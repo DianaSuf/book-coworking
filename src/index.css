@@ -1,11 +1,52 @@
+@font-face {
+  font-family: 'Grtsk Exa';
+  font-style: normal;
+  font-weight: 400;
+  src: local('GrtskExa-Regular'), url('../public/fonts/GrtskExa-Regular.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Grtsk Exa';
+  font-style: normal;
+  font-weight: 500;
+  src: local('GrtskExa-Medium'), url('../public/fonts/GrtskExa-Medium.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Grtsk Exa';
+  font-style: normal;
+  font-weight: 600;
+  src: local('GrtskExa-Semibold'), url('../public/fonts/GrtskExa-Semibold.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Grtsk Tera';
+  font-style: normal;
+  font-weight: 600;
+  src: local('GrtskTera-Semibold'), url('../public/fonts/GrtskTera-Semibold.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Grtsk Tera';
+  font-style: normal;
+  font-weight: 600;
+  src: local('GrtskTera-Bold'), url('../public/fonts/GrtskTera-Bold.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Grtsk Mega';
+  font-style: normal;
+  font-weight: 700;
+  src: local('GrtskMega-Bold'), url('../public/fonts/GrtskMega-Bold.woff2') format('woff2');
+}
+
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'Grtsk Exa', sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -14,7 +55,7 @@
 }
 
 a {
-  font-weight: 500;
+  font-family: 'Grtsk Exa', sans-serif;
   color: #646cff;
   text-decoration: inherit;
 }
@@ -24,6 +65,7 @@ a:hover {
 
 body {
   margin: 0;
+  padding: 0;
   display: flex;
   place-items: center;
   min-width: 320px;
@@ -52,17 +94,4 @@ button:hover {
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
 }
