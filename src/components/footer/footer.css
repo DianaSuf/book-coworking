@@ -1,0 +1,11 @@
+.footer {
+  background-color: #2C2726;
+  display: flex;
+}
+
+.footer__map-iframe {
+  width: 1017px;
+  height: 667px;
+  border: none;
+  margin-left: auto;
+}

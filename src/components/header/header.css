@@ -1,0 +1,55 @@
+.header {
+  background-color: #EF3B24;
+  height: 3.073vw;
+  width: 100vw;
+  display: flex;
+}
+
+.menu {
+  width: 100%;
+  height: 100%;
+  margin: 0 9.74%;
+  display: flex;
+  align-items: center;
+}
+
+.header__logo {
+  cursor: pointer;
+  background-image: url('../img/logo_red.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  width: 29.16vw;
+  height: 1.667vw;
+}
+
+.header__info-city {
+  display: flex;
+  margin-left: auto;
+}
+
+.header__city {
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 24px;
+}
+
+.header__notify {
+  background-image: url('../img/notify.svg');
+  width: 2.08334vw;
+  height: 2.08334vw;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  margin-left: 0.906%;
+}
+
+.header__profile {
+  background-image: url('../img/profile.svg');
+  width: 2.08334vw;
+  height: 2.08334vw;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  margin-left: 0.453%;
+}
