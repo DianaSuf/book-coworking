@@ -38,6 +38,14 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: 'Grtsk Mega';
+  font-style: normal;
+  font-weight: 700;
+  src: local('GrtskMega-Bold'), url('../fonts/GrtskMega-Bold.woff2') format('woff2');
+  font-display: swap;
+}
+
 :root {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

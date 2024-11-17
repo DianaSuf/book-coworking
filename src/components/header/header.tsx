@@ -11,7 +11,7 @@ export default function Header() {
         <nav className="menu">
           <Link className="header__logo" to={AppRoute.Root}></Link>
           <div className="header__info-city">
-            <img className="header__geo" src="../img/icon_geo.svg"/>
+            <img className="header__geo" src="../img/icon_geo_white.svg"/>
             <span className="header__city">Екатеринбург</span>
           </div>
           <button className="header__notify" onClick={() => navigate(AppRoute.Root)}></button>

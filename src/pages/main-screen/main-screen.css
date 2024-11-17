@@ -32,13 +32,49 @@
 
 .about__content {
   width: 54.636%;
-  height: 27.396%;
   background-color: #F6F6F4;
   padding: 1.9271% 3.75%;
   position: absolute;
   border-radius: 10px;
   box-sizing: border-box;
   margin-left: 9.688%;
+}
+
+.about__title-ul {
+  font-size: 30px;
+  line-height: 35px;
+  margin-bottom: 51px;
+}
+.about__title-decor {
+  color: #EF3B24;
+  font-weight: 600;
+}
+
+.about__list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.about__item {
+  display: flex;
+  color: #8A8C8C;
+  font-size: 20px;
+  line-height: 24px;
+}
+
+.about__item-title {
+  font-weight: 600;
+  color: #8A8C8C;
+}
+
+.about__item:not(:last-child) {
+  margin-bottom: 17px;
+}
+
+.about__item-img {
+  margin-right: 37px;
+  width: 24px;
+  height: 24px;
 }
 
 .about__image {

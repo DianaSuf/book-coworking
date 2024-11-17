@@ -1,6 +1,15 @@
-export const AppRoute = {
-  Root: '/',
-  NotFound: '*',
+export enum  AppRoute {
+  Root = '/',
+  NotFound = '*',
 }
 
-export const APIRoute = {}
+export enum AuthorizationStatus {
+  User = 'USER',
+  Admin = 'ADMIN',
+  NoAuth = 'NO_AUTH',
+  Unknown = 'UNKNOWN',
+}
+
+export enum  APIRoute {
+  Status = '/status',
+}
