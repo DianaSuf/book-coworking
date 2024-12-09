@@ -44,7 +44,7 @@ export default function RegisterModal({ onSwitch, onClose }: RegisterModalProps)
     validationSchema: Yup.object({
       name: Yup.string().required('Имя и фамилия обязательны'),
       email: Yup.string()
-        .test('is-valid-domain', 'Адрес электронной почты должен быть с доменом urfu.me или at.urfu.ru', (value) => {
+        .test('is-valid-domain', 'Email должен быть с доменом urfu.me или at.urfu.ru', (value) => {
           return /@(?:urfu.me|at.urfu.ru)$/.test(value || '');
         }),
       password: Yup.string()
@@ -69,8 +69,8 @@ export default function RegisterModal({ onSwitch, onClose }: RegisterModalProps)
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
           />
-          {formik.touched.email && formik.errors.email && (
-            <p className={styles.errorText}>{formik.errors.email}</p>
+          {formik.touched.name && formik.errors.name && (
+            <p className={styles.errorText}>{formik.errors.name}</p>
           )}
         </div>
         <div className={styles.inputGroup}>

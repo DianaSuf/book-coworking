@@ -39,7 +39,7 @@ export default function LoginModal({ onSwitch, onClose }: LoginModalProps) {
       email: Yup.string()
         .test(
           'is-valid-domain',
-          'Адрес электронной почты должен быть с доменом urfu.me или at.urfu.ru',
+          'Email должен быть с доменом urfu.me или at.urfu.ru',
           (value) => /@(?:urfu.me|at.urfu.ru)$/.test(value || '')
         ),
       password: Yup.string()
