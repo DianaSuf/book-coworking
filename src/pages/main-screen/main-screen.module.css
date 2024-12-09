@@ -5,18 +5,18 @@
   margin-bottom: 6.198%;
 }
 
-.hero__content {
+.heroContent {
   width: 34.167vw;
 }
 
-.hero__title {
+.heroTitle {
   font-size: 40px;
   line-height: 40px;
   width: 83.232%;
   padding-bottom: 6.098%;
 }
 
-.hero__text {
+.heroText {
   font-size: 20px;
   line-height: 24px;
   color: #8A8C8C;
@@ -30,7 +30,7 @@
   position: relative;
 }
 
-.about__content {
+.aboutContent {
   width: 54.636%;
   background-color: #F6F6F4;
   padding: 1.9271% 3.75%;
@@ -40,43 +40,44 @@
   margin-left: 9.688%;
 }
 
-.about__title-ul {
+.aboutTitleUl {
   font-size: 30px;
   line-height: 35px;
   margin-bottom: 51px;
 }
-.about__title-decor {
+
+.aboutTitleDecor {
   color: #EF3B24;
   font-weight: 600;
 }
 
-.about__list {
+.aboutList {
   list-style-type: none;
   padding: 0;
 }
 
-.about__item {
+.aboutItem {
   display: flex;
   color: #8A8C8C;
   font-size: 20px;
   line-height: 24px;
 }
 
-.about__item-title {
+.aboutItemTitle {
   font-weight: 600;
   color: #8A8C8C;
 }
 
-.about__item:not(:last-child) {
+.aboutItem:not(:last-child) {
   margin-bottom: 17px;
 }
 
-.about__item-img {
+.aboutItemImg {
   margin-right: 37px;
   width: 24px;
   height: 24px;
 }
 
-.about__image {
+.aboutImage {
   margin-left: auto;
 }

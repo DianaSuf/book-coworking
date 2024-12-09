@@ -1,0 +1,22 @@
+.action-button--red {
+  background: #EF3B24;
+  border-radius: 10px;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 25px;
+  padding: 18px 20px;
+}
+.action-button--red:hover {
+  background: #FC5540;
+}
+
+.action-button--black {
+  background: #14191A;
+  border-radius: 4px;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  width: 400px;
+  height: 48px;
+  /* padding: 18px 20px; */
+}

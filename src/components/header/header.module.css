@@ -13,7 +13,7 @@
   align-items: center;
 }
 
-.header__logo {
+.logo {
   cursor: pointer;
   background-image: url('../img/logo_red.svg');
   background-size: contain;
@@ -23,18 +23,18 @@
   height: 1.667vw;
 }
 
-.header__info-city {
+.infoCity {
   display: flex;
   margin-left: auto;
 }
 
-.header__city {
+.city {
   font-weight: 400;
   font-size: 24px;
   line-height: 24px;
 }
 
-.header__notify {
+.notify {
   background-image: url('../img/notify.svg');
   width: 2.08334vw;
   height: 2.08334vw;
@@ -42,9 +42,10 @@
   background-repeat: no-repeat;
   background-position: center;
   margin-left: 0.906%;
+  margin-right: 7px;
 }
 
-.header__profile {
+.profile {
   background-image: url('../img/profile.svg');
   width: 2.08334vw;
   height: 2.08334vw;
@@ -52,4 +53,14 @@
   background-repeat: no-repeat;
   background-position: center;
   margin-left: 0.453%;
+}
+
+.title {
+  font-size: 24px;
+}
+
+.text {
+  font-size: 20px;
+  color: #8A8C8C;
+  margin-bottom: 16px;
 }

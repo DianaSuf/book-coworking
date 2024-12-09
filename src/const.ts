@@ -1,5 +1,6 @@
 export enum  AppRoute {
   Root = '/',
+  Profile = '/profile',
   NotFound = '*',
 }
 
@@ -11,5 +12,8 @@ export enum AuthorizationStatus {
 }
 
 export enum  APIRoute {
-  Status = '/status',
+  Status = '/Brusnika/status',
+  Refresh = '/Brusnika/refresh',
+  Register = '/Brusnika/registration',
+  Login = '/Brusnika/login'
 }

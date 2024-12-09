@@ -49,6 +49,7 @@
 :root {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
 }
 
 body {
@@ -74,7 +75,7 @@ h1 {
 
 h2 {
   font-family: "Grtsk Tera", "Verdana", sans-serif;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 24px;
   font-size: 40px;
   color: #000000;
@@ -108,11 +109,32 @@ span {
 }
 
 img {
-  display: block; 
+  display: block;
+  border: none;
 }
 
 p {
   font-family: "Grtsk Exa", "Verdana", sans-serif;
   font-weight: 400;
   margin: 0;
+  color: #14191A;
+  font-size: 14px;
+}
+
+input {
+  border: 1px solid #8A8C8C;
+  border-radius: 4px;
+  padding: 8px 12px;
+  outline: none;
+  line-height: 20px;
+}
+
+label {
+  font-family: "Grtsk Exa", "Verdana", sans-serif;
+  font-weight: 400;
+  margin: 0;
+  margin-bottom: 8px;
+  color: #14191A;
+  font-size: 11px;
+  line-height: 16px;
 }
