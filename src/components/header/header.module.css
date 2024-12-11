@@ -55,12 +55,28 @@
   margin-left: 0.453%;
 }
 
+.containerText {
+  display: flex;
+}
+
+.containerButton {
+  display: flex;
+  justify-content: flex-end;
+}
+
 .title {
   font-size: 24px;
+  margin-bottom: 16px;
 }
 
 .text {
   font-size: 20px;
   color: #8A8C8C;
   margin-bottom: 16px;
+}
+
+.profileImg {
+  width: 40px;
+  height: 40px;
+  margin-right: 14px;
 }

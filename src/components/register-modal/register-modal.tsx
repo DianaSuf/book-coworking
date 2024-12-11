@@ -8,13 +8,15 @@ import IconButton from '@mui/material/IconButton';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import ActionButton from '../action-button/action-button';
+import { ActionButtonType } from '../../const';
 
 interface RegisterModalProps {
   onSwitch: () => void;
   onClose: () => void;
+  onRegisterSuccess: () => void;
 }
 
-export default function RegisterModal({ onSwitch, onClose }: RegisterModalProps) {
+export default function RegisterModal({ onSwitch, onClose, onRegisterSuccess }: RegisterModalProps) {
   const dispatch = useAppDispatch();
 
   const [showPassword, setShowPassword] = useState(false);
@@ -29,6 +31,7 @@ export default function RegisterModal({ onSwitch, onClose }: RegisterModalProps)
         password: values.password,
       })).unwrap();
       onClose();
+      onRegisterSuccess();
     } catch (error) {
       console.error('Ошибка регистрации:', error);
     }
@@ -55,8 +58,7 @@ export default function RegisterModal({ onSwitch, onClose }: RegisterModalProps)
   });
 
   return (
-    <div className={styles.modal}>
-      <img src='../img/logo_white.svg' className={styles.logo}/>
+    <>
       <h2 className={styles.title}>Регистрация</h2>
       <form className={styles.form} onSubmit={formik.handleSubmit} noValidate>
         <div className={styles.inputGroup}>
@@ -115,7 +117,7 @@ export default function RegisterModal({ onSwitch, onClose }: RegisterModalProps)
             <p className={styles.errorText}>{formik.errors.password}</p>
           )}
         </div>
-        <ActionButton text="Зарегистрироваться" variant='black' buttonType='submit' />
+        <ActionButton text="Зарегистрироваться" variant={ActionButtonType.Black} buttonType='submit' />
       </form>
       <p>
         Уже есть аккаунт?{' '}
@@ -123,6 +125,6 @@ export default function RegisterModal({ onSwitch, onClose }: RegisterModalProps)
           <p className={styles.switchButton}>Войти</p>
         </button>
       </p>
-    </div>
+    </>
   );
 };

@@ -18,6 +18,16 @@ export interface LoginData {
 export interface RefreshData {
   token: string;
 }
+
+export interface ConfirmData {
+  message: string;
+}
+export interface ConfirmResponse {
+  tokenAccess: string;
+  tokeRefresh: string;
+  role: keyof typeof AuthorizationStatus;
+}
+
 export interface RegisterResponse {
   message: string;
 }

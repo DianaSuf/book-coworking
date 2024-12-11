@@ -5,6 +5,7 @@ import Footer from '../../components/footer/footer';
 import { useNavigate } from 'react-router-dom';
 import { AppRoute } from '../../const';
 import ActionButton from '../../components/action-button/action-button';
+import { ActionButtonType } from '../../const';
 
 export default function MainScreen() {
   const navigate = useNavigate();
@@ -29,7 +30,7 @@ export default function MainScreen() {
             <ActionButton
               text="Забронировать коворкинг"
               onClick={() => navigate(AppRoute.Root)}
-              variant="red"
+              variant={ActionButtonType.Red}
             />
           </div>
         </section>

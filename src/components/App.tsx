@@ -8,6 +8,7 @@ import { useAppSelector } from '../hooks'
 import MainScreen from '../pages/main-screen/main-screen'
 import ErrorScreen from '../pages/error-screen/error-screen'
 import ProfileScreen from '../pages/profile-screen/profile-screen'
+import ConfirmScreen from '../pages/confirm-screen'
 
 function App() {
   const authorizationStatus = useAppSelector((state) => state.authorizationStatus);
@@ -21,7 +22,7 @@ function App() {
             element={<MainScreen />}
           />
           <Route
-            path={AppRoute.Root}
+            path={AppRoute.Profile}
             element={
               <PrivateRoute
                 authorizationStatus={authorizationStatus}
@@ -33,6 +34,10 @@ function App() {
           <Route
               path={AppRoute.NotFound}
               element={<ErrorScreen />}
+          />
+          <Route
+              path={AppRoute.Confirm}
+              element={<ConfirmScreen />}
           />
         </Routes>
       </HistoryRouter>

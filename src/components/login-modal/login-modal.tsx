@@ -8,6 +8,9 @@ import IconButton from '@mui/material/IconButton';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import ActionButton from '../action-button/action-button';
+import { ActionButtonType } from '../../const';
+import { AppRoute } from '../../const';
+import { useNavigate } from 'react-router-dom';
 
 interface LoginModalProps {
   onSwitch: () => void;
@@ -16,6 +19,7 @@ interface LoginModalProps {
 
 export default function LoginModal({ onSwitch, onClose }: LoginModalProps) {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
 
   const handleClickShowPassword = () => setShowPassword((prev) => !prev);
@@ -24,6 +28,7 @@ export default function LoginModal({ onSwitch, onClose }: LoginModalProps) {
     try {
       await dispatch(loginAction({ username: values.email, password: values.password })).unwrap();
       onClose();
+      navigate(AppRoute.Profile);
     } catch (error) {
       console.error('Ошибка авторизации:', error);
     }
@@ -50,8 +55,7 @@ export default function LoginModal({ onSwitch, onClose }: LoginModalProps) {
   });
 
   return (
-    <div className={styles.modal}>
-      <img src='../img/logo_white.svg' className={styles.logo}/>
+    <>
       <h1 className={styles.title}>Вход</h1>
       <form className={styles.form} onSubmit={formik.handleSubmit} noValidate>
         <div className={styles.inputGroup}>
@@ -96,7 +100,7 @@ export default function LoginModal({ onSwitch, onClose }: LoginModalProps) {
             <p className={styles.errorText}>{formik.errors.password}</p>
           )}
         </div>
-        <ActionButton text="Войти" variant="black" buttonType="submit" />
+        <ActionButton text="Войти" variant={ActionButtonType.Black} buttonType="submit" />
       </form>
       <p>
         Нет аккаунта?{' '}
@@ -104,6 +108,6 @@ export default function LoginModal({ onSwitch, onClose }: LoginModalProps) {
           <p className={styles.switchButton}>Зарегистрироваться</p>
         </button>
       </p>
-    </div>
+    </>
   );
 }

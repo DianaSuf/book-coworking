@@ -1,10 +1,10 @@
-// import './action-button.css'
 import styles from './action-button.module.css'
+import { ActionButtonType } from '../../const';
 
 interface ActionButtonProps {
   text: string;
   onClick?: () => void;
-  variant: 'red' | 'black';
+  variant: ActionButtonType;
   buttonType?: 'submit' | 'button';
 }
 

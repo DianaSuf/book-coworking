@@ -5,7 +5,7 @@ import { APIRoute, AuthorizationStatus, AppRoute } from '../const';
 // import { getToken, saveToken, dropToken } from '../services/token';
 import { requireAuthorization, redirectToRoute } from './action';
 
-import { AuthRole, RegisterData, LoginData, RegisterResponse, LoginResponse, RefreshData, RefreshResponse } from '../types/user-data';
+import { AuthRole, RegisterData, LoginData, RegisterResponse, LoginResponse, RefreshData, RefreshResponse, ConfirmData, ConfirmResponse } from '../types/user-data';
 
 export const checkAuthAction = createAsyncThunk<void, undefined, {
   dispatch: AppDispatch;
@@ -28,7 +28,7 @@ export const registerAction = createAsyncThunk<void, RegisterData, { dispatch: A
   async ({ username, realname, password }, { dispatch, extra: api }) => {
     const { data: { message } } = await api.post<RegisterResponse>(APIRoute.Register, { username, realname, password });
     if (message === 'ok') {
-      dispatch(requireAuthorization(AuthorizationStatus.User));
+      dispatch(requireAuthorization(AuthorizationStatus.USER));
     }
   }
 );
@@ -67,3 +67,12 @@ export const refreshAction = createAsyncThunk<void, RefreshData, { dispatch: App
   }
 );
 
+export const ConfirmAction = createAsyncThunk<void, ConfirmData, { dispatch: AppDispatch; state: State; extra: AxiosInstance }>(
+  'user/refresh',
+  async ({ message }, { dispatch, extra: api }) => {
+    const { data: { tokenAccess, tokeRefresh, role } } = await api.post<ConfirmResponse>(APIRoute.Confirm, { message });
+    localStorage.setItem('tokenAccess', tokenAccess);
+    localStorage.setItem('tokeRefresh', tokeRefresh);
+    dispatch(requireAuthorization(AuthorizationStatus[role]));
+  }
+);

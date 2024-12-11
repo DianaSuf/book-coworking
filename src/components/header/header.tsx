@@ -2,14 +2,19 @@ import styles from './header.module.css';
 import { Link, useNavigate } from 'react-router-dom';
 import { AppRoute, AuthorizationStatus } from '../../const';
 import { useState } from 'react';
-import { Popper, Paper, Dialog } from '@mui/material';
-import { useAppSelector } from '../../hooks';
+import { Popper, Paper } from '@mui/material';
+import { useAppSelector, useAppDispatch } from '../../hooks';
+import Modal from '../modal/modal';
+import ConfirmModal from '../confirm-modal/confirm-modal';
 import LoginModal from '../login-modal/login-modal';
 import RegisterModal from '../register-modal/register-modal';
 import ActionButton from '../action-button/action-button';
+import { ActionButtonType } from '../../const';
+import { logoutAction } from '../../store/api-actions';
 
 export default function Header() {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const authorizationStatus = useAppSelector((state) => state.authorizationStatus);
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -33,7 +38,16 @@ export default function Header() {
   const openModal = () => setIsOpen(true);
   const closeModal = () => setIsOpen(false);
 
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState<boolean>(false);
+
+  const openConfirmModal = () => setIsConfirmModalOpen(true);
+  const closeConfirmModal = () => setIsConfirmModalOpen(false);
+
   const [showLogin, setShowLogin] = useState<boolean>(true);
+
+  const handleClose = () => {
+    dispatch(logoutAction())
+  }
 
   return (
     <header className={styles.header}>
@@ -66,27 +80,32 @@ export default function Header() {
                   <p className={styles.text}>
                     Получите возможность бронировать места и отслеживать статус брони.
                   </p>
-                  <ActionButton text="Войти или зарегистрироваться" onClick={openModal} variant="red" />
+                  <ActionButton text="Войти или зарегистрироваться" onClick={openModal} variant={ActionButtonType.Red} />
                 </>
               ) : (
                 <>
-                  <p className={styles.title}>Личный кабинет</p>
-                  <p className={styles.text}>
-                    Получите возможность бронировать места и отслеживать статус брони.
-                  </p>
-                  <ActionButton text="Войти или зарегистрироваться" onClick={openModal} variant="red" />
+                  <Link className={styles.containerText} to={AppRoute.Profile}>
+                    <img className={styles.profileImg} src="../img/profile.svg" alt="profile icon" />
+                    <p className={styles.title}>Личный кабинет</p>
+                  </Link>
+                  <div className={styles.containerButton}>
+                    <ActionButton text="Выйти" onClick={handleClose} variant={ActionButtonType.Red} />
+                  </div>
                 </>
               )}
             </Paper>
           </Popper>
         </div>
-        <Dialog open={isOpen} onClose={closeModal}>
+        <Modal isOpen={isOpen} onClose={closeModal}>
           {showLogin ? (
             <LoginModal onSwitch={() => setShowLogin(false)} onClose={closeModal} />
           ) : (
-            <RegisterModal onSwitch={() => setShowLogin(true)} onClose={closeModal} />
+            <RegisterModal onSwitch={() => setShowLogin(true)} onClose={closeModal} onRegisterSuccess={openConfirmModal} />
           )}
-        </Dialog>
+        </Modal>
+        <Modal isOpen={isConfirmModalOpen} onClose={closeConfirmModal}>
+          <ConfirmModal onClose={closeConfirmModal} />
+        </Modal>
       </nav>
     </header>
   );
