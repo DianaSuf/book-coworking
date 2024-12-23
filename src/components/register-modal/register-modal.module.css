@@ -9,6 +9,10 @@
   margin-bottom: 40px;
 }
 
+.content {
+  margin-bottom: 24px;
+}
+
 .inputGroup {
   display: flex;
   flex-direction: column;
@@ -23,10 +27,6 @@
 .errorText {
   margin-top: 5px;
   color: #EF3B24;
-}
-
-.switchButton {
-  color: #005BD1;
 }
 
 .passwordWrapper {
@@ -49,3 +49,10 @@
   transform: translateY(-50%);
 }
 
+.switch {
+  margin-top: 40px;
+}
+
+.switchButton {
+  color: #005BD1;
+}

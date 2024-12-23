@@ -29,7 +29,7 @@ export default function MainScreen() {
             </p>
             <ActionButton
               text="Забронировать коворкинг"
-              onClick={() => navigate(AppRoute.Root)}
+              onClick={() => navigate(AppRoute.Book)}
               variant={ActionButtonType.Red}
             />
           </div>

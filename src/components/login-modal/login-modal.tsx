@@ -14,15 +14,21 @@ import { useNavigate } from 'react-router-dom';
 
 interface LoginModalProps {
   onSwitch: () => void;
+  onForgotPassword: () => void;
   onClose: () => void;
 }
 
-export default function LoginModal({ onSwitch, onClose }: LoginModalProps) {
+export default function LoginModal({ onSwitch, onForgotPassword, onClose }: LoginModalProps) {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
 
   const handleClickShowPassword = () => setShowPassword((prev) => !prev);
+
+  const handleForgotPassword = () => {
+    onForgotPassword();
+    onClose();
+  };
 
   const handleSubmit = async (values: { email: string; password: string }) => {
     try {
@@ -58,56 +64,66 @@ export default function LoginModal({ onSwitch, onClose }: LoginModalProps) {
     <>
       <h1 className={styles.title}>Вход</h1>
       <form className={styles.form} onSubmit={formik.handleSubmit} noValidate>
-        <div className={styles.inputGroup}>
-          <label htmlFor="email">Email</label>
-          <input
-            id="email"
-            name="email"
-            type="email"
-            value={formik.values.email}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-          />
-          {formik.touched.email && formik.errors.email && (
-            <p className={styles.errorText}>{formik.errors.email}</p>
-          )}
-        </div>
-        <div className={styles.inputGroup}>
-          <label htmlFor="password">Пароль</label>
-          <div className={styles.passwordWrapper}>
+        <div className={styles.content}>
+          <div className={styles.inputGroup}>
+            <label htmlFor="email">Email</label>
             <input
-              id="password"
-              name="password"
-              type={showPassword ? 'text' : 'password'}
-              value={formik.values.password}
+              id="email"
+              name="email"
+              type="email"
+              value={formik.values.email}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              className={styles.inputPassword}
             />
-            <IconButton
-              onClick={handleClickShowPassword}
-              aria-label={showPassword ? 'Скрыть пароль' : 'Показать пароль'}
-              edge="end"
-              className={styles.iconButton}
-              sx={{
-                position: 'absolute',
-              }}
-            >
-              {showPassword ? <VisibilityOff /> : <Visibility />}
-            </IconButton>
+            {formik.touched.email && formik.errors.email && (
+              <p className={styles.errorText}>{formik.errors.email}</p>
+            )}
           </div>
-          {formik.touched.password && formik.errors.password && (
-            <p className={styles.errorText}>{formik.errors.password}</p>
-          )}
+          <div className={styles.inputGroup}>
+            <label htmlFor="password">Пароль</label>
+            <div className={styles.passwordWrapper}>
+              <input
+                id="password"
+                name="password"
+                type={showPassword ? 'text' : 'password'}
+                value={formik.values.password}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                className={styles.inputPassword}
+              />
+              <IconButton
+                onClick={handleClickShowPassword}
+                aria-label={showPassword ? 'Скрыть пароль' : 'Показать пароль'}
+                edge="end"
+                className={styles.iconButton}
+                sx={{
+                  position: 'absolute',
+                }}
+              >
+                {showPassword ? <VisibilityOff /> : <Visibility />}
+              </IconButton>
+            </div>
+            {formik.touched.password && formik.errors.password && (
+              <p className={styles.errorText}>{formik.errors.password}</p>
+            )}
+          </div>
         </div>
         <ActionButton text="Войти" variant={ActionButtonType.Black} buttonType="submit" />
       </form>
-      <p>
-        Нет аккаунта?{' '}
-        <button type="button" onClick={onSwitch}>
-          <p className={styles.switchButton}>Зарегистрироваться</p>
-        </button>
-      </p>
+      <div className={styles.switch}>
+        <p>
+          Если Вы забыли пароль, его можно{' '}
+          <button type="button" onClick={handleForgotPassword}>
+            <p className={styles.switchButton}>восстановить</p>
+          </button>
+        </p>
+        <p>
+          Если у Вас еще нет аккаунта -{' '}
+          <button type="button" onClick={onSwitch}>
+            <p className={styles.switchButton}>зарегистрироваться</p>
+          </button>
+        </p>
+      </div>
     </>
   );
 }

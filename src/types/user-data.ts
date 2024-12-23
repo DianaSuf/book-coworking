@@ -24,7 +24,7 @@ export interface ConfirmData {
 }
 export interface ConfirmResponse {
   tokenAccess: string;
-  tokeRefresh: string;
+  tokenRefresh: string;
   role: keyof typeof AuthorizationStatus;
 }
 
@@ -34,14 +34,12 @@ export interface RegisterResponse {
 
 export interface LoginResponse {
   tokenAccess: string;
-  tokeRefresh: string;
+  tokenRefresh: string;
   role: keyof typeof AuthorizationStatus;
 }
-
 
 export interface RefreshResponse {
   tokenAccess: string;
-  tokeRefresh: string;
+  tokenRefresh: string;
   role: keyof typeof AuthorizationStatus;
 }
-

@@ -1,7 +1,9 @@
 export enum  AppRoute {
   Root = '/',
-  Profile = '/profile',
   Confirm = '/verification',
+  Profile = '/profile',
+  Book = '/book',
+  Notify = '/notify',
   NotFound = '*',
 }
 

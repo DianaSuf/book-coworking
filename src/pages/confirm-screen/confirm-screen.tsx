@@ -1,8 +1,8 @@
-import { useAppDispatch } from "../hooks"
-import { ConfirmAction } from "../store/api-actions";
+import { useAppDispatch } from "../../hooks"
+import { confirmAction } from "../../store/api-actions";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
-import { AppRoute } from "../const";
+import { AppRoute } from "../../const";
 
 export default function ConfirmScreen() {
   const dispatch = useAppDispatch();
@@ -14,10 +14,10 @@ export default function ConfirmScreen() {
 
   useEffect(() => {
     if (data) {
-      dispatch(ConfirmAction({message: data}))
+      dispatch(confirmAction({message: data}))
       .unwrap()
       .then(() => {
-        navigate(AppRoute.Profile);
+        navigate(AppRoute.Profile, { replace: true });
       })
       .catch(() => {
         navigate(AppRoute.NotFound);

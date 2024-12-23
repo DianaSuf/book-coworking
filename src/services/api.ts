@@ -30,10 +30,12 @@ export const createAPI = (): AxiosInstance => {
   api.interceptors.request.use(
     (config: InternalAxiosRequestConfig) => {
       const token = localStorage.getItem('tokenAccess');
+      console.log(token);
 
       if (token && config.headers) {
         config.headers.Authorization = `Bearer ${token}`;
       }
+      console.log(token);
 
       return config;
     },
@@ -43,20 +45,19 @@ export const createAPI = (): AxiosInstance => {
     (response) => response, // Обработка успешного ответа
     async (error: AxiosError<DetailMessageType>) => {
       const originalRequest = error.config; // Исходный запрос
-      console.log('401 ошибка: Unauthorized');
+      console.log(error);
 
       if (!originalRequest) {
         throw error;
       }
   
       const statusCode = error.response?.status;
-      console.log('401 ошибка: Unauthorized с response ');
       console.log(statusCode);
   
       // Если получена ошибка 401 (Unauthorized), и токен обновления существует
       if (statusCode === 401) {
         localStorage.removeItem('tokenAccess');
-        const tokenRefresh = localStorage.getItem('tokeRefresh');
+        const tokenRefresh = localStorage.getItem('tokenRefresh');
         if (tokenRefresh) {
           try {
             // Отправляем запрос на обновление токенов
@@ -64,7 +65,7 @@ export const createAPI = (): AxiosInstance => {
   
             // Сохраняем новые токены
             localStorage.setItem('tokenAccess', data.tokenAccess);
-            localStorage.setItem('tokeRefresh', data.tokeRefresh);
+            localStorage.setItem('tokenRefresh', data.tokenRefresh);
   
             // Обновляем Authorization заголовок с новым токеном и повторяем запрос
             if (originalRequest.headers) {
@@ -90,7 +91,7 @@ export const createAPI = (): AxiosInstance => {
       if (statusCode === 403) {
         console.log('403 ошибка: Forbidden');
         localStorage.removeItem('tokenAccess');
-        localStorage.removeItem('tokeRefresh');
+        localStorage.removeItem('tokenRefresh');
       } else if (shouldDisplayError(error.response!)) {
         const detailMessage = error.response!.data;
         toast.warn(detailMessage.message);

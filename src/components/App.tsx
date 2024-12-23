@@ -5,13 +5,16 @@ import HistoryRouter from './history-route'
 import browserHistory from '../browser-history'
 import PrivateRoute from './private-route'
 import { useAppSelector } from '../hooks'
+import { getAuthorizationStatus } from '../store/slices/user-slice'
 import MainScreen from '../pages/main-screen/main-screen'
 import ErrorScreen from '../pages/error-screen/error-screen'
 import ProfileScreen from '../pages/profile-screen/profile-screen'
-import ConfirmScreen from '../pages/confirm-screen'
+import ConfirmScreen from '../pages/confirm-screen/confirm-screen'
+import NotifyScreen from '../pages/notify-screen/notify-screen'
+import BookScreen from '../pages/book-screen/book-screen'
 
 function App() {
-  const authorizationStatus = useAppSelector((state) => state.authorizationStatus);
+  const authorizationStatus = useAppSelector(getAuthorizationStatus);
 
   return (
     <HelmetProvider>
@@ -32,12 +35,32 @@ function App() {
             }
           />
           <Route
-              path={AppRoute.NotFound}
-              element={<ErrorScreen />}
+            path={AppRoute.Notify}
+            element={
+              <PrivateRoute
+                authorizationStatus={authorizationStatus}
+              >
+                <NotifyScreen />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path={AppRoute.Book}
+            element={
+              <PrivateRoute
+                authorizationStatus={authorizationStatus}
+              >
+                <BookScreen />
+              </PrivateRoute>
+            }
           />
           <Route
               path={AppRoute.Confirm}
               element={<ConfirmScreen />}
+          />
+          <Route
+              path={AppRoute.NotFound}
+              element={<ErrorScreen />}
           />
         </Routes>
       </HistoryRouter>

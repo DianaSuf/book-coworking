@@ -1,21 +1,21 @@
 import styles from './header.module.css';
 import { Link, useNavigate } from 'react-router-dom';
-import { AppRoute, AuthorizationStatus } from '../../const';
+import { AppRoute, AuthorizationStatus, ActionButtonType } from '../../const';
 import { useState } from 'react';
 import { Popper, Paper } from '@mui/material';
 import { useAppSelector, useAppDispatch } from '../../hooks';
 import Modal from '../modal/modal';
-import ConfirmModal from '../confirm-modal/confirm-modal';
+import ConfirmRegisterModal from '../confirm-register-modal/confirm-register-modal';
+import ForgotModal from '../forgot-modal/forgot-modal';
 import LoginModal from '../login-modal/login-modal';
 import RegisterModal from '../register-modal/register-modal';
 import ActionButton from '../action-button/action-button';
-import { ActionButtonType } from '../../const';
-import { logoutAction } from '../../store/api-actions';
+import { logoutUser, getAuthorizationStatus } from '../../store/slices/user-slice';
 
 export default function Header() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const authorizationStatus = useAppSelector((state) => state.authorizationStatus);
+  const authorizationStatus = useAppSelector(getAuthorizationStatus);
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
@@ -43,10 +43,15 @@ export default function Header() {
   const openConfirmModal = () => setIsConfirmModalOpen(true);
   const closeConfirmModal = () => setIsConfirmModalOpen(false);
 
+  const [isForgotModalOpen, setIsForgotModalOpen] = useState<boolean>(false);
+
+  const openForgotModal = () => setIsForgotModalOpen(true);
+  const closeForgotModal = () => setIsForgotModalOpen(false);
+
   const [showLogin, setShowLogin] = useState<boolean>(true);
 
   const handleClose = () => {
-    dispatch(logoutAction())
+    dispatch(logoutUser());
   }
 
   return (
@@ -57,7 +62,7 @@ export default function Header() {
           <img className={styles.geo} src="../img/icon_geo_white.svg" alt="Geo Icon" />
           <span className={styles.city}>Екатеринбург</span>
         </div>
-        <button className={styles.notify} onClick={() => navigate(AppRoute.Root)}></button>
+        <button className={styles.notify} onClick={() => navigate(AppRoute.Notify)}></button>
 
         <div
           className={styles.profileContainer}
@@ -98,13 +103,16 @@ export default function Header() {
         </div>
         <Modal isOpen={isOpen} onClose={closeModal}>
           {showLogin ? (
-            <LoginModal onSwitch={() => setShowLogin(false)} onClose={closeModal} />
+            <LoginModal onSwitch={() => setShowLogin(false)} onClose={closeModal} onForgotPassword={openForgotModal} />
           ) : (
             <RegisterModal onSwitch={() => setShowLogin(true)} onClose={closeModal} onRegisterSuccess={openConfirmModal} />
           )}
         </Modal>
+        <Modal isOpen={isForgotModalOpen} onClose={closeForgotModal}>
+          <ForgotModal />
+        </Modal>
         <Modal isOpen={isConfirmModalOpen} onClose={closeConfirmModal}>
-          <ConfirmModal onClose={closeConfirmModal} />
+          <ConfirmRegisterModal onClose={closeConfirmModal} />
         </Modal>
       </nav>
     </header>
