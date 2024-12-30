@@ -45,14 +45,8 @@ function App() {
             }
           />
           <Route
-            path={AppRoute.Book}
-            element={
-              <PrivateRoute
-                authorizationStatus={authorizationStatus}
-              >
-                <BookScreen />
-              </PrivateRoute>
-            }
+              path={AppRoute.Book}
+              element={<BookScreen />}
           />
           <Route
               path={AppRoute.Confirm}

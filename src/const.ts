@@ -15,11 +15,11 @@ export enum AuthorizationStatus {
 }
 
 export enum  APIRoute {
-  Status = '/Brusnika/status',
-  Refresh = '/Brusnika/refresh',
-  Register = '/Brusnika/registration',
-  Login = '/Brusnika/login',
-  Confirm = '/Brusnika/confirm',
+  Status = '/Brusnika/user/status',
+  Refresh = '/Brusnika/auth/refresh',
+  Register = '/Brusnika/auth/registration',
+  Login = '/Brusnika/auth/login',
+  Confirm = '/Brusnika/auth/confirm',
 }
 
 export enum  ActionButtonType {

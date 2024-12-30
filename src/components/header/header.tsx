@@ -17,21 +17,43 @@ export default function Header() {
   const dispatch = useAppDispatch();
   const authorizationStatus = useAppSelector(getAuthorizationStatus);
 
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [notifyAnchorEl, setNotifyAnchorEl] = useState<null | HTMLElement>(null);
+  const [profileAnchorEl, setProfileAnchorEl] = useState<null | HTMLElement>(null);
 
-  const handleToggleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(anchorEl ? null : event.currentTarget);
+  const openNotifyPopper = Boolean(notifyAnchorEl);
+  const openProfilePopper = Boolean(profileAnchorEl);
+
+  const handleNotifyClick = (event: React.MouseEvent<HTMLElement>) => {
+    if (authorizationStatus === AuthorizationStatus.NoAuth || authorizationStatus === AuthorizationStatus.Unknown) {
+      setNotifyAnchorEl(notifyAnchorEl ? null : event.currentTarget);
+    } else {
+      navigate(AppRoute.Notify);
+    }
   };
 
-  const handleMouseEnter = (event: React.MouseEvent<HTMLElement>) => {
-    if (!anchorEl) setAnchorEl(event.currentTarget);
+  const handleProfileToggle = (event: React.MouseEvent<HTMLElement>) => {
+    setProfileAnchorEl(profileAnchorEl ? null : event.currentTarget);
   };
 
-  const handleMouseLeave = () => {
-    if (anchorEl) setAnchorEl(null);
+  const handleNotifyMouseEnter = (event: React.MouseEvent<HTMLElement>) => {
+    if ((authorizationStatus === AuthorizationStatus.NoAuth || authorizationStatus === AuthorizationStatus.Unknown) && !notifyAnchorEl) {
+      setNotifyAnchorEl(event.currentTarget);
+    }
+  };
+  
+  const handleNotifyMouseLeave = () => {
+    if (authorizationStatus === AuthorizationStatus.NoAuth || authorizationStatus === AuthorizationStatus.Unknown) {
+      setNotifyAnchorEl(null);
+    }
   };
 
-  const open = Boolean(anchorEl);
+  const handleProfileMouseEnter = (event: React.MouseEvent<HTMLElement>) => {
+    if (!profileAnchorEl) setProfileAnchorEl(event.currentTarget);
+  };
+
+  const handleProfileMouseLeave = () => {
+    if (profileAnchorEl) setProfileAnchorEl(null);
+  };
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
@@ -62,15 +84,38 @@ export default function Header() {
           <img className={styles.geo} src="../img/icon_geo_white.svg" alt="Geo Icon" />
           <span className={styles.city}>Екатеринбург</span>
         </div>
-        <button className={styles.notify} onClick={() => navigate(AppRoute.Notify)}></button>
+        <div
+          className={styles.container}
+          onMouseEnter={handleNotifyMouseEnter}
+          onMouseLeave={handleNotifyMouseLeave}
+        >
+          <button className={styles.notify} onClick={handleNotifyClick}></button>
+          <Popper open={openNotifyPopper} anchorEl={notifyAnchorEl} placement="bottom-end" sx={{ width: 360 }} disablePortal>
+            <Paper
+              elevation={0}
+              sx={{
+                py: { xs: '8px', sm: '12px', md: '14px' },
+                px: { xs: '10px', sm: '15px', md: '17px' },
+                mt: '9px',
+              }}
+            >
+              <p className={styles.title}>Ой! Мы еще не знакомы :(</p>
+              <ActionButton
+                text="Войти или зарегистрироваться"
+                onClick={openModal}
+                variant={ActionButtonType.Red}
+              />
+            </Paper>
+          </Popper>
+        </div>
 
         <div
-          className={styles.profileContainer}
-          onMouseEnter={handleMouseEnter}
-          onMouseLeave={handleMouseLeave}
+          className={styles.container}
+          onMouseEnter={handleProfileMouseEnter}
+          onMouseLeave={handleProfileMouseLeave}
         >
-          <button className={styles.profile} onClick={handleToggleClick}></button>
-          <Popper open={open} anchorEl={anchorEl} placement="bottom-end" sx={{ width: 360 }} disablePortal>
+          <button className={styles.profile} onClick={handleProfileToggle}></button>
+          <Popper open={openProfilePopper} anchorEl={profileAnchorEl} placement="bottom-end" sx={{ width: 360 }} disablePortal>
             <Paper
               elevation={0}
               sx={{

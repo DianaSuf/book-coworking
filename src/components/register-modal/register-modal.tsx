@@ -1,12 +1,9 @@
 import styles from './register-modal.module.css'
-import { useState } from 'react';
 import { useAppDispatch } from '../../hooks';
 import { registerAction } from '../../store/api-actions';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import IconButton from '@mui/material/IconButton';
-import Visibility from '@mui/icons-material/Visibility';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import PasswordInput from '../password-input/password-input';
 import ActionButton from '../action-button/action-button';
 import { ActionButtonType } from '../../const';
 
@@ -18,10 +15,6 @@ interface RegisterModalProps {
 
 export default function RegisterModal({ onSwitch, onClose, onRegisterSuccess }: RegisterModalProps) {
   const dispatch = useAppDispatch();
-
-  const [showPassword, setShowPassword] = useState(false);
-
-  const handleClickShowPassword = () => setShowPassword((prev) => !prev);
 
   const handleSubmit = async (values: { name: string; email: string; password: string }) => {
     try {
@@ -90,34 +83,16 @@ export default function RegisterModal({ onSwitch, onClose, onRegisterSuccess }: 
               <p className={styles.errorText}>{formik.errors.email}</p>
             )}
           </div>
-          <div className={styles.inputGroup}>
-            <label htmlFor="password">Пароль</label>
-            <div className={styles.passwordWrapper}>
-              <input
-                id="password"
-                name="password"
-                type={showPassword ? 'text' : 'password'}
-                value={formik.values.password}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                className={styles.inputPassword}
-              />
-              <IconButton
-                onClick={handleClickShowPassword}
-                aria-label={showPassword ? 'Скрыть пароль' : 'Показать пароль'}
-                edge="end"
-                className={styles.iconButton}
-                sx={{
-                  position: 'absolute',
-                }}
-              >
-                {showPassword ? <VisibilityOff /> : <Visibility />}
-              </IconButton>
-            </div>
-            {formik.touched.password && formik.errors.password && (
-              <p className={styles.errorText}>{formik.errors.password}</p>
-            )}
-          </div>
+          <PasswordInput
+            id="password"
+            name="password"
+            label="Пароль"
+            value={formik.values.password}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            touched={formik.touched.password}
+            error={formik.errors.password}
+          />
         </div>
         <ActionButton text="Зарегистрироваться" variant={ActionButtonType.Black} buttonType='submit' />
       </form>
