@@ -6,7 +6,7 @@ import { Popper, Paper } from '@mui/material';
 import { useAppSelector, useAppDispatch } from '../../hooks';
 import Modal from '../modal/modal';
 import ConfirmRegisterModal from '../confirm-register-modal/confirm-register-modal';
-import ForgotModal from '../forgot-modal/forgot-modal';
+import ForgotPasswordModal from '../forgot-password-modal/forgot-password-modal';
 import LoginModal from '../login-modal/login-modal';
 import RegisterModal from '../register-modal/register-modal';
 import ActionButton from '../action-button/action-button';
@@ -154,7 +154,7 @@ export default function Header() {
           )}
         </Modal>
         <Modal isOpen={isForgotModalOpen} onClose={closeForgotModal}>
-          <ForgotModal />
+          <ForgotPasswordModal />
         </Modal>
         <Modal isOpen={isConfirmModalOpen} onClose={closeConfirmModal}>
           <ConfirmRegisterModal onClose={closeConfirmModal} />

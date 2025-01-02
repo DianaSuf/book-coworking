@@ -1,6 +1,6 @@
 import ActionButton from "../action-button/action-button";
 import { ActionButtonType } from "../../const";
-import styles from './confirm-password-modal.module.css'
+import styles from './success-forgot-password-modal.module.css'
 
 interface ConfirmPasswordModalProps {
   onClose: () => void;

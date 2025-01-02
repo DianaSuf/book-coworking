@@ -2,9 +2,9 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import ActionButton from "../action-button/action-button";
 import { ActionButtonType } from "../../const";
-import styles from './forgot-modal.module.css'
+import styles from './forgot-password-modal.module.css'
 
-export default function ForgotModal( ) {
+export default function ForgotPasswordModal( ) {
   const formik = useFormik({
     initialValues: {
       email: '',
