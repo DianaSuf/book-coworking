@@ -10,47 +10,54 @@ export default function BookScreen() {
 
   const onClickHandler = (event: MouseEvent) => {
     const target = event.target as SVGElement;
-    const [, seatId] = target.id.split('-');
 
+    const match = target.id.match(/(?:UnionSeat-|RectangeSeat-|^)(\d+)(?:-|$)/);
+    const seatId = match ? match[1] : null;
+  
+    if (!seatId) return;
+  
+    console.log(`seatId: ${seatId}`);
+    console.log(target);
+  
     if (
       target.id &&
       (
         target.id.startsWith('UnionSeat-') ||
         target.id.startsWith('RectangeSeat-') ||
-        (() => {
-          return Number(seatId) >= 1 && Number(seatId) <= 24;
-        })()
+        (
+          target.id.startsWith(`${seatId}-`) &&
+          Number(seatId) >= 1 && Number(seatId) <= 24
+        )
       )
     ) {
       const unionSeat = document.querySelector<SVGElement>(`[id^="UnionSeat-${seatId}"]`);
       const rectangeSeat = document.querySelector<SVGElement>(`[id^="RectangeSeat-${seatId}"]`);
-      const numberSeat = document.querySelector<SVGElement>(`[id^="${seatId}"]`);
-
+      const numberSeat = document.querySelector<SVGElement>(`[id^="${seatId}-"]`);
+  
       const currentUnionFill = unionSeat?.getAttribute('fill');
       const currentRectangeFill = rectangeSeat?.getAttribute('fill');
       const currentNumberFill = numberSeat?.getAttribute('fill');
-
+  
       if (unionSeat) {
         unionSeat.setAttribute('fill', currentUnionFill === '#F5887A' ? '#9ACA3C' : '#F5887A');
       }
-
+  
       if (rectangeSeat) {
         rectangeSeat.setAttribute('fill', currentRectangeFill === '#F9B2A4' ? '#C1DC8B' : '#F9B2A4');
       }
-
+  
       if (numberSeat) {
         numberSeat.setAttribute('fill', currentNumberFill === '#F5887A' ? '#9ACA3C' : '#F5887A');
       }
-
-      setSelectedSeats((prevSelectedSeats) => {
-        if (prevSelectedSeats.includes(seatId)) {
-          return prevSelectedSeats.filter((seat) => seat !== seatId);
-        } else {
-          return [...prevSelectedSeats, seatId];
-        }
-      });
+  
+      setSelectedSeats((prevSelectedSeats) =>
+        prevSelectedSeats.includes(seatId)
+          ? prevSelectedSeats.filter((seat) => seat !== seatId)
+          : [...prevSelectedSeats, seatId]
+      );
     }
   };
+  
 
   useEffect(() => {
     const addClickListener = () => {
@@ -117,7 +124,7 @@ export default function BookScreen() {
           </ul>
 
           <ReactSVG
-            src="../../../public/img/map.svg"
+            src="../../../img/map.svg"
           />
         </section>
       </main>

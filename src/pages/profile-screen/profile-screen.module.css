@@ -53,6 +53,26 @@
   margin-bottom: 20px;
 }
 
+.emailWrapper {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+}
+
+.inputEmail {
+  width: 100%;
+  padding-right: 40px;
+  box-sizing: border-box;
+}
+
+.lockImg {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
 .errorText {
   margin-top: 5px;
   color: #EF3B24;

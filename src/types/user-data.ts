@@ -1,44 +1,43 @@
 import { AuthorizationStatus } from "../const";
 
-export interface AuthRole {
+export interface IAuthRole {
   role: keyof typeof AuthorizationStatus;
 }
 
-export interface RegisterData {
+export interface IRegisterData {
   username: string;
   realname: string;
   password: string;
 }
 
-export interface LoginData {
+export interface ILoginData {
   username: string;
   password: string;
 }
 
-export interface RefreshData {
+export interface IRefreshData {
   token: string;
 }
 
-export interface ConfirmData {
+export interface IUserData {
+  username: string;
+  realname: string;
+}
+
+export type IRealNameData = Pick<IUserData, 'realname'>;
+
+export type IUserNameData = Pick<IUserData, 'username'>;
+
+export interface IMessage {
   message: string;
 }
-export interface ConfirmResponse {
-  tokenAccess: string;
-  tokenRefresh: string;
-  role: keyof typeof AuthorizationStatus;
+
+export interface IPassword {
+  oldPassword: string;
+  newPassword: string;
 }
 
-export interface RegisterResponse {
-  message: string;
-}
-
-export interface LoginResponse {
-  tokenAccess: string;
-  tokenRefresh: string;
-  role: keyof typeof AuthorizationStatus;
-}
-
-export interface RefreshResponse {
+export interface ITokenResponse {
   tokenAccess: string;
   tokenRefresh: string;
   role: keyof typeof AuthorizationStatus;

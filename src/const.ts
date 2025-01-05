@@ -19,7 +19,11 @@ export enum  APIRoute {
   Refresh = '/Brusnika/auth/refresh',
   Register = '/Brusnika/auth/registration',
   Login = '/Brusnika/auth/login',
-  Confirm = '/Brusnika/auth/confirm',
+  ConfirmRegister = '/Brusnika/auth/confirmReg',
+  DataUser = '/Brusnika/user/profile',
+  UpdateUserRealname = '/Brusnika/user/updateRealname',
+  UpdateUserPassword = '/Brusnika/user/updatePassword',
+  ResetUserPassword = '/Brusnika/auth/password',
 }
 
 export enum  ActionButtonType {

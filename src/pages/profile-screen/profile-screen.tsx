@@ -1,4 +1,7 @@
 import styles from './profile-screen.module.css'
+import { useEffect } from 'react';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { fetchUserDataAction, updateUserRealnameAction, updateUserPasswordAction } from '../../store/api-actions';
 import { Helmet } from 'react-helmet-async'
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -9,6 +12,13 @@ import ActionButton from '../../components/action-button/action-button';
 import { ActionButtonType } from '../../const';
 
 export default function ProfileScreen() {
+  const dispatch = useAppDispatch();
+  const userData = useAppSelector((state) => state.user.userData);
+
+  useEffect(() => {
+    dispatch(fetchUserDataAction());
+  }, [dispatch]);
+
   const personalForm = useFormik({
     initialValues: {
       name: '',
@@ -17,14 +27,16 @@ export default function ProfileScreen() {
     validateOnBlur: true,
     validationSchema: Yup.object({
       name: Yup.string().required('Имя и фамилия обязательны'),
-      email: Yup.string()
-        .test('is-valid-domain', 'Email должен быть с доменом urfu.me или at.urfu.ru', (value) => {
-          return /@(?:urfu.me|at.urfu.ru)$/.test(value || '');
-        })
-        .required('Email обязателен'),
     }),
     onSubmit: (values) => {
-      console.log('Личные данные отправлены:', values);
+      dispatch(updateUserRealnameAction({ realname: values.name }))
+      .unwrap()
+      .then((message) => {
+        console.log(message);
+      })
+      .catch((error) => {
+        console.error('Ошибка обновления:', error);
+      });
     },
   });
 
@@ -45,11 +57,26 @@ export default function ProfileScreen() {
         .required('Повторите новый пароль'),
     }),
     onSubmit: (values) => {
-      console.log('Пароль отправлен:', values);
+      dispatch(updateUserPasswordAction({ oldPassword: values.oldPassword, newPassword: values.newPassword }))
+      .unwrap()
+      .then((message) => {
+        console.log(message);
+      })
+      .catch((error) => {
+        console.error('Ошибка обновления:', error);
+      });
     },
   });
-  
 
+  useEffect(() => {
+    if (userData) {
+      personalForm.setValues({
+        name: userData.realname || '',
+        email: userData.username || '',
+      });
+    }
+  }, [userData]);
+  
   return (
     <>
       <Helmet>
@@ -78,17 +105,23 @@ export default function ProfileScreen() {
               </div>
               <div className={styles.inputGroup}>
                 <label htmlFor="email">Email</label>
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  value={personalForm.values.email}
-                  onChange={personalForm.handleChange}
-                  onBlur={personalForm.handleBlur}
-                />
-                {personalForm.touched.email && personalForm.errors.email && (
-                  <p className={styles.errorText}>{personalForm.errors.email}</p>
-                )}
+                <div className={styles.emailWrapper}>
+                  <input
+                    id="email"
+                    name="email"
+                    type="email"
+                    value={personalForm.values.email}
+                    onChange={personalForm.handleChange}
+                    onBlur={personalForm.handleBlur}
+                    className={styles.inputEmail}
+                    readOnly
+                  />
+                  <img
+                    className={styles.lockImg}
+                    src="../img/icon_lock.svg"
+                    alt="lock icon"
+                  />
+                </div>
               </div>
             </div>
             <ActionButton text="Сохранить" variant={ActionButtonType.Black} buttonType='submit' />

@@ -1,13 +1,16 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { AuthorizationStatus } from "../../const";
-import { checkAuthAction, registerAction, loginAction, confirmAction } from "../api-actions";
+import { IUserData } from "../../types/user-data";
+import { checkAuthAction, registerAction, loginAction, confirmRegisterAction, fetchUserDataAction } from "../api-actions";
 
 type UserState = {
   authorizationStatus: AuthorizationStatus;
+  userData: IUserData  | null;
 }
 
 const initialState: UserState  = {
   authorizationStatus: AuthorizationStatus.Unknown,
+  userData: null,
 };
 
 export const userSlice = createSlice({
@@ -19,6 +22,7 @@ export const userSlice = createSlice({
       localStorage.removeItem("tokenRefresh");
 
       state.authorizationStatus = AuthorizationStatus.NoAuth;
+      state.userData = null;
     },
   },
   selectors: {
@@ -47,11 +51,18 @@ export const userSlice = createSlice({
         state.authorizationStatus = AuthorizationStatus.NoAuth;
       });
     builder
-      .addCase(confirmAction.fulfilled, (state, action) => {
+      .addCase(confirmRegisterAction.fulfilled, (state, action) => {
         state.authorizationStatus = action.payload;
       })
-      .addCase(confirmAction.rejected, (state) => {
+      .addCase(confirmRegisterAction.rejected, (state) => {
         state.authorizationStatus = AuthorizationStatus.NoAuth;
+      });
+    builder
+      .addCase(fetchUserDataAction.fulfilled, (state, action) => {
+        state.userData = action.payload;
+      })
+      .addCase(fetchUserDataAction.rejected, (state) => {
+        state.userData = null;
       });
   }
 });

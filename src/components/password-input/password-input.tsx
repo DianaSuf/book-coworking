@@ -49,7 +49,7 @@ export default function PasswordInput({
           className={styles.iconButton}
           sx={{ position: 'absolute' }}
         >
-          {showPassword ? <VisibilityOff /> : <Visibility />}
+          {showPassword ? <VisibilityOff sx={{ width: '16px', height: '16px' }} /> : <Visibility sx={{ width: '16px', height: '16px' }} />}
         </IconButton>
       </div>
       {touched && error && <p className={styles.errorText}>{error}</p>}

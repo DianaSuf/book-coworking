@@ -1,9 +1,10 @@
 import axios, { AxiosInstance, InternalAxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
 import { StatusCodes } from 'http-status-codes';
-// import { getToken } from './token';
 import { toast } from 'react-toastify';
-import { RefreshResponse } from '../types/user-data';
+import { ITokenResponse } from '../types/user-data';
 import { APIRoute } from '../const';
+import { logoutUser } from '../store/slices/user-slice';
+import { store } from '../store'
 
 const BACKEND_URL = 'http://localhost:8080/';
 const REQUEST_TIMEOUT = 5000;
@@ -30,68 +31,45 @@ export const createAPI = (): AxiosInstance => {
   api.interceptors.request.use(
     (config: InternalAxiosRequestConfig) => {
       const token = localStorage.getItem('tokenAccess');
-      console.log(token);
 
       if (token && config.headers) {
         config.headers.Authorization = `Bearer ${token}`;
       }
-      console.log(token);
 
       return config;
     },
   );
 
   api.interceptors.response.use(
-    (response) => response, // Обработка успешного ответа
+    (response) => response,
     async (error: AxiosError<DetailMessageType>) => {
-      const originalRequest = error.config; // Исходный запрос
-      console.log(error);
+      const originalRequest = error.config;
 
       if (!originalRequest) {
         throw error;
       }
   
       const statusCode = error.response?.status;
-      console.log(statusCode);
-  
-      // Если получена ошибка 401 (Unauthorized), и токен обновления существует
+
       if (statusCode === 401) {
         localStorage.removeItem('tokenAccess');
         const tokenRefresh = localStorage.getItem('tokenRefresh');
         if (tokenRefresh) {
-          try {
-            // Отправляем запрос на обновление токенов
-            const { data } = await api.post<RefreshResponse>(APIRoute.Refresh, { token: tokenRefresh });
-  
-            // Сохраняем новые токены
-            localStorage.setItem('tokenAccess', data.tokenAccess);
-            localStorage.setItem('tokenRefresh', data.tokenRefresh);
-  
-            // Обновляем Authorization заголовок с новым токеном и повторяем запрос
-            if (originalRequest.headers) {
-              originalRequest.headers.Authorization = `Bearer ${data.tokenAccess}`;
-            }
-  
-            return api(originalRequest); // Повторяем исходный запрос с новым токеном
-          } catch (refreshError) {
-            // Если обновление токенов не удалось, очищаем их
-            localStorage.removeItem('tokenAccess');
-            toast.error('Сессия истекла. Пожалуйста, войдите снова.');
-            throw refreshError;
+          const { data } = await api.post<ITokenResponse>(APIRoute.Refresh, { token: tokenRefresh });
+
+          localStorage.setItem('tokenAccess', data.tokenAccess);
+          localStorage.setItem('tokenRefresh', data.tokenRefresh);
+
+          if (originalRequest.headers) {
+            originalRequest.headers.Authorization = `Bearer ${data.tokenAccess}`;
           }
-        } else {
-          // Если токен обновления отсутствует, очищаем старые токены и перенаправляем на авторизацию
-          localStorage.removeItem('tokenAccess');
-          toast.error('Не удалось обновить сессию. Пожалуйста, войдите снова.');
-          throw error;
-        }
+
+          return api(originalRequest);
+        } 
       }
-  
-      // Обработка других ошибок
+
       if (statusCode === 403) {
-        console.log('403 ошибка: Forbidden');
-        localStorage.removeItem('tokenAccess');
-        localStorage.removeItem('tokenRefresh');
+        store.dispatch(logoutUser());
       } else if (shouldDisplayError(error.response!)) {
         const detailMessage = error.response!.data;
         toast.warn(detailMessage.message);

@@ -1,5 +1,5 @@
 import { useAppDispatch } from "../../hooks"
-import { confirmAction } from "../../store/api-actions";
+import { confirmRegisterAction } from "../../store/api-actions";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { AppRoute } from "../../const";
@@ -14,10 +14,10 @@ export default function ConfirmScreen() {
 
   useEffect(() => {
     if (data) {
-      dispatch(confirmAction({message: data}))
+      dispatch(confirmRegisterAction({message: data}))
       .unwrap()
       .then(() => {
-        navigate(AppRoute.Profile, { replace: true });
+        navigate(AppRoute.Profile);
       })
       .catch(() => {
         navigate(AppRoute.NotFound);
