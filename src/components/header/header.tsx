@@ -4,11 +4,8 @@ import { AppRoute, AuthorizationStatus, ActionButtonType } from '../../const';
 import { useState } from 'react';
 import { Popper, Paper } from '@mui/material';
 import { useAppSelector, useAppDispatch } from '../../hooks';
-import Modal from '../modal/modal';
-import ConfirmRegisterModal from '../confirm-register-modal/confirm-register-modal';
-import ForgotPasswordModal from '../forgot-password-modal/forgot-password-modal';
-import LoginModal from '../login-modal/login-modal';
-import RegisterModal from '../register-modal/register-modal';
+import { openModal } from '../../store/slices/modal-slice';
+import AuthModals from '../authModalManager';
 import ActionButton from '../action-button/action-button';
 import { logoutUser, getAuthorizationStatus } from '../../store/slices/user-slice';
 
@@ -55,22 +52,9 @@ export default function Header() {
     if (profileAnchorEl) setProfileAnchorEl(null);
   };
 
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-
-  const openModal = () => setIsOpen(true);
-  const closeModal = () => setIsOpen(false);
-
-  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState<boolean>(false);
-
-  const openConfirmModal = () => setIsConfirmModalOpen(true);
-  const closeConfirmModal = () => setIsConfirmModalOpen(false);
-
-  const [isForgotModalOpen, setIsForgotModalOpen] = useState<boolean>(false);
-
-  const openForgotModal = () => setIsForgotModalOpen(true);
-  const closeForgotModal = () => setIsForgotModalOpen(false);
-
-  const [showLogin, setShowLogin] = useState<boolean>(true);
+  const handleAuthModal = () => {
+    dispatch(openModal('login'));
+  };
 
   const handleClose = () => {
     dispatch(logoutUser());
@@ -102,7 +86,7 @@ export default function Header() {
               <p className={styles.title}>Ой! Мы еще не знакомы :(</p>
               <ActionButton
                 text="Войти или зарегистрироваться"
-                onClick={openModal}
+                onClick={handleAuthModal}
                 variant={ActionButtonType.Red}
               />
             </Paper>
@@ -130,7 +114,7 @@ export default function Header() {
                   <p className={styles.text}>
                     Получите возможность бронировать места и отслеживать статус брони.
                   </p>
-                  <ActionButton text="Войти или зарегистрироваться" onClick={openModal} variant={ActionButtonType.Red} />
+                  <ActionButton text="Войти или зарегистрироваться" onClick={handleAuthModal} variant={ActionButtonType.Red} />
                 </>
               ) : (
                 <>
@@ -146,20 +130,8 @@ export default function Header() {
             </Paper>
           </Popper>
         </div>
-        <Modal isOpen={isOpen} onClose={closeModal}>
-          {showLogin ? (
-            <LoginModal onSwitch={() => setShowLogin(false)} onClose={closeModal} onForgotPassword={openForgotModal} />
-          ) : (
-            <RegisterModal onSwitch={() => setShowLogin(true)} onClose={closeModal} onRegisterSuccess={openConfirmModal} />
-          )}
-        </Modal>
-        <Modal isOpen={isForgotModalOpen} onClose={closeForgotModal}>
-          <ForgotPasswordModal />
-        </Modal>
-        <Modal isOpen={isConfirmModalOpen} onClose={closeConfirmModal}>
-          <ConfirmRegisterModal onClose={closeConfirmModal} />
-        </Modal>
       </nav>
+      <AuthModals />
     </header>
   );
 }

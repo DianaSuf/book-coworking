@@ -2,11 +2,42 @@
   display: flex;
 }
 
+.bookNoAuth {
+  width: 420px;
+  height: 100vh;
+  box-shadow: 0px 4px 16px 0px rgba(20, 25, 26, 0.08);
+  padding: 15px 45px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
 .book {
   width: 420px;
   height: 100vh;
   box-shadow: 0px 4px 16px 0px rgba(20, 25, 26, 0.08);
-  padding: 15px 40px;
+  padding: 15px 45px;
+}
+
+.textNoAuth {
+  font-size: 20px;
+  line-height: 24px;
+  color: rgba(138, 140, 140, 1);
+  margin-bottom: 25px;
+}
+
+.container {
+  button {
+    color: inherit;
+  }
+}
+
+.rs-calendar-table-cell-selected {
+  background-color: rgba(239, 59, 36, 1) !important;
+}
+
+.rs-picker-toolbar {
+  border-top: 1px solid rgba(239, 59, 36, 1) !important;
 }
 
 .selectedList {

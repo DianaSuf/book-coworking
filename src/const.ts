@@ -30,3 +30,5 @@ export enum  ActionButtonType {
   Red = 'red',
   Black = 'black',
 }
+
+export type ModalType = 'login' | 'register' | 'forgotPassword' | 'confirmRegister' | null;

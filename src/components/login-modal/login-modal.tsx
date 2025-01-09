@@ -6,8 +6,6 @@ import * as Yup from 'yup';
 import PasswordInput from '../password-input/password-input';
 import ActionButton from '../action-button/action-button';
 import { ActionButtonType } from '../../const';
-import { AppRoute } from '../../const';
-import { useNavigate } from 'react-router-dom';
 
 interface LoginModalProps {
   onSwitch: () => void;
@@ -17,18 +15,15 @@ interface LoginModalProps {
 
 export default function LoginModal({ onSwitch, onForgotPassword, onClose }: LoginModalProps) {
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
 
   const handleForgotPassword = () => {
     onForgotPassword();
-    onClose();
   };
 
   const handleSubmit = async (values: { email: string; password: string }) => {
     try {
       await dispatch(loginAction({ username: values.email, password: values.password })).unwrap();
       onClose();
-      navigate(AppRoute.Profile);
     } catch (error) {
       console.error('Ошибка авторизации:', error);
     }

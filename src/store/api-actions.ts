@@ -116,7 +116,7 @@ export const updateUserPasswordAction = createAsyncThunk<IMessage, IPassword, {
 }>(
   'user/updateUserPassword',
   async ({ oldPassword, newPassword }, { extra: api }) => {
-    const { data: { message } } = await api.post<IMessage>(APIRoute.UpdateUserRealname, { oldPassword, newPassword });
+    const { data: { message } } = await api.post<IMessage>(APIRoute.UpdateUserPassword, { oldPassword, newPassword });
     return  { message };
   }
 );
