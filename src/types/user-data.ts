@@ -51,8 +51,13 @@ export interface FetchUsersDataParams {
   user: string;
 }
 
-export interface FetchFreeTablesParams {
+export interface FetchBusyTablesParams {
   date: string;
-  timeStart: string;
-  timeEnd: string;
+  timeStart: string | null;
+  timeEnd: string | null;
+}
+
+export interface IDataReserval extends FetchBusyTablesParams {
+  tables: number[];
+  usernames?: string[];
 }

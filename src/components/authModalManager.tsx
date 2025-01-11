@@ -1,17 +1,25 @@
+import { useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../hooks';
 import Modal from './modal/modal';
 import LoginModal from './login-modal/login-modal';
 import RegisterModal from './register-modal/register-modal';
 import ForgotPasswordModal from './forgot-password-modal/forgot-password-modal';
 import ConfirmRegisterModal from './confirm-register-modal/confirm-register-modal';
+import SuccessReservalModal from './success-reserval-modal/success-reserval-modal';
 import { closeModal, openModal } from '../store/slices/modal-slice';
 
 export default function AuthModals() {
   const dispatch = useAppDispatch();
   const { currentModal } = useAppSelector((state) => state.modal);
+  const [email, setEmail] = useState<string>('');
 
   const closeCurrentModal = () => {
     dispatch(closeModal());
+  };
+
+  const handleRegisterSuccess = (email: string) => {
+    setEmail(email);
+    dispatch(openModal('confirmRegister'));
   };
 
   return (
@@ -30,7 +38,7 @@ export default function AuthModals() {
           <RegisterModal
             onSwitch={() => dispatch(openModal('login'))}
             onClose={closeCurrentModal}
-            onRegisterSuccess={() => dispatch(openModal('confirmRegister'))}
+            onRegisterSuccess={handleRegisterSuccess}
           />
         </Modal>
       )}
@@ -41,7 +49,14 @@ export default function AuthModals() {
       )}
       {currentModal === 'confirmRegister' && (
         <Modal isOpen onClose={closeCurrentModal}>
-          <ConfirmRegisterModal onClose={closeCurrentModal} />
+          <ConfirmRegisterModal onClose={closeCurrentModal}  email={email}/>
+        </Modal>
+      )}
+      {currentModal === 'successReserval' && (
+        <Modal isOpen onClose={closeCurrentModal}>
+          <SuccessReservalModal
+            onClose={closeCurrentModal}
+          />
         </Modal>
       )}
     </>

@@ -6,7 +6,7 @@ interface ConfirmPasswordModalProps {
   onClose: () => void;
 }
 
-export default function ConfirmPasswordModal({ onClose }: ConfirmPasswordModalProps) {
+export default function SuccessConfirmPasswordModal({ onClose }: ConfirmPasswordModalProps) {
   return (
     <>
       <h1 className={styles.title}>Забыли пароль?</h1>

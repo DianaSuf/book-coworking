@@ -24,8 +24,9 @@ export enum  APIRoute {
   UpdateUserRealname = '/Brusnika/user/updateRealname',
   UpdateUserPassword = '/Brusnika/user/updatePassword',
   ResetUserPassword = '/Brusnika/auth/password',
-  FreeTables = '/Brusnika/user/freeTables',
+  BusyTables = '/Brusnika/user/busyTables',
   SearchUsers = '/Brusnika/user/group',
+  Reserval = '/Brusnika/user/reserval',
 }
 
 export enum  ActionButtonType {
@@ -33,4 +34,4 @@ export enum  ActionButtonType {
   Black = 'black',
 }
 
-export type ModalType = 'login' | 'register' | 'forgotPassword' | 'confirmRegister' | null;
+export type ModalType = 'login' | 'register' | 'forgotPassword' | 'confirmRegister' | 'successReserval' | null;

@@ -4,7 +4,7 @@ import { AppDispatch, State } from '../types/state';
 import { APIRoute, AuthorizationStatus, AppRoute } from '../const';
 import { redirectToRoute } from './action';
 
-import { IAuthRole, IRegisterData, ILoginData, IMessage, IRefreshData, ITokenResponse, IUserData, IRealNameData, IUserNameData, IPassword, IUserDataWithId, FetchUsersDataParams, FetchFreeTablesParams } from '../types/user-data';
+import { IAuthRole, IRegisterData, ILoginData, IMessage, IRefreshData, ITokenResponse, IUserData, IRealNameData, IUserNameData, IPassword, IUserDataWithId, FetchUsersDataParams, FetchBusyTablesParams, IDataReserval } from '../types/user-data';
 
 export const checkAuthAction = createAsyncThunk<AuthorizationStatus, undefined, {
   dispatch: AppDispatch;
@@ -133,15 +133,15 @@ export const resetUserPasswordAction = createAsyncThunk<IMessage, IUserNameData,
   }
 );
 
-export const fetchFreeTablesAction = createAsyncThunk<number[], FetchFreeTablesParams, {
+export const fetchBusyTablesAction = createAsyncThunk<number[], FetchBusyTablesParams, {
   dispatch: AppDispatch;
   state: State;
   extra: AxiosInstance
 }>(
-  'book/fetchFreeTables',
+  'book/fetchBusyTables',
   async ({ date, timeStart, timeEnd }, { extra: api }) => {
-    const response = await api.post<number[]>(APIRoute.FreeTables, { date, timeStart, timeEnd });
-    return  response.data;
+    const response = await api.post<number[]>(APIRoute.BusyTables, { date, timeStart, timeEnd });
+    return response.data;
   }
 );
 
@@ -160,4 +160,16 @@ export const fetchUsersDataAction = createAsyncThunk<IUserDataWithId | IMessage,
       return undefined;
     }
   },
+);
+
+export const reservalTablesAction = createAsyncThunk<IMessage, IDataReserval, {
+  dispatch: AppDispatch;
+  state: State;
+  extra: AxiosInstance
+}>(
+  'book/reservalTables',
+  async ({ date, timeStart, timeEnd, usernames, tables }, { extra: api }) => {
+    const { data: { message } } =  await api.post<IMessage>(APIRoute.Reserval, { date, timeStart, timeEnd, usernames, tables });
+    return  { message };
+  }
 );

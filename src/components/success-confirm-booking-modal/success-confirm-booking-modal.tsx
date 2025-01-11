@@ -6,7 +6,7 @@ interface ConfirmBookingModalProps {
   onClose: () => void;
 }
 
-export default function ConfirmBookingModal({ onClose }: ConfirmBookingModalProps) {
+export default function SuccessConfirmBookingModal({ onClose }: ConfirmBookingModalProps) {
   return (
     <>
       <h1 className={styles.title}>Бронь подтверждена!</h1>

@@ -42,9 +42,6 @@ export default function LoginModal({ onSwitch, onForgotPassword, onClose }: Logi
           'Email должен быть с доменом urfu.me или at.urfu.ru',
           (value) => /@(?:urfu.me|at.urfu.ru)$/.test(value || '')
         ),
-      // password: Yup.string()
-      //   .min(6, 'Пароль должен содержать хотя бы 6 символов')
-      //   .required('Пароль обязателен'),
       password: Yup.string()
         // .min(6, 'Пароль должен содержать хотя бы 6 символов')
         .required('Пароль обязателен'),

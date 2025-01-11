@@ -4,9 +4,9 @@ import { ReactSVG } from 'react-svg';
 import Header from '../../components/header/header';
 import Footer from '../../components/footer/footer';
 import { useAppSelector, useAppDispatch } from '../../hooks';
-import { getAuthorizationStatus } from '../../store/slices/user-slice';
-import { fetchUsersDataAction, fetchFreeTablesAction } from '../../store/api-actions';
-import { IUserDataWithId } from '../../types/user-data';
+import { getAuthorizationStatus, getUserData } from '../../store/slices/user-slice';
+import { fetchUsersDataAction, fetchBusyTablesAction, reservalTablesAction } from '../../store/api-actions';
+import { IUserDataWithId, IDataReserval } from '../../types/user-data';
 import { AuthorizationStatus, ActionButtonType } from '../../const';
 import ActionButton from '../../components/action-button/action-button';
 import AuthModals from '../../components/authModalManager';
@@ -77,6 +77,7 @@ const useUsers = (defaultUsers: IUserDataWithId[] = []) => {
 
 export default function BookScreen() {
   const dispatch = useAppDispatch();
+  const userData = useAppSelector(getUserData);
   const authorizationStatus = useAppSelector(getAuthorizationStatus);
   const [selectedSeats, setSelectedSeats] = useState<number[]>([]);
   const [selectedUsers, setSelectedUsers] = useState<IUserDataWithId[]>([]);
@@ -95,6 +96,15 @@ export default function BookScreen() {
     const month = String(d.getMonth() + 1).padStart(2, '0');
     const year = d.getFullYear();
     return `${day}.${month}.${year}`;
+  };
+
+  const handleSubmit = async (dataToSend: IDataReserval) => {
+    try {
+      await dispatch(reservalTablesAction(dataToSend)).unwrap();
+      handleReservalModal();
+    } catch (error) {
+      console.error('Ошибка при бронировании:', error);
+    }
   };
 
   const formik = useFormik({
@@ -116,8 +126,9 @@ export default function BookScreen() {
       const dataToSend = {
         ...values,
         date: formattedDate,
+        usernames: [userData?.username ?? '', ...values.usernames],
       };
-      console.log('Форма отправлена с данными:', dataToSend);
+      handleSubmit(dataToSend);
     },
   });
 
@@ -132,6 +143,10 @@ export default function BookScreen() {
 
   const handleAuthModal = () => {
     dispatch(openModal('login'));
+  };
+
+  const handleReservalModal = () => {
+    dispatch(openModal('successReserval'));
   };
 
   const handleToggleChange = (checked: boolean) => {
@@ -258,7 +273,7 @@ export default function BookScreen() {
       const formattedDate = formatDateForRequest(date);
       console.log(formattedDate);
       
-      const response = await dispatch(fetchFreeTablesAction({
+      const response = await dispatch(fetchBusyTablesAction({
         date: formattedDate,
         timeStart,
         timeEnd

@@ -27,6 +27,7 @@ export const userSlice = createSlice({
   },
   selectors: {
     getAuthorizationStatus: (store) => store.authorizationStatus,
+    getUserData: (store) => store.userData,
   },
   extraReducers: (builder) => {
     builder
@@ -69,4 +70,4 @@ export const userSlice = createSlice({
 
 export const { logoutUser } = userSlice.actions;
 
-export const { getAuthorizationStatus } = userSlice.selectors;
+export const { getAuthorizationStatus, getUserData } = userSlice.selectors;

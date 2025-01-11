@@ -10,7 +10,7 @@ import { ActionButtonType } from '../../const';
 interface RegisterModalProps {
   onSwitch: () => void;
   onClose: () => void;
-  onRegisterSuccess: () => void;
+  onRegisterSuccess: (email: string) => void;
 }
 
 export default function RegisterModal({ onSwitch, onClose, onRegisterSuccess }: RegisterModalProps) {
@@ -24,7 +24,7 @@ export default function RegisterModal({ onSwitch, onClose, onRegisterSuccess }: 
         password: values.password,
       })).unwrap();
       onClose();
-      onRegisterSuccess();
+      onRegisterSuccess(values.email);
     } catch (error) {
       console.error('Ошибка регистрации:', error);
     }
