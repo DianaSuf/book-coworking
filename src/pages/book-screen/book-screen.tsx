@@ -5,7 +5,7 @@ import Header from '../../components/header/header';
 import Footer from '../../components/footer/footer';
 import { useAppSelector, useAppDispatch } from '../../hooks';
 import { getAuthorizationStatus } from '../../store/slices/user-slice';
-import { fetchUsersDataAction  } from '../../store/api-actions';
+import { fetchUsersDataAction, fetchFreeTablesAction } from '../../store/api-actions';
 import { IUserDataWithId } from '../../types/user-data';
 import { AuthorizationStatus, ActionButtonType } from '../../const';
 import ActionButton from '../../components/action-button/action-button';
@@ -78,7 +78,7 @@ const useUsers = (defaultUsers: IUserDataWithId[] = []) => {
 export default function BookScreen() {
   const dispatch = useAppDispatch();
   const authorizationStatus = useAppSelector(getAuthorizationStatus);
-  const [selectedSeats, setSelectedSeats] = useState<string[]>([]);
+  const [selectedSeats, setSelectedSeats] = useState<number[]>([]);
   const [selectedUsers, setSelectedUsers] = useState<IUserDataWithId[]>([]);
   const [timeStart, setTimeStart] = useState<string | null>(null);
   const [timeEnd, setTimeEnd] = useState<string | null>(null);
@@ -87,6 +87,15 @@ export default function BookScreen() {
   const [users, loading, fetchUsers] = useUsers();
   const [pickerValue, setPickerValue] = useState(null);
   console.log(selectedSeats)
+
+  const formatDateForRequest = (date: string | Date): string => {
+    if (!date) return '';
+    const d = new Date(date);
+    const day = String(d.getDate()).padStart(2, '0');
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const year = d.getFullYear();
+    return `${day}.${month}.${year}`;
+  };
 
   const formik = useFormik({
     initialValues: {
@@ -103,16 +112,20 @@ export default function BookScreen() {
       tables: Yup.array().min(1, 'Выберите место').required('Выберите место'),
     }),
     onSubmit: (values) => {
-      console.log('Форма отправлена с данными:', values);
+      const formattedDate = values.date ? formatDateForRequest(values.date) : '';
+      const dataToSend = {
+        ...values,
+        date: formattedDate,
+      };
+      console.log('Форма отправлена с данными:', dataToSend);
     },
   });
 
   useEffect(() => {
     formik.setFieldValue('tables', selectedSeats);
-    console.log(selectedSeats)
   }, [selectedSeats]);
   
-  // Обновляем значения selectedUsers в форме
+  
   useEffect(() => {
     formik.setFieldValue('usernames', selectedUsers.map((user) => user.username));
   }, [selectedUsers]);
@@ -127,64 +140,68 @@ export default function BookScreen() {
 
   const onClickHandler = (event: MouseEvent) => {
     const target = event.target as SVGElement;
-
     const match = target.id.match(/(?:UnionSeat-|RectangeSeat-|^)(\d+)(?:-|$)/);
-    const seatId = match ? match[1] : null;
-
+    const seatId = match ? parseInt(match[1], 10) : null;
+  
     if (!seatId) return;
-
-    if (
-      target.id &&
-      (
-        target.id.startsWith('UnionSeat-') ||
-        target.id.startsWith('RectangeSeat-') ||
+  
+    const maxSeatsToSelect = 1 + selectedUsers.length; // Ограничение выбора мест
+  
+    if (selectedSeats.length < maxSeatsToSelect) {
+      if (
+        target.id &&
         (
-          target.id.startsWith(`${seatId}-`) &&
-          Number(seatId) >= 1 && Number(seatId) <= 24
+          target.id.startsWith('UnionSeat-') ||
+          target.id.startsWith('RectangeSeat-') ||
+          (
+            target.id.startsWith(`${seatId}-`) &&
+            seatId >= 1 && seatId <= 24
+          )
         )
-      )
-    ) {
-      const unionSeat = document.querySelector<SVGElement>(`[id^="UnionSeat-${seatId}"]`);
-      const rectangeSeat = document.querySelector<SVGElement>(`[id^="RectangeSeat-${seatId}"]`);
-      const numberSeat = document.querySelector<SVGElement>(`[id^="${seatId}-"]`);
-
-      if (!selectedSeats.includes(seatId)) {
-        if (unionSeat) {
-          unionSeat.setAttribute('fill', '#9ACA3C');
+      ) {
+        const unionSeat = document.querySelector<SVGElement>(`[id^="UnionSeat-${seatId}"]`);
+        const rectangeSeat = document.querySelector<SVGElement>(`[id^="RectangeSeat-${seatId}"]`);
+        const numberSeat = document.querySelector<SVGElement>(`[id^="${seatId}-"]`);
+  
+        if (!selectedSeats.includes(seatId)) {
+          if (unionSeat) {
+            unionSeat.setAttribute('fill', '#9ACA3C');
+          }
+  
+          if (rectangeSeat) {
+            rectangeSeat.setAttribute('fill', '#C1DC8B');
+          }
+  
+          if (numberSeat) {
+            numberSeat.setAttribute('fill', '#9ACA3C');
+          }
+  
+          setSelectedSeats((prevSelectedSeats) => [...prevSelectedSeats, seatId]);
         }
-
-        if (rectangeSeat) {
-          rectangeSeat.setAttribute('fill', '#C1DC8B');
-        }
-
-        if (numberSeat) {
-          numberSeat.setAttribute('fill', '#9ACA3C');
-        }
-
-        setSelectedSeats((prevSelectedSeats) => [...prevSelectedSeats, seatId]);
       }
     }
   };
 
-  const handleRemoveSeat = (seatId: string) => {
+  const handleRemoveSeat = (seatId: number) => {
     const unionSeat = document.querySelector<SVGElement>(`[id^="UnionSeat-${seatId}"]`);
     const rectangeSeat = document.querySelector<SVGElement>(`[id^="RectangeSeat-${seatId}"]`);
     const numberSeat = document.querySelector<SVGElement>(`[id^="${seatId}-"]`);
-
+  
     if (unionSeat) {
       unionSeat.setAttribute('fill', '#F5887A');
     }
-
+  
     if (rectangeSeat) {
       rectangeSeat.setAttribute('fill', '#F9B2A4');
     }
-
+  
     if (numberSeat) {
       numberSeat.setAttribute('fill', '#F5887A');
     }
-
+  
     setSelectedSeats((prevSelectedSeats) => prevSelectedSeats.filter((seat) => seat !== seatId));
   };
+  
 
   const restoreSeatColors = () => {
     selectedSeats.forEach((seatId) => {
@@ -235,6 +252,30 @@ export default function BookScreen() {
       return prevUsers;
     });
   };
+
+  const fetchFreeTables = async (date: string, timeStart: string, timeEnd: string) => {
+    try {
+      const formattedDate = formatDateForRequest(date);
+      console.log(formattedDate);
+      
+      const response = await dispatch(fetchFreeTablesAction({
+        date: formattedDate,
+        timeStart,
+        timeEnd
+      }));
+      
+      const payload = response.payload as number[];
+      setSelectedSeats(payload);
+    } catch (error) {
+      console.error('Error fetching free tables:', error);
+    }
+  };
+
+  useEffect(() => {
+    if (formik.values.date && timeStart && timeEnd) {
+      fetchFreeTables(formik.values.date, timeStart, timeEnd);
+    }
+  }, [formik.values.date, timeStart, timeEnd]);
 
   return (
     <>
@@ -331,23 +372,24 @@ export default function BookScreen() {
                 <div>
                   <p className={styles.seatText}>Выбранные места:</p>
                   <ul className={styles.selectedList}>
-                    {selectedSeats.length > 0 ? (
-                      selectedSeats.map((seat) => (
-                        <li key={seat} className={styles.selectedItem}>
-                          {seat}
-                          <button
-                            className={styles.deleteBtn}
-                            type="button"
-                            onClick={() => handleRemoveSeat(seat)}
-                          >
-                            Удалить
-                          </button>
-                        </li>
-                      ))
-                    ) : (
-                      <p className={styles.noSelection}>Пусто</p>
-                    )}
+                  {selectedSeats && selectedSeats.length > 0 ? (
+            selectedSeats.map((seat) => (
+              <li key={seat} className={styles.selectedItem}>
+                {seat}
+                <button
+                  className={styles.deleteBtn}
+                  type="button"
+                  onClick={() => handleRemoveSeat(seat)}
+                >
+                  Удалить
+                </button>
+              </li>
+            ))
+          ) : (
+            <p className={styles.noSelection}>Пусто</p>
+          )}
                   </ul>
+
                   {formik.errors.tables && formik.touched.tables && (
                     <p className={styles.errorText}>{formik.errors.tables}</p>
                   )}
