@@ -4,7 +4,7 @@ import { AppDispatch, State } from '../types/state';
 import { APIRoute, AuthorizationStatus, AppRoute } from '../const';
 import { redirectToRoute } from './action';
 
-import { IAuthRole, IRegisterData, ILoginData, IMessage, IRefreshData, ITokenResponse, IUserData, IRealNameData, IUserNameData, IPassword } from '../types/user-data';
+import { IAuthRole, IRegisterData, ILoginData, IMessage, IRefreshData, ITokenResponse, IUserData, IRealNameData, IUserNameData, IPassword, IUserDataWithId, FetchUsersDataParams, FetchFreeTablesParams } from '../types/user-data';
 
 export const checkAuthAction = createAsyncThunk<AuthorizationStatus, undefined, {
   dispatch: AppDispatch;
@@ -131,4 +131,33 @@ export const resetUserPasswordAction = createAsyncThunk<IMessage, IUserNameData,
     const { data: { message } } = await api.post<IMessage>(APIRoute.ResetUserPassword, { username });
     return  { message };
   }
+);
+
+export const fetchFreeTablesAction = createAsyncThunk<number[], FetchFreeTablesParams, {
+  dispatch: AppDispatch;
+  state: State;
+  extra: AxiosInstance
+}>(
+  'book/fetchFreeTables',
+  async ({ date, timeStart, timeEnd }, { extra: api }) => {
+    const response = await api.post<number[]>(APIRoute.FreeTables, { date, timeStart, timeEnd });
+    return  response.data;
+  }
+);
+
+export const fetchUsersDataAction = createAsyncThunk<IUserDataWithId | IMessage, FetchUsersDataParams, {
+  dispatch: AppDispatch;
+  state: State;
+  extra: AxiosInstance;
+}>(
+  'book/fetchUsers',
+  async ({ user }, {extra: api}) => {
+    try {
+      const {data} = await api.get(`${APIRoute.SearchUsers}/${user}`);
+      return data;
+    }
+    catch {
+      return undefined;
+    }
+  },
 );

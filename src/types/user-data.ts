@@ -28,6 +28,10 @@ export type IRealNameData = Pick<IUserData, 'realname'>;
 
 export type IUserNameData = Pick<IUserData, 'username'>;
 
+export interface IUserDataWithId extends IUserData {
+  id: number;
+}
+
 export interface IMessage {
   message: string;
 }
@@ -41,4 +45,14 @@ export interface ITokenResponse {
   tokenAccess: string;
   tokenRefresh: string;
   role: keyof typeof AuthorizationStatus;
+}
+
+export interface FetchUsersDataParams {
+  user: string;
+}
+
+export interface FetchFreeTablesParams {
+  date: string;
+  timeStart: string;
+  timeEnd: string;
 }

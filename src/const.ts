@@ -24,6 +24,8 @@ export enum  APIRoute {
   UpdateUserRealname = '/Brusnika/user/updateRealname',
   UpdateUserPassword = '/Brusnika/user/updatePassword',
   ResetUserPassword = '/Brusnika/auth/password',
+  FreeTables = '/Brusnika/user/freeTables',
+  SearchUsers = '/Brusnika/user/group',
 }
 
 export enum  ActionButtonType {

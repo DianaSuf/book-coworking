@@ -36,17 +36,15 @@ export default function LoginModal({ onSwitch, onForgotPassword, onClose }: Logi
     },
     validateOnBlur: true,
     validationSchema: Yup.object({
-      // email: Yup.string()
-      //   .test(
-      //     'is-valid-domain',
-      //     'Email должен быть с доменом urfu.me или at.urfu.ru',
-      //     (value) => /@(?:urfu.me|at.urfu.ru)$/.test(value || '')
-      //   ),
+      email: Yup.string()
+        .test(
+          'is-valid-domain',
+          'Email должен быть с доменом urfu.me или at.urfu.ru',
+          (value) => /@(?:urfu.me|at.urfu.ru)$/.test(value || '')
+        ),
       // password: Yup.string()
       //   .min(6, 'Пароль должен содержать хотя бы 6 символов')
       //   .required('Пароль обязателен'),
-      email: Yup.string()
-        .required('Email обязателен'),
       password: Yup.string()
         // .min(6, 'Пароль должен содержать хотя бы 6 символов')
         .required('Пароль обязателен'),
