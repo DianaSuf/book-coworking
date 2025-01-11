@@ -353,7 +353,7 @@ export default function BookScreen() {
                     data={timeOptions}
                     searchable={false}
                     className={styles.timeSelect}
-                    renderValue={(value, item) =>
+                    renderValue={(_value, item) =>
                       item && typeof item === 'object' && 'label' in item ? (
                         <span style={{ color: '#14191A' }}>{item.label}</span>
                       ) : <span style={{ color: '#8A8C8C' }}>с</span>
@@ -372,7 +372,7 @@ export default function BookScreen() {
                     searchable={false}
                     className={styles.timeSelect}
                     disabled={!timeStart}
-                    renderValue={(value, item) =>
+                    renderValue={(_value, item) =>
                       item && typeof item === 'object' && 'label' in item ? (
                         <span style={{ color: '#14191A' }}>{item.label}</span>
                       ) : <span style={{ color: '#8A8C8C' }}>до</span>
@@ -446,7 +446,7 @@ export default function BookScreen() {
                         valueKey="id"
                         value={pickerValue}
                         onSearch={fetchUsers}
-                        onSelect={(value, item) => {
+                        onSelect={(_value, item) => {
                           handleSelect(item as IUserDataWithId);
                           setPickerValue(null);
                         }}
