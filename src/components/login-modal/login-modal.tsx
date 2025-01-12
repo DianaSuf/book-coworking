@@ -43,7 +43,7 @@ export default function LoginModal({ onSwitch, onForgotPassword, onClose }: Logi
           (value) => /@(?:urfu.me|at.urfu.ru)$/.test(value || '')
         ),
       password: Yup.string()
-        // .min(6, 'Пароль должен содержать хотя бы 6 символов')
+        .min(6, 'Пароль должен содержать хотя бы 6 символов')
         .required('Пароль обязателен'),
     }),
     onSubmit: handleSubmit,
