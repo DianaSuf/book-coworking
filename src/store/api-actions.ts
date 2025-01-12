@@ -4,7 +4,7 @@ import { AppDispatch, State } from '../types/state';
 import { APIRoute, AuthorizationStatus, AppRoute } from '../const';
 import { redirectToRoute } from './action';
 
-import { IAuthRole, IRegisterData, ILoginData, IMessage, IRefreshData, ITokenResponse, IUserData, IRealNameData, IUserNameData, IPassword, IUserDataWithId, FetchUsersDataParams, FetchBusyTablesParams, IDataReserval } from '../types/user-data';
+import { IAuthRole, IRegisterData, ILoginData, IMessage, IRefreshData, ITokenResponse, IUserData, IRealNameData, IUserNameData, IPassword, IUserDataWithId, FetchUsersDataParams, FetchBusyTablesParams, IDataReserval, INotificationsData, IReservalId } from '../types/user-data';
 
 export const checkAuthAction = createAsyncThunk<AuthorizationStatus, undefined, {
   dispatch: AppDispatch;
@@ -22,18 +22,14 @@ export const checkAuthAction = createAsyncThunk<AuthorizationStatus, undefined, 
   },
 );
 
-export const registerAction = createAsyncThunk<AuthorizationStatus, IRegisterData, {
+export const registerAction = createAsyncThunk<void, IRegisterData, {
   dispatch: AppDispatch;
   state: State;
   extra: AxiosInstance
 }>(
   'user/register',
   async ({ username, realname, password }, { extra: api }) => {
-    const { data: { message } } = await api.post<IMessage>(APIRoute.Register, { username, realname, password });
-    if (message === 'ok') {
-      return AuthorizationStatus.USER;
-    }
-    return AuthorizationStatus.NoAuth;
+    await api.post<IMessage>(APIRoute.Register, { username, realname, password });
   }
 );
 
@@ -47,6 +43,7 @@ export const loginAction = createAsyncThunk<AuthorizationStatus, ILoginData, {
     const { data: { tokenAccess, tokenRefresh, role } } = await api.post<ITokenResponse>(APIRoute.Login, { username, password });
     localStorage.setItem('tokenAccess', tokenAccess);
     localStorage.setItem('tokenRefresh', tokenRefresh);
+    dispatch(fetchUserDataAction());
     dispatch(redirectToRoute(AppRoute.Profile));
     return AuthorizationStatus[role];
   }
@@ -66,17 +63,21 @@ export const refreshAction = createAsyncThunk<void, IRefreshData, {
   }
 );
 
-export const confirmRegisterAction = createAsyncThunk<AuthorizationStatus, IMessage, {
-  dispatch: AppDispatch;
-  state: State;
-  extra: AxiosInstance
-}>(
-  'user/refresh',
+export const confirmRegisterAction = createAsyncThunk<
+  { authorizationStatus: AuthorizationStatus },
+  IMessage,
+  { dispatch: AppDispatch; state: State; extra: AxiosInstance }
+>(
+  'user/confirmRegister',
   async ({ message }, { extra: api }) => {
-    const { data: { tokenAccess, tokenRefresh, role } } = await api.post<ITokenResponse>(APIRoute.ConfirmRegister, { message });
+    const {
+      data: { tokenAccess, tokenRefresh, role },
+    } = await api.post<ITokenResponse>(APIRoute.ConfirmRegister, { message });
+
     localStorage.setItem('tokenAccess', tokenAccess);
     localStorage.setItem('tokenRefresh', tokenRefresh);
-    return AuthorizationStatus[role];
+
+    return { authorizationStatus: AuthorizationStatus[role] };
   }
 );
 
@@ -172,4 +173,38 @@ export const reservalTablesAction = createAsyncThunk<IMessage, IDataReserval, {
     const { data: { message } } =  await api.post<IMessage>(APIRoute.Reserval, { date, timeStart, timeEnd, usernames, tables });
     return  { message };
   }
+);
+
+export const fetchNotificationsAction = createAsyncThunk<INotificationsData, undefined, {
+  dispatch: AppDispatch;
+  state: State;
+  extra: AxiosInstance;
+}>(
+  'notifications/fetchNotifications',
+  async (_arg, {extra: api}) => {
+    try {
+      const {data} = await api.get(APIRoute.Notifications);
+      return data;
+    }
+    catch {
+      return undefined;
+    }
+  },
+);
+
+export const CancelReservalAction = createAsyncThunk<INotificationsData, IReservalId, {
+  dispatch: AppDispatch;
+  state: State;
+  extra: AxiosInstance;
+}>(
+  'notifications/cancelReserval',
+  async (id, {extra: api}) => {
+    try {
+      const {data} = await api.get(`${APIRoute.CancelReserval}/${id}`);
+      return data;
+    }
+    catch {
+      return undefined;
+    }
+  },
 );

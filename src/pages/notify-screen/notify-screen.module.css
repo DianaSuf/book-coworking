@@ -1,3 +1,66 @@
 .notify {
-  padding: 40px 258px;
+  padding: 40px 290px;
+  min-height: 700px;
+}
+
+.book {
+  width: 100%;
+  padding: 38px 40px;
+  margin: 30px;
+  background-color: #F6F6F4;
+  border-radius: 10px;
+  box-shadow: 0px 4px 16px 0px rgba(20, 25, 26, 0.08);
+  display: flex;
+  justify-content: space-between;
+}
+
+.title {
+  font-weight: 400;
+}
+
+.group {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  margin: 10px 0;
+}
+
+.titleNotifications {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 100%;
+  margin: 0 30px;
+}
+
+.titleNotifications::before,
+.titleNotifications::after {
+  content: '';
+  flex-grow: 1;
+  height: 0.5px;
+  background-color: #EF3B24;
+  width: 100px;
+}
+
+.titleNotifications::before {
+  margin-right: 30px;
+}
+
+.titleNotifications::after {
+  margin-left: 30px;
+}
+
+
+.empty {
+  font-size: 40px;
+}
+
+.text{
+  font-size: 20px;
+}
+
+.bookBtn {
+  color: rgba(239, 59, 36, 1);
+  font-size: 20px;
 }

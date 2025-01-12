@@ -27,6 +27,8 @@ export enum  APIRoute {
   BusyTables = '/Brusnika/user/busyTables',
   SearchUsers = '/Brusnika/user/group',
   Reserval = '/Brusnika/user/reserval',
+  Notifications = '/Brusnika/user/notifications',
+  CancelReserval = '/Brusnika/user/cancel',
 }
 
 export enum  ActionButtonType {
@@ -35,3 +37,8 @@ export enum  ActionButtonType {
 }
 
 export type ModalType = 'login' | 'register' | 'forgotPassword' | 'confirmRegister' | 'successReserval' | null;
+
+export enum  ReservalType {
+  CODE = 'CODE',
+  GROUP = 'GROUP',
+}

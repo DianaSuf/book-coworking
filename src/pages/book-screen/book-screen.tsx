@@ -15,7 +15,7 @@ import DatePicker from 'rsuite/DatePicker';
 import 'rsuite/dist/rsuite.min.css';
 import styles from './book-screen.module.css';
 import ruRU from 'rsuite/locales/ru_RU';
-import { CustomProvider, SelectPicker, Toggle, InputPicker } from 'rsuite';
+import { CustomProvider, SelectPicker, Toggle, InputPicker, Checkbox } from 'rsuite';
 import SpinnerIcon from '@rsuite/icons/legacy/Spinner';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -80,6 +80,7 @@ export default function BookScreen() {
   const userData = useAppSelector(getUserData);
   const authorizationStatus = useAppSelector(getAuthorizationStatus);
   const [selectedSeats, setSelectedSeats] = useState<number[]>([]);
+  const [freeTables, setFreeTables] = useState<number[]>([]);
   const [selectedUsers, setSelectedUsers] = useState<IUserDataWithId[]>([]);
   const [timeStart, setTimeStart] = useState<string | null>(null);
   const [timeEnd, setTimeEnd] = useState<string | null>(null);
@@ -119,7 +120,15 @@ export default function BookScreen() {
       date: Yup.date().nullable().required('Дата обязательна'),
       timeStart: Yup.string().nullable().required('Время начала обязательно'),
       timeEnd: Yup.string().nullable().required('Время окончания обязательно'),
-      tables: Yup.array().min(1, 'Выберите место').required('Выберите место'),
+      tables: Yup.array()
+        .min(1, 'Выберите место')
+        .required('Выберите место')
+        .test('tables-usernames', 'Выберите место другу', function (value) {
+          const usernames = this.parent.usernames || [];
+          if (!value) return false;
+          return value.length === usernames.length + 1;
+        }),
+      usernames: Yup.array().of(Yup.string()),
     }),
     onSubmit: (values) => {
       const formattedDate = values.date ? formatDateForRequest(values.date) : '';
@@ -158,9 +167,9 @@ export default function BookScreen() {
     const match = target.id.match(/(?:UnionSeat-|RectangeSeat-|^)(\d+)(?:-|$)/);
     const seatId = match ? parseInt(match[1], 10) : null;
   
-    if (!seatId) return;
+    if (!seatId || freeTables.includes(seatId)) return; // Не разрешаем выбирать занятые места
   
-    const maxSeatsToSelect = 1 + selectedUsers.length; // Ограничение выбора мест
+    const maxSeatsToSelect = 1 + selectedUsers.length;
   
     if (selectedSeats.length < maxSeatsToSelect) {
       if (
@@ -195,7 +204,7 @@ export default function BookScreen() {
         }
       }
     }
-  };
+  };  
 
   const handleRemoveSeat = (seatId: number) => {
     const unionSeat = document.querySelector<SVGElement>(`[id^="UnionSeat-${seatId}"]`);
@@ -219,25 +228,93 @@ export default function BookScreen() {
   
 
   const restoreSeatColors = () => {
+    // Сбрасываем цвет всех выбранных мест
     selectedSeats.forEach((seatId) => {
       const unionSeat = document.querySelector<SVGElement>(`[id^="UnionSeat-${seatId}"]`);
       const rectangeSeat = document.querySelector<SVGElement>(`[id^="RectangeSeat-${seatId}"]`);
       const numberSeat = document.querySelector<SVGElement>(`[id^="${seatId}-"]`);
-
-      if (unionSeat) {
-        unionSeat.setAttribute('fill', '#9ACA3C');
+  
+      // Проверяем, не находится ли место в списке занятых
+      if (freeTables.includes(seatId)) {
+        if (unionSeat) {
+          unionSeat.setAttribute('fill', '#B8B8B8'); // Цвет для занятых мест
+        }
+  
+        if (rectangeSeat) {
+          rectangeSeat.setAttribute('fill', '#D5D0CF'); // Цвет для занятых мест
+        }
+  
+        if (numberSeat) {
+          numberSeat.setAttribute('fill', '#B8B8B8'); // Цвет для занятых мест
+        }
+      } else {
+        // Если место не занято, сбрасываем его цвет как доступного
+        if (unionSeat) {
+          unionSeat.setAttribute('fill', '#9ACA3C');
+        }
+  
+        if (rectangeSeat) {
+          rectangeSeat.setAttribute('fill', '#C1DC8B');
+        }
+  
+        if (numberSeat) {
+          numberSeat.setAttribute('fill', '#9ACA3C');
+        }
       }
-
-      if (rectangeSeat) {
-        rectangeSeat.setAttribute('fill', '#C1DC8B');
-      }
-
-      if (numberSeat) {
-        numberSeat.setAttribute('fill', '#9ACA3C');
+    });
+  
+    // Обрабатываем все занятые места, которые не находятся в selectedSeats
+    freeTables.forEach((seatId) => {
+      if (!selectedSeats.includes(seatId)) {
+        const unionSeat = document.querySelector<SVGElement>(`[id^="UnionSeat-${seatId}"]`);
+        const rectangeSeat = document.querySelector<SVGElement>(`[id^="RectangeSeat-${seatId}"]`);
+        const numberSeat = document.querySelector<SVGElement>(`[id^="${seatId}-"]`);
+  
+        if (unionSeat) {
+          unionSeat.setAttribute('fill', '#B8B8B8'); // Цвет для занятых мест
+        }
+  
+        if (rectangeSeat) {
+          rectangeSeat.setAttribute('fill', '#D5D0CF'); // Цвет для занятых мест
+        }
+  
+        if (numberSeat) {
+          numberSeat.setAttribute('fill', '#B8B8B8'); // Цвет для занятых мест
+        }
       }
     });
   };
+  
 
+  useEffect(() => {
+    const renderBusySeats = () => {
+      freeTables.forEach((seatId) => {
+        const unionSeat = document.querySelector<SVGElement>(`[id^="UnionSeat-${seatId}"]`);
+        const rectangeSeat = document.querySelector<SVGElement>(`[id^="RectangeSeat-${seatId}"]`);
+        const numberSeat = document.querySelector<SVGElement>(`[id^="${seatId}-"]`);
+  
+        if (unionSeat) {
+          unionSeat.setAttribute('fill', '#B8B8B8');
+        }
+  
+        if (rectangeSeat) {
+          rectangeSeat.setAttribute('fill', '#D5D0CF');
+        }
+  
+        if (numberSeat) {
+          numberSeat.setAttribute('fill', '#B8B8B8');
+        }
+      });
+    };
+  
+    renderBusySeats();
+  }, [freeTables]);
+
+  useEffect(() => {
+    setSelectedSeats((prevSelectedSeats) =>
+      prevSelectedSeats.filter((seatId) => !freeTables.includes(seatId))
+    );
+  }, [freeTables]);  
 
   const handleStartTimeChange = (value: string | null) => {
     setTimeStart(value);
@@ -268,7 +345,7 @@ export default function BookScreen() {
     });
   };
 
-  const fetchFreeTables = async (date: string, timeStart: string, timeEnd: string) => {
+  const fetchBusyTables = async (date: string, timeStart: string, timeEnd: string) => {
     try {
       const formattedDate = formatDateForRequest(date);
       console.log(formattedDate);
@@ -280,7 +357,7 @@ export default function BookScreen() {
       }));
       
       const payload = response.payload as number[];
-      setSelectedSeats(payload);
+      setFreeTables(payload);
     } catch (error) {
       console.error('Error fetching free tables:', error);
     }
@@ -288,9 +365,44 @@ export default function BookScreen() {
 
   useEffect(() => {
     if (formik.values.date && timeStart && timeEnd) {
-      fetchFreeTables(formik.values.date, timeStart, timeEnd);
+      fetchBusyTables(formik.values.date, timeStart, timeEnd);
     }
   }, [formik.values.date, timeStart, timeEnd]);
+
+  useEffect(() => {
+    // Update selectedSeats based on the new selectedUsers state
+    const maxSeatsToSelect = 1 + selectedUsers.length;
+    setSelectedSeats((prevSelectedSeats) => prevSelectedSeats.slice(0, maxSeatsToSelect));
+  
+    // Restore seat colors
+    restoreSeatColors();
+  }, [selectedUsers]);
+  
+  const handleRemoveUser = (userId: number) => {
+    setSelectedUsers((prevUsers) => prevUsers.filter((u) => u.id !== userId));
+  };
+
+  const handleSelectAllSeats = (checked: boolean | undefined) => {
+    if (checked) {
+      const allSeats = Array.from({ length: 24 }, (_, i) => i + 1).filter(
+        (seatId) => !freeTables.includes(seatId)
+      );
+      setSelectedSeats(allSeats);
+  
+      allSeats.forEach((seatId) => {
+        const unionSeat = document.querySelector<SVGElement>(`[id^="UnionSeat-${seatId}"]`);
+        const rectangeSeat = document.querySelector<SVGElement>(`[id^="RectangeSeat-${seatId}"]`);
+        const numberSeat = document.querySelector<SVGElement>(`[id^="${seatId}-"]`);
+  
+        if (unionSeat) unionSeat.setAttribute('fill', '#9ACA3C');
+        if (rectangeSeat) rectangeSeat.setAttribute('fill', '#C1DC8B');
+        if (numberSeat) numberSeat.setAttribute('fill', '#9ACA3C');
+      });
+    } else {
+      setSelectedSeats([]);
+      restoreSeatColors();
+    }
+  };  
 
   return (
     <>
@@ -388,21 +500,21 @@ export default function BookScreen() {
                   <p className={styles.seatText}>Выбранные места:</p>
                   <ul className={styles.selectedList}>
                   {selectedSeats && selectedSeats.length > 0 ? (
-            selectedSeats.map((seat) => (
-              <li key={seat} className={styles.selectedItem}>
-                {seat}
-                <button
-                  className={styles.deleteBtn}
-                  type="button"
-                  onClick={() => handleRemoveSeat(seat)}
-                >
-                  Удалить
-                </button>
-              </li>
-            ))
-          ) : (
-            <p className={styles.noSelection}>Пусто</p>
-          )}
+                    selectedSeats.map((seat) => (
+                      <li key={seat} className={styles.selectedItem}>
+                        {seat}
+                        <button
+                          className={styles.deleteBtn}
+                          type="button"
+                          onClick={() => handleRemoveSeat(seat)}
+                        >
+                          Удалить
+                        </button>
+                      </li>
+                    ))
+                  ) : (
+                    <p className={styles.noSelection}>Пусто</p>
+                  )}
                   </ul>
 
                   {formik.errors.tables && formik.touched.tables && (
@@ -429,7 +541,7 @@ export default function BookScreen() {
                               <button
                                 className={styles.deleteBtn}
                                 type="button"
-                                onClick={() => setSelectedUsers((prevUsers) => prevUsers.filter((u) => u.id !== user.id))}
+                                onClick={() => handleRemoveUser(user.id)}
                               >
                                 Удалить
                               </button>
@@ -465,6 +577,14 @@ export default function BookScreen() {
                   )}
                 </div>
               </div>
+              {authorizationStatus === AuthorizationStatus.ADMIN && (
+                <Checkbox
+                  color="red"
+                  onChange={(checked) => handleSelectAllSeats(!!checked)}
+                >
+                  Забронировать всё
+                </Checkbox>
+              )}
               <ActionButton
                 text="Забронировать коворкинг"
                 buttonType="submit"

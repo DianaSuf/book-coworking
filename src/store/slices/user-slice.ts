@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { AuthorizationStatus } from "../../const";
 import { IUserData } from "../../types/user-data";
-import { checkAuthAction, registerAction, loginAction, confirmRegisterAction, fetchUserDataAction } from "../api-actions";
+import { checkAuthAction, loginAction, confirmRegisterAction, fetchUserDataAction } from "../api-actions";
 
 type UserState = {
   authorizationStatus: AuthorizationStatus;
@@ -38,13 +38,6 @@ export const userSlice = createSlice({
         state.authorizationStatus = AuthorizationStatus.NoAuth;
       });
     builder
-      .addCase(registerAction.fulfilled, (state, action) => {
-        state.authorizationStatus = action.payload;
-      })
-      .addCase(registerAction.rejected, (state) => {
-        state.authorizationStatus = AuthorizationStatus.NoAuth;
-      });
-    builder
       .addCase(loginAction.fulfilled, (state, action) => {
         state.authorizationStatus = action.payload;
       })
@@ -53,7 +46,7 @@ export const userSlice = createSlice({
       });
     builder
       .addCase(confirmRegisterAction.fulfilled, (state, action) => {
-        state.authorizationStatus = action.payload;
+        state.authorizationStatus = action.payload.authorizationStatus;
       })
       .addCase(confirmRegisterAction.rejected, (state) => {
         state.authorizationStatus = AuthorizationStatus.NoAuth;

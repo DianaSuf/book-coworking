@@ -1,7 +1,7 @@
 import styles from './profile-screen.module.css'
 import { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { fetchUserDataAction, updateUserRealnameAction, updateUserPasswordAction } from '../../store/api-actions';
+import { updateUserRealnameAction, updateUserPasswordAction } from '../../store/api-actions';
 import { Helmet } from 'react-helmet-async'
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -14,10 +14,6 @@ import { ActionButtonType } from '../../const';
 export default function ProfileScreen() {
   const dispatch = useAppDispatch();
   const userData = useAppSelector((state) => state.user.userData);
-
-  useEffect(() => {
-    dispatch(fetchUserDataAction());
-  }, [dispatch]);
 
   const personalForm = useFormik({
     initialValues: {

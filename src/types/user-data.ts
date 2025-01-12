@@ -61,3 +61,29 @@ export interface IDataReserval extends FetchBusyTablesParams {
   tables: number[];
   usernames?: string[];
 }
+
+export type IReservalType = 'CODE' | 'GROUP';
+
+export interface IReserval {
+  id: number;
+  dateReserval: string;
+  timeStartReserval: string;
+  timeEndReserval: string;
+  table: number;
+}
+
+export interface INotification extends IReserval {
+  timeSend: string;
+  type: IReservalType;
+  state: boolean;
+  invit: string;
+}
+
+export interface INotificationsData {
+  reservals: IReserval[];
+  todayNotifications: INotification[];
+  last7DaysNotifications: INotification[];
+  lastMonthNotifications: INotification[];
+}
+
+export type IReservalId = Pick<IUserDataWithId, 'id'>;
