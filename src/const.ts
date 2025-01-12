@@ -3,7 +3,7 @@ export enum  AppRoute {
   Confirm = '/verification',
   Profile = '/profile',
   Book = '/book',
-  Notify = '/notify',
+  Notify = '/notification',
   NotFound = '*',
 }
 
