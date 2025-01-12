@@ -1,10 +1,11 @@
-import {AxiosInstance} from 'axios';
-import {createAsyncThunk} from '@reduxjs/toolkit';
+import { AxiosInstance } from 'axios';
+import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AppDispatch, State } from '../types/state';
 import { APIRoute, AuthorizationStatus, AppRoute } from '../const';
 import { redirectToRoute } from './action';
-
-import { IAuthRole, IRegisterData, ILoginData, IMessage, IRefreshData, ITokenResponse, IUserData, IRealNameData, IUserNameData, IPassword, IUserDataWithId, FetchUsersDataParams, FetchBusyTablesParams, IDataReserval, INotificationsData, IReservalId } from '../types/user-data';
+import { IAuthRole, IRegisterData, ILoginData, IMessage, IRefreshData, ITokenResponse, IUserData, IRealNameData, IUserNameData, IPassword, IUserDataWithId } from '../types/user-data';
+import { IDataBusyTables, IDataReserval, IUserParams } from '../types/book-data';
+import { INotificationsData, IReservalId } from '../types/notification-data';
 
 export const checkAuthAction = createAsyncThunk<AuthorizationStatus, undefined, {
   dispatch: AppDispatch;
@@ -134,7 +135,7 @@ export const resetUserPasswordAction = createAsyncThunk<IMessage, IUserNameData,
   }
 );
 
-export const fetchBusyTablesAction = createAsyncThunk<number[], FetchBusyTablesParams, {
+export const fetchBusyTablesAction = createAsyncThunk<number[], IDataBusyTables, {
   dispatch: AppDispatch;
   state: State;
   extra: AxiosInstance
@@ -146,7 +147,7 @@ export const fetchBusyTablesAction = createAsyncThunk<number[], FetchBusyTablesP
   }
 );
 
-export const fetchUsersDataAction = createAsyncThunk<IUserDataWithId | IMessage, FetchUsersDataParams, {
+export const fetchUsersDataAction = createAsyncThunk<IUserDataWithId | IMessage, IUserParams, {
   dispatch: AppDispatch;
   state: State;
   extra: AxiosInstance;

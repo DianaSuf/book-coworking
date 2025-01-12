@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { fetchNotificationsAction } from "../api-actions";
-import { IReserval, INotification } from "../../types/user-data";
+import { IReserval, INotification } from "../../types/notification-data";
 
 interface NotificationsState {
   reservals: IReserval[];

@@ -3,11 +3,13 @@ import { Helmet } from 'react-helmet-async'
 import Header from '../../components/header/header'
 import Footer from '../../components/footer/footer'
 import { useEffect } from 'react'
-import { ReservalType } from '../../const'
+import { ReservalType, ModalType } from '../../const'
 import { useAppDispatch, useAppSelector } from '../../hooks'
 import { fetchNotificationsAction } from '../../store/api-actions'
 import { getReservals, getNotificationsToday, getNotificationsWeek, getNotificationsMonth } from '../../store/slices/notifications-slice'
-import { INotification } from '../../types/user-data'
+import { INotification } from '../../types/notification-data'
+import AuthModals from '../../components/authModalManager'
+import { openModal } from '../../store/slices/modal-slice'
 
 export default function NotifyScreen() {
   const dispatch = useAppDispatch()
@@ -19,6 +21,10 @@ export default function NotifyScreen() {
   useEffect(() => {
     dispatch(fetchNotificationsAction())
   }, [dispatch])
+
+  const handleConfirmModal = () => {
+    dispatch(openModal(ModalType.ConfirmBooking));
+  };
 
   const renderNotification = (notification: INotification) => {
     return notification.type === ReservalType.CODE ? (
@@ -40,7 +46,7 @@ export default function NotifyScreen() {
           </p>
           <p className={styles.text}>Необходимо подтвердить присутствие.</p>
         </div>
-        <button className={styles.bookBtn}>Подтвердить</button>
+        <button className={styles.bookBtn} onClick={handleConfirmModal}>Подтвердить</button>
       </div>
     )
   }
@@ -82,30 +88,25 @@ export default function NotifyScreen() {
             )}
             {notificationsToday.length > 0 && (
               <>
-                <div className={styles.today}>
                   <h3 className={styles.titleNotifications}>сегодня</h3>
                   {notificationsToday.map(renderNotification)}
-                </div>
               </>
             )}
             {notificationsWeek.length > 0 && (
               <>
                 <h3 className={styles.titleNotifications}>за неделю</h3>
-                <div className={styles.week}>
                   {notificationsWeek.map(renderNotification)}
-                </div>
               </>
             )}
             {notificationsMonth.length > 0 && (
               <>
                 <h3 className={styles.titleNotifications}>за месяц</h3>
-                <div className={styles.month}>
                   {notificationsMonth.map(renderNotification)}
-                </div>
               </>
             )}
           </div>
         </section>
+        <AuthModals />
       </main>
       <Footer />
     </>

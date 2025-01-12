@@ -36,9 +36,16 @@ export enum  ActionButtonType {
   Black = 'black',
 }
 
-export type ModalType = 'login' | 'register' | 'forgotPassword' | 'confirmRegister' | 'successReserval' | null;
-
 export enum  ReservalType {
   CODE = 'CODE',
   GROUP = 'GROUP',
+}
+
+export enum  ModalType {
+  Login = 'login',
+  Register = 'register',
+  ForgotPassword = 'forgotPassword',
+  ConfirmRegister = 'confirmRegister',
+  SuccessReserval = 'successReserval',
+  ConfirmBooking = 'confirmBooking',
 }

@@ -2,9 +2,21 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import ActionButton from "../action-button/action-button";
 import { ActionButtonType } from "../../const";
+import { resetUserPasswordAction } from '../../store/api-actions';
+import { useAppDispatch } from '../../hooks';
 import styles from './forgot-password-modal.module.css'
 
 export default function ForgotPasswordModal( ) {
+  const dispatch = useAppDispatch();
+
+  const handleSubmit = async (email: string) => {
+    try {
+      await dispatch(resetUserPasswordAction({ username: email })).unwrap();
+    } catch (error) {
+      console.error('Ошибка при бронировании:', error);
+    }
+  };
+
   const formik = useFormik({
     initialValues: {
       email: '',
@@ -21,7 +33,7 @@ export default function ForgotPasswordModal( ) {
         .required('Email обязателен'),
     }),
     onSubmit: (values) => {
-      console.log('Введённый email для сброса пароля:', values.email);
+      handleSubmit(values.email);
     },
   });
 

@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { ModalType } from '../../const';
+import { IModalType } from '../../types/notification-data';
 
 interface ModalState {
-  currentModal: ModalType;
+  currentModal: IModalType;
 }
 
 const initialState: ModalState = {
@@ -13,7 +13,7 @@ export const modalSlice = createSlice({
   name: 'modal',
   initialState,
   reducers: {
-    openModal: (state, action: PayloadAction<ModalType>) => {
+    openModal: (state, action: PayloadAction<IModalType>) => {
       state.currentModal = action.payload;
     },
     closeModal: (state) => {

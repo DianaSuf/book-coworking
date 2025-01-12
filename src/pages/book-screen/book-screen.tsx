@@ -6,8 +6,9 @@ import Footer from '../../components/footer/footer';
 import { useAppSelector, useAppDispatch } from '../../hooks';
 import { getAuthorizationStatus, getUserData } from '../../store/slices/user-slice';
 import { fetchUsersDataAction, fetchBusyTablesAction, reservalTablesAction } from '../../store/api-actions';
-import { IUserDataWithId, IDataReserval } from '../../types/user-data';
-import { AuthorizationStatus, ActionButtonType } from '../../const';
+import { IUserDataWithId } from '../../types/user-data';
+import { IDataReserval } from '../../types/book-data';
+import { AuthorizationStatus, ActionButtonType, ModalType } from '../../const';
 import ActionButton from '../../components/action-button/action-button';
 import AuthModals from '../../components/authModalManager';
 import { openModal } from '../../store/slices/modal-slice';
@@ -88,7 +89,6 @@ export default function BookScreen() {
   const [isToggleOn, setIsToggleOn] = useState(false);
   const [users, loading, fetchUsers] = useUsers();
   const [pickerValue, setPickerValue] = useState(null);
-  console.log(selectedSeats)
 
   const formatDateForRequest = (date: string | Date): string => {
     if (!date) return '';
@@ -151,11 +151,11 @@ export default function BookScreen() {
   }, [selectedUsers]);
 
   const handleAuthModal = () => {
-    dispatch(openModal('login'));
+    dispatch(openModal(ModalType.Login));
   };
 
   const handleReservalModal = () => {
-    dispatch(openModal('successReserval'));
+    dispatch(openModal(ModalType.SuccessReserval));
   };
 
   const handleToggleChange = (checked: boolean) => {
@@ -167,7 +167,7 @@ export default function BookScreen() {
     const match = target.id.match(/(?:UnionSeat-|RectangeSeat-|^)(\d+)(?:-|$)/);
     const seatId = match ? parseInt(match[1], 10) : null;
   
-    if (!seatId || freeTables.includes(seatId)) return; // Не разрешаем выбирать занятые места
+    if (!seatId || freeTables.includes(seatId)) return;
   
     const maxSeatsToSelect = 1 + selectedUsers.length;
   
@@ -348,7 +348,6 @@ export default function BookScreen() {
   const fetchBusyTables = async (date: string, timeStart: string, timeEnd: string) => {
     try {
       const formattedDate = formatDateForRequest(date);
-      console.log(formattedDate);
       
       const response = await dispatch(fetchBusyTablesAction({
         date: formattedDate,
@@ -558,6 +557,7 @@ export default function BookScreen() {
                         valueKey="id"
                         value={pickerValue}
                         onSearch={fetchUsers}
+                        placeholder="Введите email"
                         onSelect={(_value, item) => {
                           handleSelect(item as IUserDataWithId);
                           setPickerValue(null);
