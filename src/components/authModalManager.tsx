@@ -8,12 +8,14 @@ import ConfirmRegisterModal from './confirm-register-modal/confirm-register-moda
 import SuccessReservalModal from './success-reserval-modal/success-reserval-modal';
 import ConfirmBookingModal from './confirm-booking-modal/confirm-booking-modal';
 import SuccessConfirmPasswordModal from './success-confirm-password-modal/success-confirm-password-modal';
-import { closeModal, openModal } from '../store/slices/modal-slice';
+import SuccessConfirmBookingModal from './success-confirm-booking-modal/success-confirm-booking-modal';
+import SuccessResetPasswordModal from './success-reset-password-modal/success-reset-password-modal';
+import { closeModal, openModal , getCurrentModal} from '../store/slices/modal-slice';
 import { ModalType } from '../const';
 
 export default function AuthModals() {
   const dispatch = useAppDispatch();
-  const { currentModal } = useAppSelector((state) => state.modal);
+  const currentModal = useAppSelector(getCurrentModal);
   const [email, setEmail] = useState<string>('');
 
   const closeCurrentModal = () => {
@@ -72,6 +74,20 @@ export default function AuthModals() {
       {currentModal === ModalType.SuccessConfirmPassword && (
         <Modal isOpen onClose={closeCurrentModal}>
           <SuccessConfirmPasswordModal
+            onClose={closeCurrentModal}
+          />
+        </Modal>
+      )}
+      {currentModal === ModalType.SuccessConfirmBooking && (
+        <Modal isOpen onClose={closeCurrentModal}>
+          <SuccessConfirmBookingModal
+            onClose={closeCurrentModal}
+          />
+        </Modal>
+      )}
+      {currentModal === ModalType.SuccessResetPassword && (
+        <Modal isOpen onClose={closeCurrentModal}>
+          <SuccessResetPasswordModal
             onClose={closeCurrentModal}
           />
         </Modal>

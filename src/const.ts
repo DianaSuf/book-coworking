@@ -1,4 +1,4 @@
-export enum  AppRoute {
+export enum AppRoute {
   Root = '/',
   Confirm = '/verification',
   Profile = '/profile',
@@ -15,7 +15,7 @@ export enum AuthorizationStatus {
   Unknown = 'UNKNOWN',
 }
 
-export enum  APIRoute {
+export enum APIRoute {
   Status = '/Brusnika/user/status',
   Refresh = '/Brusnika/auth/refresh',
   Register = '/Brusnika/auth/registration',
@@ -30,22 +30,30 @@ export enum  APIRoute {
   BusyTables = '/Brusnika/user/busyTables',
   SearchUsers = '/Brusnika/user/group',
   Reserval = '/Brusnika/user/reserval',
+  ReservalAdmin = '/Brusnika/admin/reserval',
   Notifications = '/Brusnika/user/notifications',
   CancelReserval = '/Brusnika/user/cancel',
-  ConfirmReserval = '/Brusnika/user/codeReserval/',
+  ConfirmReserval = '/Brusnika/user/codeReserval',
+  ConfirmReservalGroup = '/Brusnika/user/groupReserval',
 }
 
-export enum  ActionButtonType {
+export enum ActionButtonType {
   Red = 'red',
   Black = 'black',
 }
 
-export enum  ReservalType {
+export enum ReservalType {
   CODE = 'CODE',
   GROUP = 'GROUP',
 }
 
-export enum  ModalType {
+export enum StateType {
+  TRUE = 'TRUE',
+  FALSE = 'FALSE',
+  CONFIRMED = 'CONFIRMED',
+}
+
+export enum ModalType {
   Login = 'login',
   Register = 'register',
   ForgotPassword = 'forgotPassword',
@@ -53,4 +61,6 @@ export enum  ModalType {
   SuccessReserval = 'successReserval',
   ConfirmBooking = 'confirmBooking',
   SuccessConfirmPassword = 'successConfirmPassword',
+  SuccessConfirmBooking = 'successConfirmBooking',
+  SuccessResetPassword = 'successResetPassword',
 }

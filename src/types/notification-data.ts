@@ -2,7 +2,7 @@ import { IUserDataWithId } from "./user-data";
 
 export type IReservalType = 'CODE' | 'GROUP';
 
-export type IModalType = 'login' | 'register' | 'forgotPassword' | 'confirmRegister' | 'successReserval' | 'confirmBooking' | 'successConfirmPassword' | null;
+export type IStateType = 'TRUE' | 'CONFIRMED' | 'FALSE';
 
 export interface IReserval {
   id: number;
@@ -15,7 +15,7 @@ export interface IReserval {
 export interface INotification extends IReserval {
   timeSend: string;
   type: IReservalType;
-  state: boolean;
+  state: IStateType;
   invit: string;
 }
 

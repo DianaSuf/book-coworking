@@ -4,9 +4,10 @@ import { useAppDispatch } from '../../hooks';
 import { useLocation, useNavigate } from "react-router-dom";
 import PasswordInput from '../password-input/password-input';
 import ActionButton from "../action-button/action-button";
-import { ActionButtonType } from "../../const";
+import { ActionButtonType, ModalType } from "../../const";
 import { confirmPasswordAction } from '../../store/api-actions';
 import styles from './reset-password-modal.module.css'
+import { openModal } from '../../store/slices/modal-slice';
 import { AppRoute } from '../../const';
 
 interface ResetModalProps {
@@ -29,7 +30,7 @@ export default function ResetPasswordModal({ onClose }: ResetModalProps) {
 
     try {
       await dispatch(confirmPasswordAction({ data, password })).unwrap();
-      onClose();
+      dispatch(openModal(ModalType.SuccessResetPassword));
       navigate(AppRoute.Root);
     } catch (error) {
       console.error('Ошибка восстановлении пароля:', error);
@@ -47,7 +48,6 @@ export default function ResetPasswordModal({ onClose }: ResetModalProps) {
           .required('Пароль обязателен'),
       }),
       onSubmit: (values) => {
-        console.log('sf');
         handleSubmit(values.password);
       },
     });

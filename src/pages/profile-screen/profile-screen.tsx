@@ -10,6 +10,8 @@ import Header from '../../components/header/header'
 import Footer from '../../components/footer/footer'
 import PasswordInput from '../../components/password-input/password-input';
 import ActionButton from '../../components/action-button/action-button';
+import { openModal } from '../../store/slices/modal-slice';
+import { ModalType } from '../../const';
 import { ActionButtonType, AuthorizationStatus } from '../../const';
 
 export default function ProfileScreen() {
@@ -73,6 +75,7 @@ export default function ProfileScreen() {
       dispatch(updateUserPasswordAction({ oldPassword: values.oldPassword, newPassword: values.newPassword }))
       .unwrap()
       .then((message) => {
+        dispatch(openModal(ModalType.SuccessResetPassword));
         console.log(message);
       })
       .catch((error) => {

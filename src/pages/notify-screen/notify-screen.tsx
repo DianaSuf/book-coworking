@@ -3,9 +3,9 @@ import { Helmet } from 'react-helmet-async'
 import Header from '../../components/header/header'
 import Footer from '../../components/footer/footer'
 import { useEffect } from 'react'
-import { ReservalType, ModalType } from '../../const'
+import { ReservalType, ModalType, StateType } from '../../const'
 import { useAppDispatch, useAppSelector } from '../../hooks'
-import { fetchNotificationsAction } from '../../store/api-actions'
+import { fetchNotificationsAction, ConfirmReservalGroupAction, CancelReservalAction } from '../../store/api-actions'
 import { getReservals, getNotificationsToday, getNotificationsWeek, getNotificationsMonth } from '../../store/slices/notifications-slice'
 import { INotification } from '../../types/notification-data'
 import AuthModals from '../../components/authModalManager'
@@ -26,16 +26,50 @@ export default function NotifyScreen() {
     dispatch(openModal(ModalType.ConfirmBooking));
   };
 
+  const handleConfirmGroupModal = async (id: number) => {
+    try {
+      await dispatch(ConfirmReservalGroupAction({ id })).unwrap();
+      dispatch(openModal(ModalType.SuccessConfirmBooking));
+    } catch (error) {
+      console.error("Ошибка при подтверждении группового бронирования:", error);
+    }
+  };
+
+  const handleCancel = async (id: number) => {
+    try {
+      await dispatch(CancelReservalAction({ id })).unwrap();
+    } catch (error) {
+      console.error("Ошибка при подтверждении группового бронирования:", error);
+    }
+  };
+
   const renderNotification = (notification: INotification) => {
     return notification.type === ReservalType.CODE ? (
       <div className={styles.book} key={notification.id}>
         <div className={styles.content}>
           <div className={styles.time}><p className={styles.text}>А Вы придёте? Мы Вас ждем ♥</p><p className={styles.timeText}>{notification.timeSend}</p></div>
           <p className={styles.text}>
-            Вы забронировали коворкинг {notification.dateReserval} с {notification.timeStartReserval} до {notification.timeEndReserval}! Место {notification.table}. Необходимо подтвердить присутствие.
+            Вы забронировали коворкинг {notification.dateReserval} с {notification.timeStartReserval} до {notification.timeEndReserval}! Место {notification.table}.
           </p>
+          {(notification.state === StateType.TRUE) && (
+            <p className={styles.bookBtn}>
+              Необходимо подтвердить присутствие.
+            </p>
+          )}
+          {(notification.state === StateType.FALSE) && (
+            <p className={styles.bookBtn}>
+              Бронь отменена(
+            </p>
+          )}
+          {(notification.state === StateType.CONFIRMED) && (
+            <p className={styles.bookBtn}>
+              Мы Вас ждем!
+            </p>
+          )}
         </div>
-        <button className={styles.bookBtn} onClick={handleConfirmModal}>Подтвердить</button>
+        {(notification.state === StateType.TRUE) && (
+          <button className={styles.bookBtn} onClick={handleConfirmModal}>Подтвердить</button>
+        )}
       </div>
     ) : (
       <div className={styles.book} key={notification.id}>
@@ -44,9 +78,25 @@ export default function NotifyScreen() {
           <p className={styles.text}>
             {notification.invit} забронировал для Вас место в коворкинге {notification.dateReserval} с {notification.timeStartReserval} до {notification.timeEndReserval}. Место {notification.table}.
           </p>
-          <p className={styles.text}>Необходимо подтвердить присутствие.</p>
+          {(notification.state === StateType.TRUE) && (
+            <p className={styles.bookBtn}>
+              Необходимо подтвердить присутствие.
+            </p>
+          )}
+          {(notification.state === StateType.FALSE) && (
+            <p className={styles.bookBtn}>
+              Бронь отменена(
+            </p>
+          )}
+          {(notification.state === StateType.CONFIRMED) && (
+            <p className={styles.bookBtn}>
+              Мы Вас ждем!
+            </p>
+          )}
         </div>
-        <button className={styles.bookBtn}>Подтвердить</button>
+        {(notification.state === StateType.TRUE) && (
+          <button className={styles.bookBtn} onClick={() => handleConfirmGroupModal(notification.id)}>Подтвердить</button>
+        )}
       </div>
     )
   }
@@ -72,7 +122,7 @@ export default function NotifyScreen() {
                     </p>
                     <p className={styles.text}>Необходимо подтвердить присутствие.</p>
                   </div>
-                  <button className={styles.bookBtn}>Отменить</button>
+                  <button className={styles.bookBtn} onClick={() => handleCancel(reserval.id)}>Отменить</button>
                 </div>
               ))
             )}

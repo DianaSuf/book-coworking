@@ -5,7 +5,7 @@ import Header from '../../components/header/header';
 import Footer from '../../components/footer/footer';
 import { useAppSelector, useAppDispatch } from '../../hooks';
 import { getAuthorizationStatus, getUserData } from '../../store/slices/user-slice';
-import { fetchUsersDataAction, fetchBusyTablesAction, reservalTablesAction } from '../../store/api-actions';
+import { fetchUsersDataAction, fetchBusyTablesAction, reservalTablesAction, reservalTablesAdminAction } from '../../store/api-actions';
 import { IUserDataWithId } from '../../types/user-data';
 import { IDataReserval } from '../../types/book-data';
 import { AuthorizationStatus, ActionButtonType, ModalType } from '../../const';
@@ -99,9 +99,37 @@ export default function BookScreen() {
     return `${day}.${month}.${year}`;
   };
 
+  const resetPage = () => {
+    // Сброс значений формы
+    formik.resetForm();
+  
+    // Сброс состояния
+    setSelectedSeats([]);
+    setFreeTables([]);
+    setSelectedUsers([]);
+    setTimeStart(null);
+    setTimeEnd(null);
+    setPickerValue(null);
+  
+    // Восстановление цветов мест
+    restoreSeatColors();
+  };
+
   const handleSubmit = async (dataToSend: IDataReserval) => {
     try {
-      await dispatch(reservalTablesAction(dataToSend)).unwrap();
+      if (AuthorizationStatus.USER === authorizationStatus) {
+        await dispatch(reservalTablesAction(dataToSend)).unwrap();
+      }
+      if (AuthorizationStatus.ADMIN === authorizationStatus) {
+        const adminData = {
+          date: dataToSend.date,
+          timeStart: dataToSend.timeStart,
+          timeEnd: dataToSend.timeEnd,
+          tables: dataToSend.tables,
+        };
+        await dispatch(reservalTablesAdminAction(adminData)).unwrap();
+      }
+      resetPage();
       handleReservalModal();
     } catch (error) {
       console.error('Ошибка при бронировании:', error);
@@ -125,6 +153,9 @@ export default function BookScreen() {
         .required('Выберите место')
         .test('tables-usernames', 'Выберите место другу', function (value) {
           const usernames = this.parent.usernames || [];
+          if (authorizationStatus === AuthorizationStatus.ADMIN) {
+            return true;
+          }
           if (!value) return false;
           return value.length === usernames.length + 1;
         }),
@@ -169,7 +200,10 @@ export default function BookScreen() {
   
     if (!seatId || freeTables.includes(seatId)) return;
   
-    const maxSeatsToSelect = 1 + selectedUsers.length;
+    let maxSeatsToSelect = 1 + selectedUsers.length;
+    if (authorizationStatus === AuthorizationStatus.ADMIN) {
+      maxSeatsToSelect = 24;
+    }
   
     if (selectedSeats.length < maxSeatsToSelect) {
       if (
@@ -225,7 +259,6 @@ export default function BookScreen() {
   
     setSelectedSeats((prevSelectedSeats) => prevSelectedSeats.filter((seat) => seat !== seatId));
   };
-  
 
   const restoreSeatColors = () => {
     // Сбрасываем цвет всех выбранных мест
@@ -284,7 +317,6 @@ export default function BookScreen() {
       }
     });
   };
-  
 
   useEffect(() => {
     const renderBusySeats = () => {
@@ -408,7 +440,6 @@ export default function BookScreen() {
     }
   };
   
-
   return (
     <>
       <Helmet>
@@ -526,62 +557,64 @@ export default function BookScreen() {
                     <p className={styles.errorText}>{formik.errors.tables}</p>
                   )}
                 </div>
-                <div className={styles.invitation}>
-                  <div className={styles.toggle}>
-                    <Toggle 
-                      color="red"
-                      checked={isToggleOn}
-                      onChange={handleToggleChange}
-                    />
-                    <p className={styles.seatText}>Я приду не один</p>
-                  </div>
-                  {isToggleOn && (
-                    <div className={styles.search}>
-                      <p className={styles.seatText}>Приглашенные люди:</p>
-                      <ul className={styles.selectedList}>
-                        {selectedUsers.length > 0 ? (
-                          selectedUsers.map((user) => (
-                            <li key={user.id} className={styles.selectedItem}>
-                              {user.username}
-                              <button
-                                className={styles.deleteBtn}
-                                type="button"
-                                onClick={() => handleRemoveUser(user.id)}
-                              >
-                                Удалить
-                              </button>
-                            </li>
-                          ))
-                        ) : (
-                          <p className={styles.noSelection}>Пусто</p>
-                        )}
-                      </ul>
-                      <InputPicker
-                        data={users}
-                        style={{ width: 224 }}
-                        labelKey="username"
-                        valueKey="id"
-                        value={pickerValue}
-                        onSearch={fetchUsers}
-                        placeholder="Введите email"
-                        onSelect={(_value, item) => {
-                          handleSelect(item as IUserDataWithId);
-                          setPickerValue(null);
-                        }}
-                        renderMenu={(menu) => {
-                          if (loading) {
-                            return (
-                              <p style={{ padding: 10, color: '#999', textAlign: 'center' }}>
-                                <SpinnerIcon spin /> Загрузка...
-                              </p>
-                            );
-                          }
-                          return menu;
-                        }}
+                {(authorizationStatus !== AuthorizationStatus.ADMIN) && (
+                  <div className={styles.invitation}>
+                    <div className={styles.toggle}>
+                      <Toggle 
+                        color="red"
+                        checked={isToggleOn}
+                        onChange={handleToggleChange}
                       />
+                      <p className={styles.seatText}>Я приду не один</p>
                     </div>
-                  )}
-                </div>
+                    {isToggleOn && (
+                      <div className={styles.search}>
+                        <p className={styles.seatText}>Приглашенные люди:</p>
+                        <ul className={styles.selectedList}>
+                          {selectedUsers.length > 0 ? (
+                            selectedUsers.map((user) => (
+                              <li key={user.id} className={styles.selectedItem}>
+                                {user.username}
+                                <button
+                                  className={styles.deleteBtn}
+                                  type="button"
+                                  onClick={() => handleRemoveUser(user.id)}
+                                >
+                                  Удалить
+                                </button>
+                              </li>
+                            ))
+                          ) : (
+                            <p className={styles.noSelection}>Пусто</p>
+                          )}
+                        </ul>
+                        <InputPicker
+                          data={users}
+                          style={{ width: 224 }}
+                          labelKey="username"
+                          valueKey="id"
+                          value={pickerValue}
+                          onSearch={fetchUsers}
+                          placeholder="Введите email"
+                          onSelect={(_value, item) => {
+                            handleSelect(item as IUserDataWithId);
+                            setPickerValue(null);
+                          }}
+                          renderMenu={(menu) => {
+                            if (loading) {
+                              return (
+                                <p style={{ padding: 10, color: '#999', textAlign: 'center' }}>
+                                  <SpinnerIcon spin /> Загрузка...
+                                </p>
+                              );
+                            }
+                            return menu;
+                          }}
+                        />
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
               {authorizationStatus === AuthorizationStatus.ADMIN && (
                 <div className={styles.checkbox}>
