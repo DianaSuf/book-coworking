@@ -381,27 +381,33 @@ export default function BookScreen() {
     setSelectedUsers((prevUsers) => prevUsers.filter((u) => u.id !== userId));
   };
 
-  const handleSelectAllSeats = (checked: boolean | undefined) => {
+  const handleSelectAllSeats = (checked: boolean) => {
     if (checked) {
+      // Сначала находим все доступные места (не занятые)
       const allSeats = Array.from({ length: 24 }, (_, i) => i + 1).filter(
-        (seatId) => !freeTables.includes(seatId)
+        (seatId) => !freeTables.includes(seatId) // Оставляем только доступные места
       );
-      setSelectedSeats(allSeats);
   
+      setSelectedSeats(allSeats); // Добавляем все доступные места в selectedSeats
+  
+      // Перекрашиваем доступные места
       allSeats.forEach((seatId) => {
         const unionSeat = document.querySelector<SVGElement>(`[id^="UnionSeat-${seatId}"]`);
         const rectangeSeat = document.querySelector<SVGElement>(`[id^="RectangeSeat-${seatId}"]`);
         const numberSeat = document.querySelector<SVGElement>(`[id^="${seatId}-"]`);
   
+        // Перекрашиваем все доступные места в зелёный
         if (unionSeat) unionSeat.setAttribute('fill', '#9ACA3C');
         if (rectangeSeat) rectangeSeat.setAttribute('fill', '#C1DC8B');
         if (numberSeat) numberSeat.setAttribute('fill', '#9ACA3C');
       });
     } else {
+      // Если сняли выбор с "Забронировать всё", сбрасываем выбранные места
       setSelectedSeats([]);
-      restoreSeatColors();
+      restoreSeatColors(); // Восстанавливаем исходные цвета мест
     }
-  };  
+  };
+  
 
   return (
     <>
@@ -578,12 +584,16 @@ export default function BookScreen() {
                 </div>
               </div>
               {authorizationStatus === AuthorizationStatus.ADMIN && (
-                <Checkbox
-                  color="red"
-                  onChange={(checked) => handleSelectAllSeats(!!checked)}
-                >
-                  Забронировать всё
-                </Checkbox>
+                <div className={styles.checkbox}>
+                  <Checkbox
+                    color="red"
+                    indeterminate={selectedSeats.length > 0 && selectedSeats.length < (24 - freeTables.length)}
+                    checked={selectedSeats.length === (24 - freeTables.length)} 
+                    onChange={(_value, checked) => handleSelectAllSeats(checked)}
+                  >
+                    <p className={styles.text}>Забронировать всё</p>
+                  </Checkbox>
+                </div>
               )}
               <ActionButton
                 text="Забронировать коворкинг"

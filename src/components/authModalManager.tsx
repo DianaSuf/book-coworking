@@ -7,6 +7,7 @@ import ForgotPasswordModal from './forgot-password-modal/forgot-password-modal';
 import ConfirmRegisterModal from './confirm-register-modal/confirm-register-modal';
 import SuccessReservalModal from './success-reserval-modal/success-reserval-modal';
 import ConfirmBookingModal from './confirm-booking-modal/confirm-booking-modal';
+import SuccessConfirmPasswordModal from './success-confirm-password-modal/success-confirm-password-modal';
 import { closeModal, openModal } from '../store/slices/modal-slice';
 import { ModalType } from '../const';
 
@@ -46,7 +47,9 @@ export default function AuthModals() {
       )}
       {currentModal === ModalType.ForgotPassword && (
         <Modal isOpen onClose={closeCurrentModal}>
-          <ForgotPasswordModal />
+          <ForgotPasswordModal
+            onSuccess={() => dispatch(openModal(ModalType.SuccessConfirmPassword))}
+          />
         </Modal>
       )}
       {currentModal === ModalType.ConfirmRegister && (
@@ -64,6 +67,13 @@ export default function AuthModals() {
       {currentModal === ModalType.ConfirmBooking && (
         <Modal isOpen onClose={closeCurrentModal}>
           <ConfirmBookingModal />
+        </Modal>
+      )}
+      {currentModal === ModalType.SuccessConfirmPassword && (
+        <Modal isOpen onClose={closeCurrentModal}>
+          <SuccessConfirmPasswordModal
+            onClose={closeCurrentModal}
+          />
         </Modal>
       )}
     </>

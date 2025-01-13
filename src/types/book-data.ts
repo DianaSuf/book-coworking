@@ -9,6 +9,10 @@ export interface IDataReserval extends IDataBusyTables {
   usernames?: string[];
 }
 
+// export interface IAdminReserval extends IDataBusyTables {
+//   tables: number[];
+// }
+
 export interface IUserParams {
   user: string;
 }

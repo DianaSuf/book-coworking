@@ -138,6 +138,11 @@
   gap: 10px;
 }
 
+.checkbox {
+  margin-top: auto;
+  margin-bottom: 10px;
+}
+
 .map {
   width: 1101.9px;
   margin: 92px 102px;
@@ -187,5 +192,5 @@
 
 .text {
   font-size: 20px;
-  line-height: 24px;
+  line-height: 14px;
 }

@@ -1,11 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { AuthorizationStatus } from "../../const";
-import { IUserData } from "../../types/user-data";
-import { checkAuthAction, loginAction, confirmRegisterAction, fetchUserDataAction } from "../api-actions";
+import { IUserData, IAdminData } from "../../types/user-data";
+import { checkAuthAction, loginAction, confirmRegisterAction, fetchUserDataAction, confirmPasswordAction, fetchAdminDataAction } from "../api-actions";
 
 type UserState = {
   authorizationStatus: AuthorizationStatus;
-  userData: IUserData  | null;
+  userData: IUserData  | null | IAdminData;
 }
 
 const initialState: UserState  = {
@@ -52,10 +52,24 @@ export const userSlice = createSlice({
         state.authorizationStatus = AuthorizationStatus.NoAuth;
       });
     builder
+      .addCase(confirmPasswordAction.fulfilled, (state, action) => {
+        state.authorizationStatus = action.payload.authorizationStatus;
+      })
+      .addCase(confirmPasswordAction.rejected, (state) => {
+        state.authorizationStatus = AuthorizationStatus.NoAuth;
+      });
+    builder
       .addCase(fetchUserDataAction.fulfilled, (state, action) => {
         state.userData = action.payload;
       })
       .addCase(fetchUserDataAction.rejected, (state) => {
+        state.userData = null;
+      });
+    builder
+      .addCase(fetchAdminDataAction.fulfilled, (state, action) => {
+        state.userData = action.payload;
+      })
+      .addCase(fetchAdminDataAction.rejected, (state) => {
         state.userData = null;
       });
   }

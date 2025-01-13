@@ -3,7 +3,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AppDispatch, State } from '../types/state';
 import { APIRoute, AuthorizationStatus, AppRoute } from '../const';
 import { redirectToRoute } from './action';
-import { IAuthRole, IRegisterData, ILoginData, IMessage, IRefreshData, ITokenResponse, IUserData, IRealNameData, IUserNameData, IPassword, IUserDataWithId } from '../types/user-data';
+import { IAuthRole, IRegisterData, ILoginData, IMessage, IRefreshData, ITokenResponse, IUserData, IRealNameData, IUserNameData, IPassword, IUserDataWithId, IConfirmPassword, IAdminData } from '../types/user-data';
 import { IDataBusyTables, IDataReserval, IUserParams } from '../types/book-data';
 import { INotificationsData, IReservalId } from '../types/notification-data';
 
@@ -44,7 +44,12 @@ export const loginAction = createAsyncThunk<AuthorizationStatus, ILoginData, {
     const { data: { tokenAccess, tokenRefresh, role } } = await api.post<ITokenResponse>(APIRoute.Login, { username, password });
     localStorage.setItem('tokenAccess', tokenAccess);
     localStorage.setItem('tokenRefresh', tokenRefresh);
-    dispatch(fetchUserDataAction());
+    if (AuthorizationStatus.USER === AuthorizationStatus[role]) {
+      dispatch(fetchUserDataAction());
+    }
+    if (AuthorizationStatus.ADMIN === AuthorizationStatus[role]) {
+      dispatch(fetchAdminDataAction());
+    }
     dispatch(redirectToRoute(AppRoute.Profile));
     return AuthorizationStatus[role];
   }
@@ -90,7 +95,23 @@ export const fetchUserDataAction = createAsyncThunk<IUserData | null, undefined,
   'user/fetchUserProfile',
   async (_arg, {extra: api}) => {
     try {
-      const { data } = await api.get<IUserData>(APIRoute.DataUser);
+      const { data } = await api.get<IUserData>(APIRoute.UserProfile);
+      return data;
+    } catch {
+      return null;
+    }
+  },
+);
+
+export const fetchAdminDataAction = createAsyncThunk<IAdminData | null, undefined, {
+  dispatch: AppDispatch;
+  state: State;
+  extra: AxiosInstance;
+}>(
+  'user/fetchAdminProfile',
+  async (_arg, {extra: api}) => {
+    try {
+      const { data } = await api.get<IAdminData>(APIRoute.AdminProfile);
       return data;
     } catch {
       return null;
@@ -104,9 +125,8 @@ export const updateUserRealnameAction = createAsyncThunk<IMessage, IRealNameData
   extra: AxiosInstance
 }>(
   'user/updateUserRealname',
-  async ({ realname }, { dispatch, extra: api }) => {
+  async ({ realname }, { extra: api }) => {
     const { data: { message } } = await api.post<IMessage>(APIRoute.UpdateUserRealname, { realname });
-    dispatch(fetchUserDataAction());
     return  { message };
   }
 );
@@ -132,6 +152,21 @@ export const resetUserPasswordAction = createAsyncThunk<IMessage, IUserNameData,
   async ({ username }, { extra: api }) => {
     const { data: { message } } = await api.post<IMessage>(APIRoute.ResetUserPassword, { username });
     return  { message };
+  }
+);
+
+export const confirmPasswordAction = createAsyncThunk<{ authorizationStatus: AuthorizationStatus }, IConfirmPassword, {
+  dispatch: AppDispatch;
+  state: State;
+  extra: AxiosInstance
+}>(
+  'user/confirmPassword',
+  async ({ data, password }, { extra: api }) => {
+    const { data: { tokenAccess, tokenRefresh, role } } = await api.post<ITokenResponse>(APIRoute.ConfirmPassword, { data, password });
+    localStorage.setItem('tokenAccess', tokenAccess);
+    localStorage.setItem('tokenRefresh', tokenRefresh);
+
+    return { authorizationStatus: AuthorizationStatus[role] };
   }
 );
 

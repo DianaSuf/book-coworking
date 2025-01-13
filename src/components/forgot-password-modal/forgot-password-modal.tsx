@@ -6,12 +6,17 @@ import { resetUserPasswordAction } from '../../store/api-actions';
 import { useAppDispatch } from '../../hooks';
 import styles from './forgot-password-modal.module.css'
 
-export default function ForgotPasswordModal( ) {
+interface ForgotPasswordModalProps {
+  onSuccess: () => void;
+}
+
+export default function ForgotPasswordModal({ onSuccess }: ForgotPasswordModalProps) {
   const dispatch = useAppDispatch();
 
   const handleSubmit = async (email: string) => {
     try {
       await dispatch(resetUserPasswordAction({ username: email })).unwrap();
+      onSuccess();
     } catch (error) {
       console.error('Ошибка при бронировании:', error);
     }

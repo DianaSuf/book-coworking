@@ -4,6 +4,7 @@ export enum  AppRoute {
   Profile = '/profile',
   Book = '/book',
   Notify = '/notification',
+  Password = '/password',
   NotFound = '*',
 }
 
@@ -20,10 +21,12 @@ export enum  APIRoute {
   Register = '/Brusnika/auth/registration',
   Login = '/Brusnika/auth/login',
   ConfirmRegister = '/Brusnika/auth/confirmReg',
-  DataUser = '/Brusnika/user/profile',
+  UserProfile = '/Brusnika/user/profile',
+  AdminProfile = '/Brusnika/admin/profile',
   UpdateUserRealname = '/Brusnika/user/updateRealname',
   UpdateUserPassword = '/Brusnika/user/updatePassword',
   ResetUserPassword = '/Brusnika/auth/password',
+  ConfirmPassword = '/Brusnika/auth/confirmPas',
   BusyTables = '/Brusnika/user/busyTables',
   SearchUsers = '/Brusnika/user/group',
   Reserval = '/Brusnika/user/reserval',
@@ -48,4 +51,5 @@ export enum  ModalType {
   ConfirmRegister = 'confirmRegister',
   SuccessReserval = 'successReserval',
   ConfirmBooking = 'confirmBooking',
+  SuccessConfirmPassword = 'successConfirmPassword',
 }

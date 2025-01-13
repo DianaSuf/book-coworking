@@ -1,36 +1,58 @@
 import { HelmetProvider } from 'react-helmet-async'
 import { Routes, Route} from 'react-router-dom'
 import { useEffect } from 'react';
-import { AppRoute } from '../const'
+import { AppRoute, AuthorizationStatus } from '../const'
 import HistoryRouter from './history-route'
 import browserHistory from '../browser-history'
 import PrivateRoute from './private-route'
 import { useAppSelector, useAppDispatch } from '../hooks'
 import { getAuthorizationStatus } from '../store/slices/user-slice'
-import { fetchUserDataAction } from '../store/api-actions';
+import { fetchUserDataAction, fetchAdminDataAction } from '../store/api-actions';
 import MainScreen from '../pages/main-screen/main-screen'
 import ErrorScreen from '../pages/error-screen/error-screen'
 import ProfileScreen from '../pages/profile-screen/profile-screen'
 import ConfirmScreen from '../pages/confirm-screen/confirm-screen'
 import NotifyScreen from '../pages/notify-screen/notify-screen'
 import BookScreen from '../pages/book-screen/book-screen'
+import Modal from './modal/modal';
+import ResetPasswordModal from './reset-password-modal/reset-password-modal';
+import { closeModal } from '../store/slices/modal-slice';
 
 function App() {
   const dispatch = useAppDispatch();
   const authorizationStatus = useAppSelector(getAuthorizationStatus);
 
+  const closeCurrentModal = () => {
+    dispatch(closeModal());
+  };
+
   useEffect(() => {
+    if (AuthorizationStatus.USER === authorizationStatus) {
       dispatch(fetchUserDataAction());
+    }
+    if (AuthorizationStatus.ADMIN === authorizationStatus) {
+      dispatch(fetchAdminDataAction());
+    }
     }, [dispatch]);
 
   return (
     <HelmetProvider>
       <HistoryRouter history={browserHistory}>
         <Routes>
-          <Route
+          {/* <Route
             path={AppRoute.Root}
             element={<MainScreen />}
-          />
+          /> */}
+          <Route path={AppRoute.Root} element={<MainScreen />}>
+            <Route
+              path="password"
+              element={
+                <Modal isOpen onClose={closeCurrentModal}>
+                  <ResetPasswordModal onClose={closeCurrentModal} />
+                </Modal>
+              }
+            />
+          </Route>
           <Route
             path={AppRoute.Profile}
             element={
@@ -59,11 +81,22 @@ function App() {
               path={AppRoute.Confirm}
               element={<ConfirmScreen />}
           />
+          {/* <Route
+            path={AppRoute.Password}
+            element={
+              <Modal isOpen onClose={closeCurrentModal}>
+                <ResetPasswordModal onClose={closeCurrentModal} />
+              </Modal>
+            }
+          /> */}
           <Route
-              path={AppRoute.NotFound}
-              element={<ErrorScreen />}
+            path={AppRoute.NotFound}
+            element={<ErrorScreen />}
           />
         </Routes>
+        {/* <Routes>
+          <Route path={AppRoute.Password} element={<Modal isOpen onClose={closeCurrentModal}><ResetPasswordModal onClose={closeCurrentModal} /></Modal>} />
+        </Routes> */}
       </HistoryRouter>
     </HelmetProvider>
   )

@@ -32,6 +32,10 @@ export interface IUserDataWithId extends IUserData {
   id: number;
 }
 
+export interface IAdminData extends IUserData {
+  code: string;
+}
+
 export interface IMessage {
   message: string;
 }
@@ -45,4 +49,9 @@ export interface ITokenResponse {
   tokenAccess: string;
   tokenRefresh: string;
   role: keyof typeof AuthorizationStatus;
+}
+
+export interface IConfirmPassword {
+  data: string;
+  password: string;
 }

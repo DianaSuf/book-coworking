@@ -1,7 +1,8 @@
 import styles from './profile-screen.module.css'
 import { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { fetchUserDataAction, updateUserRealnameAction, updateUserPasswordAction } from '../../store/api-actions';
+import { fetchUserDataAction, updateUserRealnameAction, updateUserPasswordAction, fetchAdminDataAction } from '../../store/api-actions';
+import { getAuthorizationStatus, getUserData } from '../../store/slices/user-slice';
 import { Helmet } from 'react-helmet-async'
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -9,14 +10,20 @@ import Header from '../../components/header/header'
 import Footer from '../../components/footer/footer'
 import PasswordInput from '../../components/password-input/password-input';
 import ActionButton from '../../components/action-button/action-button';
-import { ActionButtonType } from '../../const';
+import { ActionButtonType, AuthorizationStatus } from '../../const';
 
 export default function ProfileScreen() {
   const dispatch = useAppDispatch();
-  const userData = useAppSelector((state) => state.user.userData);
+  const userData = useAppSelector(getUserData);
+  const authorizationStatus = useAppSelector(getAuthorizationStatus);
 
   useEffect(() => {
-    dispatch(fetchUserDataAction());
+    if (AuthorizationStatus.USER === authorizationStatus) {
+      dispatch(fetchUserDataAction());
+    }
+    if (AuthorizationStatus.ADMIN === authorizationStatus) {
+      dispatch(fetchAdminDataAction());
+    }
   }, [dispatch]);
 
   const personalForm = useFormik({
@@ -33,6 +40,12 @@ export default function ProfileScreen() {
       .unwrap()
       .then((message) => {
         console.log(message);
+        if (AuthorizationStatus.USER === authorizationStatus) {
+          dispatch(fetchUserDataAction());
+        }
+        if (AuthorizationStatus.ADMIN === authorizationStatus) {
+          dispatch(fetchAdminDataAction());
+        }
       })
       .catch((error) => {
         console.error('Ошибка обновления:', error);
@@ -126,6 +139,22 @@ export default function ProfileScreen() {
             </div>
             <ActionButton text="Сохранить" variant={ActionButtonType.Black} buttonType='submit' />
           </form>
+          {authorizationStatus === AuthorizationStatus.ADMIN && userData && 'code' in userData && (
+            <>
+              <h3 className={styles.title}>код</h3>
+              <div className={styles.form} style={{width: "400px"}}>
+                <div className={styles.inputGroup}>
+                  <label htmlFor="code">Код для бронирования</label>
+                  <input
+                    id="code"
+                    name="code"
+                    type="text"
+                    value={userData?.code || ''}
+                    readOnly />
+                </div>
+              </div>
+            </>
+          )}
           <h3 className={styles.title}>пароль</h3>
           <form className={styles.form} onSubmit={passwordForm.handleSubmit} noValidate>
             <div className={styles.content}>

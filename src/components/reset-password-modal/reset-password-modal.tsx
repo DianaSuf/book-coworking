@@ -1,15 +1,41 @@
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import { useAppDispatch } from '../../hooks';
+import { useLocation, useNavigate } from "react-router-dom";
 import PasswordInput from '../password-input/password-input';
 import ActionButton from "../action-button/action-button";
 import { ActionButtonType } from "../../const";
-import styles from './reset-modal.module.css'
+import { confirmPasswordAction } from '../../store/api-actions';
+import styles from './reset-password-modal.module.css'
+import { AppRoute } from '../../const';
 
 interface ResetModalProps {
   onClose: () => void;
 }
 
-export default function ResetModal({ onClose }: ResetModalProps) {
+export default function ResetPasswordModal({ onClose }: ResetModalProps) {
+  const dispatch = useAppDispatch();
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const queryParams = new URLSearchParams(location.search);
+  const data = queryParams.get("data") || "";
+
+  const handleSubmit = async (password: string) => {
+    if (!data) {
+      console.error("Параметр 'data' отсутствует в URL.");
+      return;
+    }
+
+    try {
+      await dispatch(confirmPasswordAction({ data, password })).unwrap();
+      onClose();
+      navigate(AppRoute.Root);
+    } catch (error) {
+      console.error('Ошибка восстановлении пароля:', error);
+    }
+  };
+  
   const formik = useFormik({
       initialValues: {
         password: '',
@@ -21,24 +47,27 @@ export default function ResetModal({ onClose }: ResetModalProps) {
           .required('Пароль обязателен'),
       }),
       onSubmit: (values) => {
-        console.log('Введённый пароль:', values.password);
+        console.log('sf');
+        handleSubmit(values.password);
       },
     });
 
   return (
     <>
       <h1 className={styles.title}>Восстановление пароля</h1>
-      <PasswordInput
-        id="password"
-        name="password"
-        label="Введите новый пароль"
-        value={formik.values.password}
-        onChange={formik.handleChange}
-        onBlur={formik.handleBlur}
-        touched={formik.touched.password}
-        error={formik.errors.password}
-      />
-      <ActionButton text="Применить" onClick={onClose} variant={ActionButtonType.Black} />
+      <form className={styles.form} onSubmit={formik.handleSubmit} noValidate>
+        <PasswordInput
+          id="password"
+          name="password"
+          label="Введите новый пароль"
+          value={formik.values.password}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          touched={formik.touched.password}
+          error={formik.errors.password}
+        />
+        <ActionButton text="Применить" onClick={onClose} variant={ActionButtonType.Black} buttonType="submit"/>
+      </form>
     </>
   );
 }
