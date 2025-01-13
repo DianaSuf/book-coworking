@@ -5,7 +5,7 @@ import { APIRoute, AuthorizationStatus, AppRoute } from '../const';
 import { redirectToRoute } from './action';
 import { IAuthRole, IRegisterData, ILoginData, IMessage, IRefreshData, ITokenResponse, IUserData, IRealNameData, IUserNameData, IPassword, IUserDataWithId, IConfirmPassword, IAdminData } from '../types/user-data';
 import { IDataBusyTables, IDataReserval, IUserParams } from '../types/book-data';
-import { INotificationsData, IReservalId } from '../types/notification-data';
+import { INotificationsData, IReservalId, IConfirmReserval } from '../types/notification-data';
 
 export const checkAuthAction = createAsyncThunk<AuthorizationStatus, undefined, {
   dispatch: AppDispatch;
@@ -243,4 +243,16 @@ export const CancelReservalAction = createAsyncThunk<INotificationsData, IReserv
       return undefined;
     }
   },
+);
+
+export const ConfirmReservalAction = createAsyncThunk<IMessage, IConfirmReserval, {
+  dispatch: AppDispatch;
+  state: State;
+  extra: AxiosInstance;
+}>(
+  'notifications/confirmReserval',
+  async ({ id, code }, {extra: api}) => {
+    const { data: { message } } =  await api.post<IMessage>(`${APIRoute.ConfirmReserval}/${id}`, { code });
+    return  { message };
+  }
 );

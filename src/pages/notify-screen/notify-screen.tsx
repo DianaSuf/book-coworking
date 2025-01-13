@@ -35,7 +35,7 @@ export default function NotifyScreen() {
             Вы забронировали коворкинг {notification.dateReserval} с {notification.timeStartReserval} до {notification.timeEndReserval}! Место {notification.table}. Необходимо подтвердить присутствие.
           </p>
         </div>
-        <button className={styles.bookBtn}>Подтвердить</button>
+        <button className={styles.bookBtn} onClick={handleConfirmModal}>Подтвердить</button>
       </div>
     ) : (
       <div className={styles.book} key={notification.id}>
@@ -46,7 +46,7 @@ export default function NotifyScreen() {
           </p>
           <p className={styles.text}>Необходимо подтвердить присутствие.</p>
         </div>
-        <button className={styles.bookBtn} onClick={handleConfirmModal}>Подтвердить</button>
+        <button className={styles.bookBtn}>Подтвердить</button>
       </div>
     )
   }

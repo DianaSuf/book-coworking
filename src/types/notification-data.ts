@@ -27,3 +27,7 @@ export interface INotificationsData {
 }
 
 export type IReservalId = Pick<IUserDataWithId, 'id'>;
+
+export interface IConfirmReserval extends IReserval {
+  code: string;
+}

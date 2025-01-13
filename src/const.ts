@@ -32,6 +32,7 @@ export enum  APIRoute {
   Reserval = '/Brusnika/user/reserval',
   Notifications = '/Brusnika/user/notifications',
   CancelReserval = '/Brusnika/user/cancel',
+  ConfirmReserval = '/Brusnika/user/codeReserval/',
 }
 
 export enum  ActionButtonType {
