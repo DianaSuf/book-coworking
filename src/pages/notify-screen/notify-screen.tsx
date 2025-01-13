@@ -30,7 +30,7 @@ export default function NotifyScreen() {
     return notification.type === ReservalType.CODE ? (
       <div className={styles.book} key={notification.id}>
         <div className={styles.content}>
-          <p className={styles.text}>А Вы придёте? Мы Вас ждем</p>
+          <div className={styles.time}><p className={styles.text}>А Вы придёте? Мы Вас ждем ♥</p><p className={styles.timeText}>{notification.timeSend}</p></div>
           <p className={styles.text}>
             Вы забронировали коворкинг {notification.dateReserval} с {notification.timeStartReserval} до {notification.timeEndReserval}! Место {notification.table}. Необходимо подтвердить присутствие.
           </p>
@@ -40,7 +40,7 @@ export default function NotifyScreen() {
     ) : (
       <div className={styles.book} key={notification.id}>
         <div className={styles.content}>
-          <p className={styles.text}>Пользователь забронировал для Вас место в коворкинге</p>
+        <div className={styles.time}><p className={styles.text}>Пользователь забронировал для Вас место в коворкинге</p><p className={styles.timeText}>{notification.timeSend}</p></div>
           <p className={styles.text}>
             {notification.invit} забронировал для Вас место в коворкинге {notification.dateReserval} с {notification.timeStartReserval} до {notification.timeEndReserval}. Место {notification.table}.
           </p>

@@ -52,13 +52,23 @@
   margin-left: 30px;
 }
 
-
 .empty {
   font-size: 40px;
 }
 
+.time {
+  display: flex;
+  gap: 20px;
+}
+
 .text{
   font-size: 20px;
+}
+
+.timeText{
+  font-size: 20px;
+  color: rgba(138, 140, 140, 1);
+  margin: 0;
 }
 
 .bookBtn {
