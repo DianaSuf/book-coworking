@@ -16,3 +16,8 @@ export interface IAdminReserval extends IDataBusyTables {
 export interface IUserParams {
   user: string;
 }
+
+export interface ITimeOption {
+  label: string;
+  value: string;
+}

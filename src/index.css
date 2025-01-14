@@ -87,6 +87,12 @@ h3 {
   color: #EF3B24;
 }
 
+h4 {
+  font-weight: 500;
+  font-size: 20px;
+  color: #000000;
+}
+
 button {
   padding: 0;
   font-family: 'Grtsk Exa', "Verdana", sans-serif;

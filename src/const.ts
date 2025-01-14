@@ -29,6 +29,7 @@ export enum APIRoute {
   ConfirmPassword = '/Brusnika/auth/confirmPas',
   BusyTables = '/Brusnika/user/busyTables',
   SearchUsers = '/Brusnika/user/group',
+  SearchData = '/Brusnika/admin/reservals',
   Reserval = '/Brusnika/user/reserval',
   ReservalAdmin = '/Brusnika/admin/reserval',
   Notifications = '/Brusnika/user/notifications',
@@ -64,3 +65,24 @@ export enum ModalType {
   SuccessConfirmBooking = 'successConfirmBooking',
   SuccessResetPassword = 'successResetPassword',
 }
+
+export enum seatColorsType {
+  Selected = 'selected',
+  Busy = 'busy',
+  Available = 'available',
+}
+
+export const seatColors = {
+  selected: {
+    primary: '#9ACA3C',
+    secondary: '#C1DC8B'
+  },
+  busy: {
+    primary: '#B8B8B8',
+    secondary: '#D5D0CF'
+  },
+  available: {
+    primary: '#F5887A',
+    secondary: '#F9B2A4'
+  }
+};

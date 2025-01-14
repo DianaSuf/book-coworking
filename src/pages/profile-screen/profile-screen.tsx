@@ -11,8 +11,8 @@ import Footer from '../../components/footer/footer'
 import PasswordInput from '../../components/password-input/password-input';
 import ActionButton from '../../components/action-button/action-button';
 import { openModal } from '../../store/slices/modal-slice';
-import { ModalType } from '../../const';
-import { ActionButtonType, AuthorizationStatus } from '../../const';
+import { ActionButtonType, AuthorizationStatus, ModalType } from '../../const';
+import ProfileDrawer from '../../components/profile-drawer/profile-drawer';
 
 export default function ProfileScreen() {
   const dispatch = useAppDispatch();
@@ -100,7 +100,7 @@ export default function ProfileScreen() {
       </Helmet>
       <Header/>
       <main className={styles.profile}>
-        <h2>Личный кабинет</h2>
+        <h2 className={styles.titleMain}>Личный кабинет</h2>
         <section className={styles.section}>
           <h3 className={styles.title}>личные данные</h3>
           <form className={styles.form} onSubmit={personalForm.handleSubmit} noValidate>
@@ -196,6 +196,7 @@ export default function ProfileScreen() {
           </form>
         </section>
       </main>
+      <ProfileDrawer />
       <Footer/>
     </>
   )

@@ -1,0 +1,10 @@
+.container {
+  button {
+    color: inherit;
+  }
+}
+
+.errorText {
+  margin-top: 5px;
+  color: #EF3B24;
+}

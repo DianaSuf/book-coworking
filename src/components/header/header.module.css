@@ -32,6 +32,7 @@
 
 .infoCity {
   display: inline;
+  margin-right: 7px;
 }
 
 .container {
@@ -53,7 +54,6 @@
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
-  margin-left: 7px;
 }
 
 .profile {

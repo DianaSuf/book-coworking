@@ -6,6 +6,7 @@ import { redirectToRoute } from './action';
 import { IAuthRole, IRegisterData, ILoginData, IMessage, IRefreshData, ITokenResponse, IUserData, IRealNameData, IUserNameData, IPassword, IUserDataWithId, IConfirmPassword, IAdminData } from '../types/user-data';
 import { IDataBusyTables, IDataReserval, IUserParams, IAdminReserval } from '../types/book-data';
 import { INotificationsData, IReservalId, IConfirmReserval } from '../types/notification-data';
+import { IDate, IUserReserval } from '../types/admin-data';
 
 export const checkAuthAction = createAsyncThunk<AuthorizationStatus, undefined, {
   dispatch: AppDispatch;
@@ -294,3 +295,14 @@ export const ConfirmReservalGroupAction = createAsyncThunk<IMessage, IReservalId
   }
 );
 
+export const SearchDateAction = createAsyncThunk<IUserReserval[], IDate, {
+  dispatch: AppDispatch;
+  state: State;
+  extra: AxiosInstance
+}>(
+  'user/searchData',
+  async ({ date }, { extra: api }) => {
+    const {data} =  await api.post<IUserReserval[]>(APIRoute.SearchData, { date });
+    return data;
+  }
+);

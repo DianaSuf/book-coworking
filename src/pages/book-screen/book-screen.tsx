@@ -8,47 +8,19 @@ import { getAuthorizationStatus, getUserData } from '../../store/slices/user-sli
 import { fetchUsersDataAction, fetchBusyTablesAction, reservalTablesAction, reservalTablesAdminAction } from '../../store/api-actions';
 import { IUserDataWithId } from '../../types/user-data';
 import { IDataReserval } from '../../types/book-data';
-import { AuthorizationStatus, ActionButtonType, ModalType } from '../../const';
+import { AuthorizationStatus, ActionButtonType, ModalType, seatColorsType } from '../../const';
+import { generateTimeOptions, timeOptions, formatDateForRequest, paintSeat } from '../../utils';
 import ActionButton from '../../components/action-button/action-button';
 import AuthModals from '../../components/authModalManager';
 import { openModal } from '../../store/slices/modal-slice';
-import DatePicker from 'rsuite/DatePicker';
 import 'rsuite/dist/rsuite.min.css';
 import styles from './book-screen.module.css';
-import ruRU from 'rsuite/locales/ru_RU';
-import { CustomProvider, SelectPicker, Toggle, InputPicker, Checkbox } from 'rsuite';
+import { Toggle, InputPicker, Checkbox } from 'rsuite';
 import SpinnerIcon from '@rsuite/icons/legacy/Spinner';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-
-const predefinedBottomRanges = [
-  {
-    label: `Сегодня ${new Date().toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' })}`,
-    value: new Date(),
-    closeOverlay: false,
-  }
-];
-
-interface TimeOption {
-  label: string;
-  value: string;
-}
-
-const generateTimeOptions = (): TimeOption[] => {
-  const options: TimeOption[] = [];
-  const start = 8 * 60;
-  const end = 20 * 60;
-  const interval = 15;
-
-  for (let time = start; time <= end; time += interval) {
-    const hours = Math.floor(time / 60);
-    const minutes = time % 60;
-    const formattedTime = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
-    options.push({ label: formattedTime, value: formattedTime });
-  }
-
-  return options;
-};
+import DatePickerComponent from '../../components/date-picker/date-picker';
+import SelectPickerComponent from '../../components/select-picker/select-picker';
 
 const useUsers = (defaultUsers: IUserDataWithId[] = []) => {
   const dispatch = useAppDispatch();
@@ -89,15 +61,6 @@ export default function BookScreen() {
   const [isToggleOn, setIsToggleOn] = useState(false);
   const [users, loading, fetchUsers] = useUsers();
   const [pickerValue, setPickerValue] = useState(null);
-
-  const formatDateForRequest = (date: string | Date): string => {
-    if (!date) return '';
-    const d = new Date(date);
-    const day = String(d.getDate()).padStart(2, '0');
-    const month = String(d.getMonth() + 1).padStart(2, '0');
-    const year = d.getFullYear();
-    return `${day}.${month}.${year}`;
-  };
 
   const resetPage = () => {
     // Сброс значений формы
@@ -174,12 +137,8 @@ export default function BookScreen() {
 
   useEffect(() => {
     formik.setFieldValue('tables', selectedSeats);
-  }, [selectedSeats]);
-  
-  
-  useEffect(() => {
     formik.setFieldValue('usernames', selectedUsers.map((user) => user.username));
-  }, [selectedUsers]);
+  }, [selectedSeats]);
 
   const handleAuthModal = () => {
     dispatch(openModal(ModalType.Login));
@@ -217,23 +176,9 @@ export default function BookScreen() {
           )
         )
       ) {
-        const unionSeat = document.querySelector<SVGElement>(`[id^="UnionSeat-${seatId}"]`);
-        const rectangeSeat = document.querySelector<SVGElement>(`[id^="RectangeSeat-${seatId}"]`);
-        const numberSeat = document.querySelector<SVGElement>(`[id^="${seatId}-"]`);
-  
+
         if (!selectedSeats.includes(seatId)) {
-          if (unionSeat) {
-            unionSeat.setAttribute('fill', '#9ACA3C');
-          }
-  
-          if (rectangeSeat) {
-            rectangeSeat.setAttribute('fill', '#C1DC8B');
-          }
-  
-          if (numberSeat) {
-            numberSeat.setAttribute('fill', '#9ACA3C');
-          }
-  
+          paintSeat(seatId, seatColorsType.Selected);
           setSelectedSeats((prevSelectedSeats) => [...prevSelectedSeats, seatId]);
         }
       }
@@ -241,79 +186,26 @@ export default function BookScreen() {
   };  
 
   const handleRemoveSeat = (seatId: number) => {
-    const unionSeat = document.querySelector<SVGElement>(`[id^="UnionSeat-${seatId}"]`);
-    const rectangeSeat = document.querySelector<SVGElement>(`[id^="RectangeSeat-${seatId}"]`);
-    const numberSeat = document.querySelector<SVGElement>(`[id^="${seatId}-"]`);
-  
-    if (unionSeat) {
-      unionSeat.setAttribute('fill', '#F5887A');
-    }
-  
-    if (rectangeSeat) {
-      rectangeSeat.setAttribute('fill', '#F9B2A4');
-    }
-  
-    if (numberSeat) {
-      numberSeat.setAttribute('fill', '#F5887A');
-    }
-  
+    paintSeat(seatId, seatColorsType.Available);
     setSelectedSeats((prevSelectedSeats) => prevSelectedSeats.filter((seat) => seat !== seatId));
   };
 
   const restoreSeatColors = () => {
     // Сбрасываем цвет всех выбранных мест
     selectedSeats.forEach((seatId) => {
-      const unionSeat = document.querySelector<SVGElement>(`[id^="UnionSeat-${seatId}"]`);
-      const rectangeSeat = document.querySelector<SVGElement>(`[id^="RectangeSeat-${seatId}"]`);
-      const numberSeat = document.querySelector<SVGElement>(`[id^="${seatId}-"]`);
-  
       // Проверяем, не находится ли место в списке занятых
       if (freeTables.includes(seatId)) {
-        if (unionSeat) {
-          unionSeat.setAttribute('fill', '#B8B8B8'); // Цвет для занятых мест
-        }
-  
-        if (rectangeSeat) {
-          rectangeSeat.setAttribute('fill', '#D5D0CF'); // Цвет для занятых мест
-        }
-  
-        if (numberSeat) {
-          numberSeat.setAttribute('fill', '#B8B8B8'); // Цвет для занятых мест
-        }
+        paintSeat(seatId, seatColorsType.Busy);
       } else {
         // Если место не занято, сбрасываем его цвет как доступного
-        if (unionSeat) {
-          unionSeat.setAttribute('fill', '#9ACA3C');
-        }
-  
-        if (rectangeSeat) {
-          rectangeSeat.setAttribute('fill', '#C1DC8B');
-        }
-  
-        if (numberSeat) {
-          numberSeat.setAttribute('fill', '#9ACA3C');
-        }
+        paintSeat(seatId, seatColorsType.Selected);
       }
     });
   
     // Обрабатываем все занятые места, которые не находятся в selectedSeats
     freeTables.forEach((seatId) => {
       if (!selectedSeats.includes(seatId)) {
-        const unionSeat = document.querySelector<SVGElement>(`[id^="UnionSeat-${seatId}"]`);
-        const rectangeSeat = document.querySelector<SVGElement>(`[id^="RectangeSeat-${seatId}"]`);
-        const numberSeat = document.querySelector<SVGElement>(`[id^="${seatId}-"]`);
-  
-        if (unionSeat) {
-          unionSeat.setAttribute('fill', '#B8B8B8'); // Цвет для занятых мест
-        }
-  
-        if (rectangeSeat) {
-          rectangeSeat.setAttribute('fill', '#D5D0CF'); // Цвет для занятых мест
-        }
-  
-        if (numberSeat) {
-          numberSeat.setAttribute('fill', '#B8B8B8'); // Цвет для занятых мест
-        }
+        paintSeat(seatId, seatColorsType.Busy);
       }
     });
   };
@@ -321,21 +213,7 @@ export default function BookScreen() {
   useEffect(() => {
     const renderBusySeats = () => {
       freeTables.forEach((seatId) => {
-        const unionSeat = document.querySelector<SVGElement>(`[id^="UnionSeat-${seatId}"]`);
-        const rectangeSeat = document.querySelector<SVGElement>(`[id^="RectangeSeat-${seatId}"]`);
-        const numberSeat = document.querySelector<SVGElement>(`[id^="${seatId}-"]`);
-  
-        if (unionSeat) {
-          unionSeat.setAttribute('fill', '#B8B8B8');
-        }
-  
-        if (rectangeSeat) {
-          rectangeSeat.setAttribute('fill', '#D5D0CF');
-        }
-  
-        if (numberSeat) {
-          numberSeat.setAttribute('fill', '#B8B8B8');
-        }
+        paintSeat(seatId, seatColorsType.Busy);
       });
     };
   
@@ -365,8 +243,6 @@ export default function BookScreen() {
     setTimeEnd(value);
     formik.setFieldValue('timeEnd', value);
   };
-
-  const timeOptions: TimeOption[] = generateTimeOptions();
 
   const handleSelect = (user: IUserDataWithId) => {
     setSelectedUsers((prevUsers) => {
@@ -401,11 +277,9 @@ export default function BookScreen() {
   }, [formik.values.date, timeStart, timeEnd]);
 
   useEffect(() => {
-    // Update selectedSeats based on the new selectedUsers state
     const maxSeatsToSelect = 1 + selectedUsers.length;
     setSelectedSeats((prevSelectedSeats) => prevSelectedSeats.slice(0, maxSeatsToSelect));
   
-    // Restore seat colors
     restoreSeatColors();
   }, [selectedUsers]);
   
@@ -424,14 +298,7 @@ export default function BookScreen() {
   
       // Перекрашиваем доступные места
       allSeats.forEach((seatId) => {
-        const unionSeat = document.querySelector<SVGElement>(`[id^="UnionSeat-${seatId}"]`);
-        const rectangeSeat = document.querySelector<SVGElement>(`[id^="RectangeSeat-${seatId}"]`);
-        const numberSeat = document.querySelector<SVGElement>(`[id^="${seatId}-"]`);
-  
-        // Перекрашиваем все доступные места в зелёный
-        if (unionSeat) unionSeat.setAttribute('fill', '#9ACA3C');
-        if (rectangeSeat) rectangeSeat.setAttribute('fill', '#C1DC8B');
-        if (numberSeat) numberSeat.setAttribute('fill', '#9ACA3C');
+        paintSeat(seatId, seatColorsType.Selected);
       });
     } else {
       // Если сняли выбор с "Забронировать всё", сбрасываем выбранные места
@@ -462,75 +329,33 @@ export default function BookScreen() {
           <section className={styles.book}>
             <form onSubmit={formik.handleSubmit} className={styles.form}>
               <div className={styles.content}>
-                <div className={styles.container}>
-                  <CustomProvider locale={ruRU}>
-                    <DatePicker
-                      isoWeek
-                      format="dd.MM.yyyy"
-                      placeholder="Выберите дату"
-                      oneTap
-                      editable={false}
-                      locale={{
-                        sunday: 'ВС',
-                        monday: 'ПН',
-                        tuesday: 'ВТ',
-                        wednesday: 'СР',
-                        thursday: 'ЧТ',
-                        friday: 'ПТ',
-                        saturday: 'СБ',
-                        ok: 'Сбросить',
-                        today: 'Сегодня',
-                        formattedMonthPattern: 'MMMM yyyy',
-                      }}
-                      shouldDisableDate={(date) => date < new Date(new Date().setHours(0, 0, 0, 0))}
-                      ranges={predefinedBottomRanges}
-                      renderCell={(date) => date.getDate()}
-                      value={formik.values.date}
-                      onChange={(value) => formik.setFieldValue('date', value)}
-                    />
-                    {formik.errors.date && formik.touched.date && (
-                      <p className={styles.errorText}>{formik.errors.date}</p>
-                    )}
-                  </CustomProvider>
-                </div>
+                <DatePickerComponent
+                  value={formik.values.date}
+                  onChange={(value) => formik.setFieldValue('date', value)}
+                  touched={formik.touched.date}
+                  error={formik.errors.date}
+                />
                 <div className={styles.timeSelects}>
                   <p className={styles.seatText}>с</p>
-                  <SelectPicker
-                    value={timeStart || ''}
+                  <SelectPickerComponent
+                    value={timeStart}
                     onChange={handleStartTimeChange}
                     data={timeOptions}
-                    searchable={false}
-                    className={styles.timeSelect}
-                    renderValue={(_value, item) =>
-                      item && typeof item === 'object' && 'label' in item ? (
-                        <span style={{ color: '#14191A' }}>{item.label}</span>
-                      ) : <span style={{ color: '#8A8C8C' }}>с</span>
-                    }
-                    style={{ width: 100 }}
+                    touched={formik.touched.timeStart}
+                    error={formik.errors.timeStart}
+                    placeholder="с"
                   />
-                  {formik.errors.timeStart && formik.touched.timeStart && (
-                      <p className={styles.errorText}>{formik.errors.timeStart}</p>
-                  )}
 
                   <p className={styles.seatText}>до</p>
-                  <SelectPicker
-                    value={timeEnd || ''}
+                  <SelectPickerComponent
+                    value={timeEnd}
                     onChange={handleEndTimeChange}
                     data={timeOptions.filter((time) => timeStart && parseInt(time.value.split(':')[0]) * 60 + parseInt(time.value.split(':')[1]) > parseInt(timeStart.split(':')[0]) * 60 + parseInt(timeStart.split(':')[1]))}
-                    searchable={false}
-                    className={styles.timeSelect}
+                    touched={formik.touched.timeEnd}
+                    error={formik.errors.timeEnd}
+                    placeholder="до"
                     disabled={!timeStart}
-                    renderValue={(_value, item) =>
-                      item && typeof item === 'object' && 'label' in item ? (
-                        <span style={{ color: '#14191A' }}>{item.label}</span>
-                      ) : <span style={{ color: '#8A8C8C' }}>до</span>
-                    }
-                    style={{ width: 100, color: '#14191A '}}
                   />
-
-                  {formik.errors.timeEnd && formik.touched.timeEnd && (
-                    <p className={styles.errorText}>{formik.errors.timeEnd}</p>
-                  )}
                 </div>
                 <div>
                   <p className={styles.seatText}>Выбранные места:</p>

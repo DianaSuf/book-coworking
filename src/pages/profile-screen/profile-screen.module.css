@@ -9,6 +9,10 @@
   margin-top: 40px;
 }
 
+.titleMain {
+  margin-left: 32px;
+}
+
 .title {
   display: flex;
   align-items: center;
