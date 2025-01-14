@@ -46,3 +46,22 @@ export const paintSeat = (seatId: number, colorType: keyof typeof seatColors) =>
     numberSeat.setAttribute('fill', colors.primary);
   }
 };
+
+export function getCorrectWordEnding(count: number): string {
+  const lastDigit = count % 10;
+  const lastTwoDigits = count % 100;
+
+  if (lastTwoDigits >= 11 && lastTwoDigits <= 19) {
+    return 'нарушений';
+  }
+
+  if (lastDigit === 1) {
+    return 'нарушение';
+  }
+
+  if (lastDigit >= 2 && lastDigit <= 4) {
+    return 'нарушения';
+  }
+
+  return 'нарушений';
+}

@@ -30,6 +30,7 @@ export enum APIRoute {
   BusyTables = '/Brusnika/user/busyTables',
   SearchUsers = '/Brusnika/user/group',
   SearchData = '/Brusnika/admin/reservals',
+  SearchBlock = '/Brusnika/admin/list',
   Reserval = '/Brusnika/user/reserval',
   ReservalAdmin = '/Brusnika/admin/reserval',
   Notifications = '/Brusnika/user/notifications',

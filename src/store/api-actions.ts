@@ -6,7 +6,7 @@ import { redirectToRoute } from './action';
 import { IAuthRole, IRegisterData, ILoginData, IMessage, IRefreshData, ITokenResponse, IUserData, IRealNameData, IUserNameData, IPassword, IUserDataWithId, IConfirmPassword, IAdminData } from '../types/user-data';
 import { IDataBusyTables, IDataReserval, IUserParams, IAdminReserval } from '../types/book-data';
 import { INotificationsData, IReservalId, IConfirmReserval } from '../types/notification-data';
-import { IDate, IUserReserval } from '../types/admin-data';
+import { IDate, IUserReserval, IUserBlock } from '../types/admin-data';
 
 export const checkAuthAction = createAsyncThunk<AuthorizationStatus, undefined, {
   dispatch: AppDispatch;
@@ -300,9 +300,26 @@ export const SearchDateAction = createAsyncThunk<IUserReserval[], IDate, {
   state: State;
   extra: AxiosInstance
 }>(
-  'user/searchData',
+  'admin/searchData',
   async ({ date }, { extra: api }) => {
     const {data} =  await api.post<IUserReserval[]>(APIRoute.SearchData, { date });
     return data;
   }
+);
+
+export const SearchBlockAction = createAsyncThunk<IUserBlock | IMessage, IUserParams, {
+  dispatch: AppDispatch;
+  state: State;
+  extra: AxiosInstance;
+}>(
+  'admin/searchBlock',
+  async ({ user }, {extra: api}) => {
+    try {
+      const {data} = await api.get(`${APIRoute.SearchBlock}/${user}`);
+      return data;
+    }
+    catch {
+      return undefined;
+    }
+  },
 );

@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react';
 import { Drawer, ButtonToolbar, Button } from 'rsuite';
 import 'rsuite/dist/rsuite.min.css';
+import SearchIcon from '@mui/icons-material/Search';
 import styles from './profile-drawer.module.css';
 import DatePickerComponent from '../date-picker/date-picker';
 import { useAppDispatch } from '../../hooks';
-import { formatDateForRequest } from '../../utils';
+import { formatDateForRequest, getCorrectWordEnding } from '../../utils';
 import { IUserReserval } from '../../types/admin-data';
-import { SearchDateAction } from '../../store/api-actions';
+import { SearchDateAction, SearchBlockAction } from '../../store/api-actions';
+import { IUserBlock } from '../../types/admin-data';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
@@ -15,6 +17,8 @@ export default function ProfileDrawer() {
   const [isOpenDrawerDoc, setIsOpenDrawerDoc] = useState(false);
   const [isOpenDrawerPeople, setIsOpenDrawerPeople] = useState(false);
   const [reservations, setReservations] = useState<IUserReserval[]>([]);
+  const [usersBlock, setUsersBlock] = useState<IUserBlock[]>([]);
+  const [searchTerm, setSearchTerm] = useState('');
 
   const handleToggleDrawerDoc = () => setIsOpenDrawerDoc((prev) => !prev);
   const handleToggleDrawerPeople = () => setIsOpenDrawerPeople((prev) => !prev);
@@ -25,6 +29,21 @@ export default function ProfileDrawer() {
       setReservations(data);
     } catch (error) {
       console.error('Ошибка:', error);
+    }
+  };
+
+  const fetchUsersBlock = async (word: string) => {
+    try {
+      const trimmedWord = word.trim();
+      if (trimmedWord) {
+        const response = await dispatch(SearchBlockAction({ user: trimmedWord }));
+        const payload = response.payload as IUserBlock[];
+        setUsersBlock(payload);
+      } else {
+        setUsersBlock([]);
+      }
+    } catch (e) {
+      console.log('Oops, error', e);
     }
   };
 
@@ -48,6 +67,10 @@ export default function ProfileDrawer() {
       handleSubmit(formattedDate);
     }
   }, [formik.values.date]);
+
+  useEffect(() => {
+    fetchUsersBlock(searchTerm);
+  }, [searchTerm]);
 
   return (
     <>
@@ -91,17 +114,17 @@ export default function ProfileDrawer() {
                 placement='bottomEnd'
               />
             </form>
-            <div className={styles.reservations}>
+            <div className={styles.list}>
               {reservations.length > 0 ? (
                 reservations.map((reservation) => (
-                  <div key={reservation.id} className={styles.reservation}>
+                  <div key={reservation.id} className={styles.item}>
                     <div className={styles.title}>
                       <p className={styles.text}>{reservation.realname}</p>
                       <p className={styles.email}>{reservation.username}</p>
                     </div>
                     <p className={styles.textGrey}>{reservation.dateReserval} с {reservation.timeStartReserval} до {reservation.timeEndReserval}</p>
                     <p className={styles.textGrey}>{reservation.table} место</p>
-                    <div className={styles.cancel}><button className={styles.cancelButton}>отменить</button></div>
+                    <div className={styles.listButton}><button className={styles.textButton}>отменить</button></div>
                   </div>
                 ))
               ) : (
@@ -142,7 +165,47 @@ export default function ProfileDrawer() {
           }}
         >
           <h4>Список пользователей</h4>
-          <div className={styles.content}></div>
+          <div className={styles.content}>
+            <div className={styles.inputWrapper}>
+              <input
+                className={styles.inputText}
+                placeholder="Введите имя пользователя"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+              <SearchIcon
+                className={styles.searchIcon}
+                sx={{ position: 'absolute' }}
+              />
+            </div>
+            <div className={styles.list}>
+              {usersBlock.length > 0 ? (
+                usersBlock.map((user) => (
+                  <div key={user.id} className={styles.itemBlock}>
+                    <div className={styles.titleBlock}>
+                      <p className={styles.text}>{user.realname}</p>
+                      <p className={styles.email}>{user.username}</p>
+                    </div>
+                    <div className={styles.contentBlock}>
+                      <p className={`${styles.countBlock} ${
+                          user.countBlock === 0
+                            ? styles.greenText
+                            : user.countBlock <= 3
+                            ? styles.orangeText
+                            : styles.redText
+                        }`}
+                      >
+                        {user.countBlock} {getCorrectWordEnding(user.countBlock)}
+                      </p>
+                      <div className={styles.listButton}><button className={styles.textButton}>забанить</button></div>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <p>Нет таких пользователей.</p>
+              )}
+            </div>
+          </div>
         </Drawer.Body>
       </Drawer>
     </>

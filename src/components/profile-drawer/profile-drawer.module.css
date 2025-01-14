@@ -50,18 +50,30 @@
   font-weight: 500;
 }
 
-.reservations {
+.list {
   margin-top: 28px;
 }
 
-.reservation {
+.item {
   background: #F6F6F4;
   box-shadow: 0px 4px 16px 0px #14191A14;
-  width: 310px;
+  width: 300px;
   height: 120px;
   border-radius: 10px;
   padding: 10px;
   margin: 15px 0px;
+}
+
+.itemBlock {
+  display: flex;
+  justify-content: space-between;
+  background: #F6F6F4;
+  box-shadow: 0px 4px 16px 0px #14191A14;
+  border-radius: 10px;
+  padding: 10px;
+  margin: 15px 0px;
+  width: 300px;
+  height: 80px; 
 }
 
 .title {
@@ -70,9 +82,22 @@
   margin-bottom: 6px;
 }
 
+.titleBlock {
+  display: flex;
+  flex-direction: column;
+}
+
+.contentBlock {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 14px;
+}
+
 .email {
   font-size: 12px;
   color: #8A8C8C;
+  margin: 0;
 }
 
 .textGrey {
@@ -81,13 +106,45 @@
   margin: 0;
 }
 
-.cancel {
+.greenText {
+  color: #9ACA3C;
+}
+
+.orangeText {
+  color: #F2994A;
+}
+
+.redText {
+  color: #EF3B24;
+}
+
+.listButton {
   display: flex;
   justify-content: flex-end;
 }
 
-.cancelButton {
+.textButton {
   color: #EF3B24;
   font-size: 20px;
   align-self: flex-end;
+}
+
+.inputWrapper {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+}
+
+.inputText {
+  width: 100%;
+  padding-right: 40px;
+  box-sizing: border-box;
+}
+
+.searchIcon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
 }
