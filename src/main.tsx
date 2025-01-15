@@ -1,4 +1,4 @@
-import { StrictMode, useState, useEffect } from 'react';
+import { StrictMode, useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
 import { ToastContainer } from 'react-toastify';
 import { Provider } from 'react-redux';
@@ -10,7 +10,6 @@ import 'react-toastify/dist/ReactToastify.css';
 import './index.css';
 
 function Root() {
-  const [isAuthChecked, setIsAuthChecked] = useState(false);
 
   useEffect(() => {
     store.dispatch(checkAuthAction()).then(() => {
@@ -24,14 +23,8 @@ function Root() {
       if (authorizationStatus === AuthorizationStatus.ADMIN) {
         store.dispatch(fetchAdminDataAction());
       }
-
-      setIsAuthChecked(true);
     });
   }, []);
-
-  if (!isAuthChecked) {
-    return <div>Loading...</div>;
-  }
 
   return (
     <Provider store={store}>

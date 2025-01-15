@@ -12,7 +12,7 @@ import { AuthorizationStatus, ActionButtonType, ModalType, seatColorsType } from
 import { generateTimeOptions, timeOptions, formatDateForRequest, paintSeat } from '../../utils';
 import ActionButton from '../../components/action-button/action-button';
 import AuthModals from '../../components/authModalManager';
-import { openModal } from '../../store/slices/modal-slice';
+import { openModal, setReservationData } from '../../store/slices/modal-slice';
 import 'rsuite/dist/rsuite.min.css';
 import styles from './book-screen.module.css';
 import { Toggle, InputPicker, Checkbox } from 'rsuite';
@@ -92,6 +92,11 @@ export default function BookScreen() {
         };
         await dispatch(reservalTablesAdminAction(adminData)).unwrap();
       }
+      dispatch(setReservationData({
+        date: dataToSend.date || '',
+        timeStart: dataToSend.timeStart || '',
+        timeEnd: dataToSend.timeEnd || '',
+      }));
       resetPage();
       handleReservalModal();
     } catch (error) {
@@ -478,7 +483,7 @@ export default function BookScreen() {
           </ul>
 
           <ReactSVG 
-            src="../../../img/map.svg" 
+            src="../../../img/map2.svg" 
             afterInjection={(svg) => {
               svgRef.current = svg;
               svg.addEventListener('click', onClickHandler);

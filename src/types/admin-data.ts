@@ -8,4 +8,5 @@ export interface IUserReserval extends IUserData, IReserval {}
 
 export interface IUserBlock extends IUserDataWithId {
   countBlock: number;
+  stateBlock: string;
 }

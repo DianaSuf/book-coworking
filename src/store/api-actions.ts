@@ -301,8 +301,13 @@ export const SearchDateAction = createAsyncThunk<IUserReserval[], IDate, {
 }>(
   'admin/searchData',
   async ({ date }, { extra: api }) => {
-    const {data} =  await api.post<IUserReserval[]>(APIRoute.SearchData, { date });
-    return data;
+    try {
+      const {data} =  await api.post<IUserReserval[]>(APIRoute.SearchData, { date });
+      return data;
+    } catch (error) {
+      console.error("Ошибка при получении списка:", error);
+      throw error;
+    }
   }
 );
 
@@ -319,6 +324,40 @@ export const SearchBlockAction = createAsyncThunk<IUserBlock | IMessage, IUserPa
     }
     catch {
       return undefined;
+    }
+  },
+);
+
+export const BlockUserAction = createAsyncThunk<IMessage, IReservalId, {
+  dispatch: AppDispatch;
+  state: State;
+  extra: AxiosInstance;
+}>(
+  'admin/blockUser',
+  async ({ id }, { extra: api}) => {
+    try {
+      const { data: { message } } = await api.get(`${APIRoute.BlockUser}/${id}`);
+      return { message };
+    } catch (error) {
+      console.error("Ошибка при получении списка:", error);
+      throw error;
+    }
+  },
+);
+
+export const UnblockUserAction = createAsyncThunk<IMessage, IReservalId, {
+  dispatch: AppDispatch;
+  state: State;
+  extra: AxiosInstance;
+}>(
+  'admin/unblockUser',
+  async ({ id }, { extra: api}) => {
+    try {
+      const { data: { message } } = await api.get(`${APIRoute.UnblockUser}/${id}`);
+      return { message };
+    } catch (error) {
+      console.error("Ошибка при получении списка:", error);
+      throw error;
     }
   },
 );

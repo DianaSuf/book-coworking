@@ -1,1 +1,1 @@
-export type IModalType = 'login' | 'register' | 'forgotPassword' | 'confirmRegister' | 'successReserval' | 'confirmBooking' | 'successConfirmPassword' | 'successConfirmBooking'  | 'successResetPassword' | null;
+export type IModalType = 'login' | 'register' | 'forgotPassword' | 'confirmRegister' | 'successReserval' | 'confirmBooking' | 'successConfirmPassword' | 'successConfirmBooking'  | 'successResetPassword';

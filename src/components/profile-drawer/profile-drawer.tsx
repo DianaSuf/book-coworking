@@ -7,7 +7,7 @@ import DatePickerComponent from '../date-picker/date-picker';
 import { useAppDispatch } from '../../hooks';
 import { formatDateForRequest, getCorrectWordEnding } from '../../utils';
 import { IUserReserval } from '../../types/admin-data';
-import { SearchDateAction, SearchBlockAction, CancelReservalAction } from '../../store/api-actions';
+import { SearchDateAction, SearchBlockAction, CancelReservalAction, BlockUserAction, UnblockUserAction } from '../../store/api-actions';
 import { IUserBlock } from '../../types/admin-data';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -46,20 +46,39 @@ export default function ProfileDrawer() {
     }
   };
 
+  const handleBlock = async (id: number) => {
+    try {
+      await dispatch(BlockUserAction({ id })).unwrap();
+      await fetchUsersBlock(searchTerm);
+    } catch (error) {
+      console.error('Ошибка при блокировке пользователя:', error);
+    }
+  };
+  
+  const handleUnblock = async (id: number) => {
+    try {
+      await dispatch(UnblockUserAction({ id })).unwrap();
+      await fetchUsersBlock(searchTerm);
+    } catch (error) {
+      console.error('Ошибка при разблокировке пользователя:', error);
+    }
+  };
+  
   const fetchUsersBlock = async (word: string) => {
     try {
       const trimmedWord = word.trim();
       if (trimmedWord) {
         const response = await dispatch(SearchBlockAction({ user: trimmedWord }));
         const payload = response.payload as IUserBlock[];
-        setUsersBlock(payload);
+        setUsersBlock([...payload]);
       } else {
         setUsersBlock([]);
       }
     } catch (e) {
-      console.log('Oops, error', e);
+      console.error('Ошибка при получении пользователей:', e);
     }
   };
+  
 
   const formik = useFormik({
     initialValues: {
@@ -201,7 +220,7 @@ export default function ProfileDrawer() {
                       <p className={styles.email}>{user.username}</p>
                     </div>
                     <div className={styles.contentBlock}>
-                      <p className={`${styles.countBlock} ${
+                      {(user.stateBlock === 'TRUE') ? <p className={`${styles.countBlock} ${
                           user.countBlock === 0
                             ? styles.greenText
                             : user.countBlock <= 3
@@ -210,8 +229,11 @@ export default function ProfileDrawer() {
                         }`}
                       >
                         {user.countBlock} {getCorrectWordEnding(user.countBlock)}
-                      </p>
-                      <div className={styles.listButton}><button className={styles.textButton}>забанить</button></div>
+                      </p> : ''}
+                      {(user.stateBlock === 'TRUE') ? 
+                        <div className={styles.listButton}><button className={styles.textButton} onClick={() => handleBlock(user.id)}>забанить</button></div> :
+                        <div className={styles.listButton}><button className={styles.textButton} onClick={() => handleUnblock(user.id)}>разбанить</button></div>
+                      }
                     </div>
                   </div>
                 ))

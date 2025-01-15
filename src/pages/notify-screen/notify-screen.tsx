@@ -3,17 +3,19 @@ import { Helmet } from 'react-helmet-async'
 import Header from '../../components/header/header'
 import Footer from '../../components/footer/footer'
 import { useEffect } from 'react'
-import { ReservalType, ModalType, StateType } from '../../const'
+import { ReservalType, ModalType, StateType, AuthorizationStatus } from '../../const'
 import { useAppDispatch, useAppSelector } from '../../hooks'
 import { fetchNotificationsAction, ConfirmReservalGroupAction, CancelReservalAction } from '../../store/api-actions'
 import { getReservals, getNotificationsToday, getNotificationsWeek, getNotificationsMonth } from '../../store/slices/notifications-slice'
 import { INotification } from '../../types/notification-data'
 import AuthModals from '../../components/authModalManager'
-import { openModal } from '../../store/slices/modal-slice'
+import { openModal, setNotificationId } from '../../store/slices/modal-slice'
+import { getAuthorizationStatus } from '../../store/slices/user-slice'
 
 export default function NotifyScreen() {
   const dispatch = useAppDispatch()
   const reservals = useAppSelector(getReservals)
+  const authorizationStatus = useAppSelector(getAuthorizationStatus)
   const notificationsToday = useAppSelector(getNotificationsToday)
   const notificationsWeek = useAppSelector(getNotificationsWeek)
   const notificationsMonth = useAppSelector(getNotificationsMonth)
@@ -22,7 +24,8 @@ export default function NotifyScreen() {
     dispatch(fetchNotificationsAction())
   }, [dispatch])
 
-  const handleConfirmModal = () => {
+  const handleConfirmModal = (id: number) => {
+    dispatch(setNotificationId(id));
     dispatch(openModal(ModalType.ConfirmBooking));
   };
 
@@ -38,7 +41,9 @@ export default function NotifyScreen() {
   const handleCancel = async (id: number) => {
     try {
       await dispatch(CancelReservalAction({ id })).unwrap();
-      await dispatch(fetchNotificationsAction());
+      if (AuthorizationStatus.USER === authorizationStatus) {
+        await dispatch(fetchNotificationsAction());
+      }
     } catch (error) {
       console.error("Ошибка при отмене бронирования:", error);
     }
@@ -69,7 +74,7 @@ export default function NotifyScreen() {
           )}
         </div>
         {(notification.state === StateType.TRUE) && (
-          <button className={styles.bookBtn} onClick={handleConfirmModal}>Подтвердить</button>
+          <button className={styles.bookBtn} onClick={() => handleConfirmModal(notification.id)}>Подтвердить</button>
         )}
       </div>
     ) : (

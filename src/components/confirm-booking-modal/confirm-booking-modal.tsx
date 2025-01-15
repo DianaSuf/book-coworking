@@ -3,8 +3,24 @@ import * as Yup from 'yup';
 import ActionButton from "../action-button/action-button";
 import { ActionButtonType } from "../../const";
 import styles from './confirm-booking-modal.module.css'
+import { getNotificationId, openModal } from '../../store/slices/modal-slice';
+import { ModalType } from '../../const';
+import { ConfirmReservalAction } from '../../store/api-actions';
+import { useAppDispatch, useAppSelector } from '../../hooks';
 
 export default function ConfirmBookingModal( ) {
+  const dispatch = useAppDispatch()
+  const id = useAppSelector(getNotificationId)
+
+  const handleSubmit = async (id: number, code: string) => {
+    try {
+      await dispatch(ConfirmReservalAction({ id, code })).unwrap();
+      dispatch(openModal(ModalType.SuccessConfirmBooking));
+    } catch (error) {
+      console.error('Ошибка отпраки кода:', error);
+    }
+  };
+
   const formik = useFormik({
     initialValues: {
       code: '',
@@ -15,7 +31,7 @@ export default function ConfirmBookingModal( ) {
         .required('Код обязателен'),
     }),
     onSubmit: (values) => {
-      console.log('Код для подтверждения брони:', values.code);
+      handleSubmit(id, values.code);
     },
   });
 

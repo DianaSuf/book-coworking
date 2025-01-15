@@ -1,6 +1,6 @@
 .header {
   background-color: #EF3B24;
-  height: 3.073vw;
+  height: 59px;
   width: 100vw;
   display: flex;
 }
@@ -20,8 +20,8 @@
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
-  width: 29.16vw;
-  height: 1.667vw;
+  width: 560px;
+  height: 32px;
 }
 
 .nav {
@@ -49,8 +49,8 @@
 
 .notify {
   background-image: url('../img/notify.svg');
-  width: 2.08334vw;
-  height: 2.08334vw;
+  width: 40px;
+  height: 40px;
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
@@ -58,8 +58,8 @@
 
 .profile {
   background-image: url('../img/profile.svg');
-  width: 2.08334vw;
-  height: 2.08334vw;
+  width: 40px;
+  height: 40px;
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
