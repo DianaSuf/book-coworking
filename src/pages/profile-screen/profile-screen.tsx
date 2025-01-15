@@ -196,7 +196,9 @@ export default function ProfileScreen() {
           </form>
         </section>
       </main>
-      <ProfileDrawer />
+      {authorizationStatus === AuthorizationStatus.ADMIN && (
+        <ProfileDrawer />
+      )}
       <Footer/>
     </>
   )

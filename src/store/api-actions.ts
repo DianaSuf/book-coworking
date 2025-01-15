@@ -247,10 +247,9 @@ export const CancelReservalAction = createAsyncThunk<IMessage, IReservalId, {
   extra: AxiosInstance;
 }>(
   'notifications/cancelReserval',
-  async ({ id }, { dispatch, extra: api}) => {
+  async ({ id }, { extra: api}) => {
     try {
       const { data: { message } } = await api.get(`${APIRoute.CancelReserval}/${id}`);
-      await dispatch(fetchNotificationsAction());
       return { message };
     } catch (error) {
       console.error("Ошибка при отмене бронирования:", error);

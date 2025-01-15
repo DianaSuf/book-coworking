@@ -7,7 +7,7 @@ import DatePickerComponent from '../date-picker/date-picker';
 import { useAppDispatch } from '../../hooks';
 import { formatDateForRequest, getCorrectWordEnding } from '../../utils';
 import { IUserReserval } from '../../types/admin-data';
-import { SearchDateAction, SearchBlockAction } from '../../store/api-actions';
+import { SearchDateAction, SearchBlockAction, CancelReservalAction } from '../../store/api-actions';
 import { IUserBlock } from '../../types/admin-data';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -29,6 +29,20 @@ export default function ProfileDrawer() {
       setReservations(data);
     } catch (error) {
       console.error('Ошибка:', error);
+    }
+  };
+
+  const handleCancel = async (id: number) => {
+    try {
+      await dispatch(CancelReservalAction({ id })).unwrap();
+      const currentFormattedDate = formik.values.date
+        ? formatDateForRequest(formik.values.date)
+        : '';
+      if (currentFormattedDate) {
+        await handleSubmit(currentFormattedDate);
+      }
+    } catch (error) {
+      console.error("Ошибка при отмене бронирования:", error);
     }
   };
 
@@ -124,7 +138,7 @@ export default function ProfileDrawer() {
                     </div>
                     <p className={styles.textGrey}>{reservation.dateReserval} с {reservation.timeStartReserval} до {reservation.timeEndReserval}</p>
                     <p className={styles.textGrey}>{reservation.table} место</p>
-                    <div className={styles.listButton}><button className={styles.textButton}>отменить</button></div>
+                    <div className={styles.listButton} onClick={() => handleCancel(reservation.id)}><button className={styles.textButton}>отменить</button></div>
                   </div>
                 ))
               ) : (

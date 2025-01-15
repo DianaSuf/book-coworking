@@ -57,6 +57,8 @@ export default function ConfirmScreen() {
       setIsRequestSent(true); // Устанавливаем флаг, чтобы предотвратить повторный запрос
 
       // Сохраняем флаг успешной отправки в localStorage, чтобы при перезагрузке компонента не отправлялся новый запрос
+      // if (!sessionStorage.getItem('confirmRegisterSent')) {
+      //   sessionStorage.setItem('confirmRegisterSent', 'true');
       if (!localStorage.getItem('confirmRegisterSent')) {
         localStorage.setItem('confirmRegisterSent', 'true');
 

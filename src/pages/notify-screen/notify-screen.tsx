@@ -38,8 +38,9 @@ export default function NotifyScreen() {
   const handleCancel = async (id: number) => {
     try {
       await dispatch(CancelReservalAction({ id })).unwrap();
+      await dispatch(fetchNotificationsAction());
     } catch (error) {
-      console.error("Ошибка при подтверждении группового бронирования:", error);
+      console.error("Ошибка при отмене бронирования:", error);
     }
   };
 
