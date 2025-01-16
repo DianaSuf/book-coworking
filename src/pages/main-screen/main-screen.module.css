@@ -5,6 +5,16 @@
   margin-bottom: 6.198%;
 }
 
+.img {
+  width: 49%;
+}
+
+.heroImage {
+  width: 100%;
+  height: auto;
+  max-width: 954px;
+}
+
 .heroContent {
   width: 34.167vw;
 }
@@ -80,4 +90,11 @@
 
 .aboutImage {
   margin-left: auto;
+}
+
+@media (max-width: 1200px) {
+  .hero {
+    display: flex;
+    
+  }
 }

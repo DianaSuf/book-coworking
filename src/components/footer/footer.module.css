@@ -1,14 +1,18 @@
-/* footer.module.css */
 .footer {
   background-color: #2C2726;
   display: flex;
+  justify-content: space-between;
+}
+
+.footerContent {
+  display: flex;
+  width: 40%;
+  justify-content: center;
+  align-items: center;
+  padding: 60px;
 }
 
 .content {
-  margin-top: 102px;
-  margin-left: 188px;
-  margin-bottom: 90px;
-  margin-right: auto;
   display: flex;
   flex-direction: column;
 }
@@ -61,12 +65,12 @@
 }
 
 .company {
-  margin-top: auto;
+  margin-top: 150px;
 }
 
 .mapIframe {
   width: 1017px;
-  height: 667px;
+  height: auto;
+  aspect-ratio: 1017 / 667;
   border: none;
-  margin-left: auto;
 }

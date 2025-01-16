@@ -19,7 +19,7 @@ export default function MainScreen() {
       <Header />
       <main>
         <section className={styles.hero}>
-          <img className={styles.heroImage} src="../img/image_1.jpg" alt="photo of coworking" />
+          <div className={styles.img}><img className={styles.heroImage} src="../img/image_1.jpg" alt="photo of coworking" /></div>
           <div className={styles.heroContent}>
             <h1 className={styles.heroTitle}>Добро пожаловать в наш коворкинг!</h1>
             <p className={styles.heroText}>

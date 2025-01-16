@@ -144,8 +144,13 @@
 }
 
 .map {
-  width: 1101.9px;
+  width: 100%;
   margin: 92px 102px;
+}
+
+.svgContainer {
+  width: 100%;
+  aspect-ratio: 1101.9 / 819;
 }
 
 .colorList {

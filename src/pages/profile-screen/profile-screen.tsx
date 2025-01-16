@@ -100,101 +100,103 @@ export default function ProfileScreen() {
       </Helmet>
       <Header/>
       <main className={styles.profile}>
-        <h2 className={styles.titleMain}>Личный кабинет</h2>
-        <section className={styles.section}>
-          <h3 className={styles.title}>личные данные</h3>
-          <form className={styles.form} onSubmit={personalForm.handleSubmit} noValidate>
-            <div className={styles.content}>
-              <div className={styles.inputGroup}>
-                <label htmlFor="name">Имя и фамилия</label>
-                <input
-                  id="name"
-                  name="name"
-                  type="text"
-                  value={personalForm.values.name}
-                  onChange={personalForm.handleChange}
-                  onBlur={personalForm.handleBlur}
-                />
-                {personalForm.touched.name && personalForm.errors.name && (
-                  <p className={styles.errorText}>{personalForm.errors.name}</p>
-                )}
-              </div>
-              <div className={styles.inputGroup}>
-                <label htmlFor="email">Email</label>
-                <div className={styles.emailWrapper}>
+        <div className={styles.profileSection}>
+          <h2 className={styles.titleMain}>Личный кабинет</h2>
+          <section className={styles.section}>
+            <h3 className={styles.title}>личные данные</h3>
+            <form className={styles.form} onSubmit={personalForm.handleSubmit} noValidate>
+              <div className={styles.content}>
+                <div className={styles.inputGroup}>
+                  <label htmlFor="name">Имя и фамилия</label>
                   <input
-                    id="email"
-                    name="email"
-                    type="email"
-                    value={personalForm.values.email}
+                    id="name"
+                    name="name"
+                    type="text"
+                    value={personalForm.values.name}
                     onChange={personalForm.handleChange}
                     onBlur={personalForm.handleBlur}
-                    className={styles.inputEmail}
-                    readOnly
                   />
-                  <img
-                    className={styles.lockImg}
-                    src="../img/icon_lock.svg"
-                    alt="lock icon"
-                  />
+                  {personalForm.touched.name && personalForm.errors.name && (
+                    <p className={styles.errorText}>{personalForm.errors.name}</p>
+                  )}
                 </div>
-              </div>
-            </div>
-            <ActionButton text="Сохранить" variant={ActionButtonType.Black} buttonType='submit' />
-          </form>
-          {authorizationStatus === AuthorizationStatus.ADMIN && userData && 'code' in userData && (
-            <>
-              <h3 className={styles.title}>код</h3>
-              <div className={styles.form} style={{width: "400px"}}>
                 <div className={styles.inputGroup}>
-                  <label htmlFor="code">Код для бронирования</label>
-                  <input
-                    id="code"
-                    name="code"
-                    type="text"
-                    value={userData?.code || ''}
-                    readOnly />
+                  <label htmlFor="email">Email</label>
+                  <div className={styles.emailWrapper}>
+                    <input
+                      id="email"
+                      name="email"
+                      type="email"
+                      value={personalForm.values.email}
+                      onChange={personalForm.handleChange}
+                      onBlur={personalForm.handleBlur}
+                      className={styles.inputEmail}
+                      readOnly
+                    />
+                    <img
+                      className={styles.lockImg}
+                      src="../img/icon_lock.svg"
+                      alt="lock icon"
+                    />
+                  </div>
                 </div>
               </div>
-            </>
-          )}
-          <h3 className={styles.title}>пароль</h3>
-          <form className={styles.form} onSubmit={passwordForm.handleSubmit} noValidate>
-            <div className={styles.content}>
-              <PasswordInput
-                id="oldPassword"
-                name="oldPassword"
-                label="Введите старый пароль"
-                value={passwordForm.values.oldPassword}
-                onChange={passwordForm.handleChange}
-                onBlur={passwordForm.handleBlur}
-                touched={passwordForm.touched.oldPassword}
-                error={passwordForm.errors.oldPassword}
-              />
-              <PasswordInput
-                id="newPassword"
-                name="newPassword"
-                label="Новый пароль"
-                value={passwordForm.values.newPassword}
-                onChange={passwordForm.handleChange}
-                onBlur={passwordForm.handleBlur}
-                touched={passwordForm.touched.newPassword}
-                error={passwordForm.errors.newPassword}
-              />
-              <PasswordInput
-                id="confirmPassword"
-                name="confirmPassword"
-                label="Повторите новый пароль"
-                value={passwordForm.values.confirmPassword}
-                onChange={passwordForm.handleChange}
-                onBlur={passwordForm.handleBlur}
-                touched={passwordForm.touched.confirmPassword}
-                error={passwordForm.errors.confirmPassword}
-              />
-            </div>
-            <ActionButton text="Сохранить" variant={ActionButtonType.Black} buttonType='submit' />
-          </form>
-        </section>
+              <ActionButton text="Сохранить" variant={ActionButtonType.Black} buttonType='submit' />
+            </form>
+            {authorizationStatus === AuthorizationStatus.ADMIN && userData && 'code' in userData && (
+              <>
+                <h3 className={styles.title}>код</h3>
+                <div className={styles.form} style={{width: "400px"}}>
+                  <div className={styles.inputGroup}>
+                    <label htmlFor="code">Код для бронирования</label>
+                    <input
+                      id="code"
+                      name="code"
+                      type="text"
+                      value={userData?.code || ''}
+                      readOnly />
+                  </div>
+                </div>
+              </>
+            )}
+            <h3 className={styles.title}>пароль</h3>
+            <form className={styles.form} onSubmit={passwordForm.handleSubmit} noValidate>
+              <div className={styles.content}>
+                <PasswordInput
+                  id="oldPassword"
+                  name="oldPassword"
+                  label="Введите старый пароль"
+                  value={passwordForm.values.oldPassword}
+                  onChange={passwordForm.handleChange}
+                  onBlur={passwordForm.handleBlur}
+                  touched={passwordForm.touched.oldPassword}
+                  error={passwordForm.errors.oldPassword}
+                />
+                <PasswordInput
+                  id="newPassword"
+                  name="newPassword"
+                  label="Новый пароль"
+                  value={passwordForm.values.newPassword}
+                  onChange={passwordForm.handleChange}
+                  onBlur={passwordForm.handleBlur}
+                  touched={passwordForm.touched.newPassword}
+                  error={passwordForm.errors.newPassword}
+                />
+                <PasswordInput
+                  id="confirmPassword"
+                  name="confirmPassword"
+                  label="Повторите новый пароль"
+                  value={passwordForm.values.confirmPassword}
+                  onChange={passwordForm.handleChange}
+                  onBlur={passwordForm.handleBlur}
+                  touched={passwordForm.touched.confirmPassword}
+                  error={passwordForm.errors.confirmPassword}
+                />
+              </div>
+              <ActionButton text="Сохранить" variant={ActionButtonType.Black} buttonType='submit' />
+            </form>
+          </section>
+        </div>
       </main>
       {authorizationStatus === AuthorizationStatus.ADMIN && (
         <ProfileDrawer />

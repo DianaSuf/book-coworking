@@ -483,8 +483,11 @@ export default function BookScreen() {
           </ul>
 
           <ReactSVG 
-            src="../../../img/map2.svg" 
+            src="../../../img/map2.svg"
             afterInjection={(svg) => {
+              svg.removeAttribute('width');
+              svg.removeAttribute('height');
+              svg.setAttribute('viewBox', '0 0 1102 819');
               svgRef.current = svg;
               svg.addEventListener('click', onClickHandler);
               restoreSeatColors();
