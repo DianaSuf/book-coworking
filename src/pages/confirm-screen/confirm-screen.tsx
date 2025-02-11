@@ -34,9 +34,9 @@
 //   return null;
 // }
 import { useAppDispatch, useAppSelector } from "../../hooks";
-import { confirmRegisterAction } from "../../store/api-actions";
+import { confirmRegisterAction, checkAuthAction } from "../../store/api-actions";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { AppRoute, AuthorizationStatus } from "../../const";
 import { getAuthorizationStatus } from "../../store/slices/user-slice";
 
@@ -45,6 +45,7 @@ export default function ConfirmScreen() {
   const authorizationStatus = useAppSelector(getAuthorizationStatus);
   const location = useLocation();
   const navigate = useNavigate();
+  const isRequestSent = useRef(false); // Предотвращаем повторный запрос
 
   const queryParams = new URLSearchParams(location.search);
   const data = queryParams.get("data");
@@ -53,13 +54,17 @@ export default function ConfirmScreen() {
     if (
       data &&
       authorizationStatus !== AuthorizationStatus.USER &&
-      authorizationStatus !== AuthorizationStatus.ADMIN
+      authorizationStatus !== AuthorizationStatus.ADMIN &&
+      !isRequestSent.current
     ) {
+      isRequestSent.current = true; // Устанавливаем флаг перед отправкой запроса
+
       localStorage.setItem("confirmRegisterStatus", `Запрос отправлен с данными: ${data}`);
 
       dispatch(confirmRegisterAction({ message: data }))
         .unwrap()
         .then(() => {
+          dispatch(checkAuthAction()); // ✅ Проверяем авторизацию после подтверждения
           localStorage.setItem("confirmRegisterStatus", "Успешный ответ от сервера, редирект в профиль");
           navigate(AppRoute.Profile);
         })
@@ -72,3 +77,5 @@ export default function ConfirmScreen() {
 
   return null;
 }
+
+
