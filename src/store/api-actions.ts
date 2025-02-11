@@ -76,13 +76,15 @@ export const confirmRegisterAction = createAsyncThunk<
   { dispatch: AppDispatch; state: State; extra: AxiosInstance }
 >(
   'user/confirmRegister',
-  async ({ message }, { extra: api }) => {
+  async ({ message }, { dispatch, extra: api }) => {
     const {
       data: { tokenAccess, tokenRefresh, role },
     } = await api.post<ITokenResponse>(APIRoute.ConfirmRegister, { message });
 
     localStorage.setItem('tokenAccess', tokenAccess);
     localStorage.setItem('tokenRefresh', tokenRefresh);
+
+    dispatch(checkAuthAction())
 
     return { authorizationStatus: AuthorizationStatus[role] };
   }
