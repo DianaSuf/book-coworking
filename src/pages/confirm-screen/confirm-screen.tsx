@@ -1,38 +1,3 @@
-// import { useAppDispatch, useAppSelector } from "../../hooks";
-// import { confirmRegisterAction } from "../../store/api-actions";
-// import { useLocation, useNavigate } from "react-router-dom";
-// import { useEffect, useState } from "react";
-// import { AppRoute, AuthorizationStatus } from "../../const";
-// import { getAuthorizationStatus } from "../../store/slices/user-slice";
-
-// export default function ConfirmScreen() {
-//   const dispatch = useAppDispatch();
-//   const authorizationStatus = useAppSelector(getAuthorizationStatus);
-//   const location = useLocation();
-//   const navigate = useNavigate();
-
-//   const queryParams = new URLSearchParams(location.search);
-//   const data = queryParams.get("data");
-//   const [isRequestSent, setIsRequestSent] = useState(false);
-
-//   useEffect(() => {
-//     if (data && authorizationStatus !== AuthorizationStatus.USER && authorizationStatus !== AuthorizationStatus.ADMIN && !isRequestSent) {
-//       setIsRequestSent(true);
-//         dispatch(confirmRegisterAction({ message: data }))
-//           .unwrap()
-//           .then(() => {
-//             navigate(AppRoute.Profile);
-//             console.log("Profile");
-//           })
-//           .catch(() => {
-//             navigate(AppRoute.NotFound);
-//             console.log("NotFound");
-//           });
-//     }
-//   }, [authorizationStatus, data, dispatch, isRequestSent, navigate]);
-
-//   return null;
-// }
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { confirmRegisterAction, checkAuthAction } from "../../store/api-actions";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -45,7 +10,7 @@ export default function ConfirmScreen() {
   const authorizationStatus = useAppSelector(getAuthorizationStatus);
   const location = useLocation();
   const navigate = useNavigate();
-  const isRequestSent = useRef(false); // Предотвращаем повторный запрос
+  const isRequestSent = useRef(false);
 
   const queryParams = new URLSearchParams(location.search);
   const data = queryParams.get("data");
@@ -57,14 +22,13 @@ export default function ConfirmScreen() {
       authorizationStatus !== AuthorizationStatus.ADMIN &&
       !isRequestSent.current
     ) {
-      isRequestSent.current = true; // Устанавливаем флаг перед отправкой запроса
-
+      isRequestSent.current = true;
       localStorage.setItem("confirmRegisterStatus", `Запрос отправлен с данными: ${data}`);
 
       dispatch(confirmRegisterAction({ message: data }))
         .unwrap()
         .then(() => {
-          dispatch(checkAuthAction()); // ✅ Проверяем авторизацию после подтверждения
+          dispatch(checkAuthAction());
           localStorage.setItem("confirmRegisterStatus", "Успешный ответ от сервера, редирект в профиль");
           navigate(AppRoute.Profile);
         })
