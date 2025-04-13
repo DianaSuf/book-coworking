@@ -8,6 +8,7 @@ import { AuthorizationStatus } from './const';
 import { checkAuthAction, fetchUserDataAction, fetchAdminDataAction } from './store/api-actions';
 import 'react-toastify/dist/ReactToastify.css';
 import './index.css';
+import { keycloak } from './keycloak';
 
 function Root() {
 
@@ -34,8 +35,20 @@ function Root() {
   );
 }
 
-createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <Root />
-  </StrictMode>
-);
+keycloak.init({
+  onLoad: "login-required",
+  silentCheckSsoRedirectUri: window.location.origin + "/check-sso.html",
+})
+.then(() => {
+  if (keycloak.token) {
+    localStorage.setItem("token", keycloak.token);
+
+    createRoot(document.getElementById('root')!).render(
+      <StrictMode>
+        <Root />
+      </StrictMode>,
+    );
+  } else {
+    console.error("Ошибка аутентификации: токен отсутствует");
+  }
+});
