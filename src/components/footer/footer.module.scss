@@ -1,0 +1,112 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.footer {
+  background-color: $color-secondary;
+  display: flex;
+  justify-content: space-between;
+
+  .footerContent {
+    display: flex;
+    width: 40%;
+    @include flex-center;
+    padding: clamp($spacing-xl, 3.125vw, 60px);
+
+    .content {
+      @include flex-column;
+    }
+  }
+}
+
+.title {
+  font-family: $font-family-mega;
+  font-weight: 700;
+  line-height: clamp(24px, 1.67vw, 32px);
+  font-size: clamp($font-size-base, 1.25vw, $font-size-xlarge);
+  color: $color-white;
+}
+
+.line {
+  color: $color-primary;
+  display: block;
+  height: 3px;
+  border: none;
+  border-top: 5px solid $color-primary;
+  width: clamp(80px, 7.29vw, 140px);
+  margin: 0;
+  margin: {
+    top: clamp($spacing-md, 1.56vw, $spacing-xl);
+    bottom: clamp($spacing-xl, 2.08vw, $spacing-xxl);
+  }
+}
+
+.text {
+  line-height: clamp(18px, 1.25vw, 24px);
+  font-size: clamp($font-size-base, 1.04vw, $font-size-large);
+  font-weight: 400;
+  color: $color-white;
+  display: flex;
+}
+
+.titleUl {
+  margin-bottom: clamp($spacing-lg, 2.08vw, $spacing-xxl);
+}
+
+.list {
+  list-style-type: none;
+  padding: 0;
+
+  .item {
+    &:not(:last-child) {
+      margin-bottom: clamp($spacing-md, 0.885vw, $spacing-md);
+    }
+  }
+}
+
+.img {
+  margin-right: clamp($spacing-md, 1.56vw, $spacing-xl);
+  width: 24px;
+  height: 24px;
+}
+
+.company {
+  margin-top: clamp($spacing-xxl, 7.81vw, 150px);
+}
+
+.mapIframe {
+  width: 54%;
+  border: none;
+}
+
+@include tablet {
+  .footer {
+    flex-direction: column;
+
+    .footerContent {
+      width: 100%;
+      padding: $spacing-xxl $spacing-lg;
+
+      .content {
+        width: 100%;
+      }
+    }
+  }
+
+  .company {
+    display: none;
+  }
+
+  .mapIframe {
+    width: auto;
+    height: 220px;
+    margin: $spacing-lg;
+  }
+}
+
+@include mobile {
+  .footer {
+    .footerContent {
+      padding: $spacing-xl $spacing-md;
+    }
+  }
+}

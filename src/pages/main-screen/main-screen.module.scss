@@ -1,0 +1,182 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.hero {
+  display: flex;
+  align-items: center;
+  gap: 2.96%;
+  margin-bottom: 6.198%;
+
+  .img {
+    width: 49%;
+
+    .heroImage {
+      width: 100%;
+      height: auto;
+      max-width: 954px;
+    }
+  }
+
+  .heroContent {
+    width: 34.167vw;
+
+    .heroTitle {
+      font-size: clamp($font-size-large, 2.08vw, $font-size-huge);
+      line-height: clamp(26px, 2.08vw, 40px);
+      width: 83.232%;
+      padding-bottom: 6.098%;
+    }
+
+    .heroText {
+      font-size: clamp($font-size-base, 1.04vw, $font-size-large);
+      line-height: clamp(18px, 1.25vw, 24px);
+      color: $color-text-secondary;
+      padding-bottom: 6.098%;
+    }
+  }
+
+  @include tablet {
+    flex-direction: column;
+    gap: $spacing-lg;
+    margin-bottom: $spacing-xxl;
+
+    .img {
+      width: 100%;
+    }
+
+    .heroContent {
+      width: 90%;
+      margin: 0 auto;
+
+      .heroTitle {
+        width: 100%;
+        padding-bottom: $spacing-lg;
+      }
+
+      .heroText {
+        padding-bottom: $spacing-lg;
+      }
+    }
+  }
+
+  @include mobile {
+    margin-bottom: $spacing-xl;
+
+    .heroContent {
+      width: 95%;
+    }
+  }
+}
+
+.about {
+  margin-bottom: clamp($spacing-xl, 4.167vw, 80px);
+  display: flex;
+  align-items: center;
+  position: relative;
+
+  .aboutContent {
+    width: 54.636%;
+    background-color: $color-background;
+    padding: 1.9271% 3.75%;
+    position: absolute;
+    border-radius: $border-radius-lg;
+    box-sizing: border-box;
+    margin-left: 9.688%;
+
+    .aboutTitleUl {
+      font-size: clamp($font-size-large, 1.56vw, $font-size-xxlarge);
+      line-height: clamp(26px, 1.82vw, 35px);
+      margin-bottom: clamp($spacing-xl, 2.65vw, 51px);
+
+      .aboutTitleDecor {
+        color: $color-primary;
+        font-weight: 600;
+      }
+    }
+
+    .aboutList {
+      list-style-type: none;
+      padding: 0;
+
+      .aboutItem {
+        display: flex;
+        color: $color-text-secondary;
+        font-size: clamp($font-size-small, 1.04vw, $font-size-large);
+        line-height: clamp(18px, 1.25vw, 24px);
+
+        &:not(:last-child) {
+          margin-bottom: clamp($spacing-lg, 2.08vw, $spacing-xxl);
+        }
+
+        .aboutItemTitle {
+          font-weight: 600;
+          color: $color-text-secondary;
+        }
+
+        .aboutItemImg {
+          margin-right: clamp($spacing-md, 1.927vw, $spacing-xxl);
+        }
+      }
+    }
+  }
+
+  .img {
+    width: 54%;
+    margin-left: auto;
+
+    .aboutImage {
+      width: 100%;
+    }
+  }
+
+  @include tablet {
+    flex-direction: column;
+    margin-bottom: $spacing-xxl;
+
+    .aboutContent {
+      position: relative;
+      width: 90%;
+      margin: 0 auto;
+      padding: $spacing-lg;
+
+      .aboutTitleUl {
+        margin-bottom: $spacing-xl;
+      }
+
+      .aboutList {
+        margin-bottom: $spacing-lg;
+
+        .aboutItem {
+          .aboutItemImg {
+            margin-right: $spacing-lg;
+          }
+        }
+      }
+    }
+
+    .img {
+      display: none;
+    }
+  }
+
+  @include mobile {
+    margin-bottom: $spacing-xl;
+
+    .aboutContent {
+      width: 95%;
+      padding: $spacing-md;
+
+      .aboutTitleUl {
+        margin-bottom: $spacing-lg;
+      }
+
+      .aboutItem {
+        .aboutItemImg {
+          margin-right: $spacing-md;
+          width: 20px;
+          height: 20px;
+        }
+      }
+    }
+  }
+}

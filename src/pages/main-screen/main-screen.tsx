@@ -1,4 +1,4 @@
-import styles from './main-screen.module.css';
+import styles from './main-screen.module.scss';
 import { Outlet } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import Header from '../../components/header/header';
@@ -49,38 +49,40 @@ export default function MainScreen() {
                   src="../img/icon_smile.svg"
                   alt="smile icon"
                 />
-                <div className={styles.aboutItemText}>
+                <div>
                   <span className={styles.aboutItemTitle}>Бронирование рабочих мест в коворкинге</span>
-                  <div className={styles.aboutItemDescription}>
+                  <div>
                     Посетители могут выбирать удобные им рабочие столы.
                   </div>
                 </div>
               </li>
               <li className={styles.aboutItem}>
                 <img className={styles.aboutItemImg} src="../img/icon_mail.svg" alt="mail icon" />
-                <div className={styles.aboutItemText}>
+                <div>
                   <span className={styles.aboutItemTitle}>Подтверждение бронирований</span>
-                  <div className={styles.aboutItemDescription}>
+                  <div>
                     Уведомление придет на почту, а также в личный кабинет.
                   </div>
                 </div>
               </li>
               <li className={styles.aboutItem}>
                 <img className={styles.aboutItemImg} src="../img/icon_map.svg" alt="map icon" />
-                <div className={styles.aboutItemText}>
+                <div>
                   <span className={styles.aboutItemTitle}>Понятный план коворкинга</span>
-                  <div className={styles.aboutItemDescription}>
+                  <div>
                     Карта поможет гостям сориентироваться в коворкинге, чтобы найти нужное место.
                   </div>
                 </div>
               </li>
             </ul>
           </div>
-          <img
-            className={styles.aboutImage}
-            src="../img/image_2.jpg"
-            alt="photo of coworking"
-          />
+          <div className={styles.img}>
+            <img
+              className={styles.aboutImage}
+              src="../img/image_2.jpg"
+              alt="photo of coworking"
+            />
+          </div>
         </section>
       </main>
       <Outlet />

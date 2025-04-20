@@ -7,7 +7,7 @@ import { store } from './store';
 import { AuthorizationStatus } from './const';
 import { checkAuthAction, fetchUserDataAction, fetchAdminDataAction } from './store/api-actions';
 import 'react-toastify/dist/ReactToastify.css';
-import './index.css';
+import './index.scss';
 import { keycloak } from './keycloak';
 
 function Root() {

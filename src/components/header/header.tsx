@@ -1,4 +1,4 @@
-import styles from './header.module.css';
+import styles from './header.module.scss';
 import { Link, useNavigate } from 'react-router-dom';
 import { AppRoute, AuthorizationStatus, ActionButtonType } from '../../const';
 import { useState } from 'react';

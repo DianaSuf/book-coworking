@@ -29,6 +29,7 @@
     "react-svg": "^16.2.0",
     "react-toastify": "^10.0.6",
     "rsuite": "^5.76.2",
+    "sass": "^1.86.3",
     "yup": "^1.4.0"
   },
   "devDependencies": {

@@ -1,0 +1,63 @@
+@use 'sass:color';
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+// Базовые стили для всех кнопок
+%button-base {
+  font-size: clamp($font-size-base, 1.04vw, $font-size-large);
+  line-height: 1.4;
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.25s ease, transform 0.2s ease;
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+.action-button {
+  &--red {
+    @extend %button-base;
+    background: $color-primary;
+    border-radius: $border-radius-lg;
+    padding: clamp($spacing-sm, 1.5vw, $spacing-lg) clamp($spacing-md, 2vw, $spacing-xxl);
+    width: fit-content;
+
+    &:hover {
+      background: $color-primary-hover;
+    }
+
+    @include tablet {
+      width: 100%;
+      max-width: 350px;
+    }
+
+    @include mobile {
+      max-width: 300px;
+    }
+  }
+
+  &--black {
+    @extend %button-base;
+    background: $color-text;
+    border-radius: $border-radius-sm;
+    width: 400px;
+    height: clamp(40px, 5vw, 48px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:hover {
+      background: color.scale($color-text, $lightness: 10%);
+    }
+
+    @include tablet {
+      width: 100%;
+      max-width: 350px;
+    }
+
+    @include mobile {
+      max-width: 280px;
+    }
+  }
+}

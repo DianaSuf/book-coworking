@@ -1,4 +1,4 @@
-import styles from './action-button.module.css'
+import styles from './action-button.module.scss'
 import { ActionButtonType } from '../../const';
 
 interface ActionButtonProps {
