@@ -21,7 +21,7 @@ export default function Header() {
   const openProfilePopper = Boolean(profileAnchorEl);
 
   const handleNotifyClick = (event: React.MouseEvent<HTMLElement>) => {
-    if (authorizationStatus === AuthorizationStatus.NoAuth || authorizationStatus === AuthorizationStatus.Unknown) {
+    if (!(authorizationStatus === AuthorizationStatus.USER || authorizationStatus === AuthorizationStatus.ADMIN)) {
       setNotifyAnchorEl(notifyAnchorEl ? null : event.currentTarget);
     } else {
       navigate(AppRoute.Notify);
@@ -33,13 +33,13 @@ export default function Header() {
   };
 
   const handleNotifyMouseEnter = (event: React.MouseEvent<HTMLElement>) => {
-    if ((authorizationStatus === AuthorizationStatus.NoAuth || authorizationStatus === AuthorizationStatus.Unknown) && !notifyAnchorEl) {
+    if (!(authorizationStatus === AuthorizationStatus.USER || authorizationStatus === AuthorizationStatus.ADMIN) && !notifyAnchorEl) {
       setNotifyAnchorEl(event.currentTarget);
     }
   };
   
   const handleNotifyMouseLeave = () => {
-    if (authorizationStatus === AuthorizationStatus.NoAuth || authorizationStatus === AuthorizationStatus.Unknown) {
+    if (!(authorizationStatus === AuthorizationStatus.USER || authorizationStatus === AuthorizationStatus.ADMIN)) {
       setNotifyAnchorEl(null);
     }
   };
@@ -110,7 +110,7 @@ export default function Header() {
                   mt: '9px',
                 }}
               >
-                {(authorizationStatus === AuthorizationStatus.NoAuth || authorizationStatus === AuthorizationStatus.Unknown) ? (
+                {!(authorizationStatus === AuthorizationStatus.USER || authorizationStatus === AuthorizationStatus.ADMIN) ? (
                   <>
                     <p className={styles.title}>Личный кабинет</p>
                     <p className={styles.text}>

@@ -20,7 +20,7 @@
     @extend %button-base;
     background: $color-primary;
     border-radius: $border-radius-lg;
-    padding: clamp($spacing-sm, 1.5vw, $spacing-lg) clamp($spacing-md, 2vw, $spacing-xxl);
+    padding: clamp($spacing-sm, 1.5vw, $spacing-md) clamp($spacing-sm, 2vw, $spacing-lg);
     width: fit-content;
 
     &:hover {

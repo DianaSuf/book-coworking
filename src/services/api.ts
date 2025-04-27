@@ -6,9 +6,6 @@ import { APIRoute } from '../const';
 import { logoutUser } from '../store/slices/user-slice';
 import { store } from '../store'
 
-// const BACKEND_URL = 'http://localhost:8080/';
-// const BACKEND_URL = 'https://brusnikacoworking-production.up.railway.app/';
-const BACKEND_URL = 'https://feisty-prosperity-production-70c5.up.railway.app/';
 const REQUEST_TIMEOUT = 5000;
 
 type DetailMessageType = {
@@ -27,7 +24,7 @@ const shouldDisplayError = (response: AxiosResponse) => !!StatusCodeMapping[resp
 export const createAPI = (): AxiosInstance => {
   
   const api = axios.create({
-    baseURL: BACKEND_URL,
+    baseURL: import.meta.env.API_URL,
     timeout: REQUEST_TIMEOUT,
   });
 

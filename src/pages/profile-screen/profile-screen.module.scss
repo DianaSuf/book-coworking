@@ -1,0 +1,112 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.profile {
+  padding: $spacing-xxl;
+  display: flex;
+  justify-content: center;
+
+  @include mobile {
+    padding: $spacing-xl;
+  }
+}
+
+.profileSection {
+  width: 100%;
+}
+
+.section {
+  @include flex-column;
+  align-items: center;
+  margin-top: $spacing-xxl;
+
+  @include tablet {
+    margin-top: $spacing-xl;
+  }
+
+  @include mobile {
+    margin-top: $spacing-lg;
+  }
+}
+
+.titleMain {
+  margin-left: $spacing-xl;
+
+  @include tablet {
+    margin-left: 0px;
+  }
+
+  @include mobile {
+    margin-left: 0px;
+  }
+}
+
+.title {
+  @include flex-center;
+  position: relative;
+  width: 100%;
+  margin: 0 $spacing-xl;
+}
+
+.title::before,
+.title::after {
+  content: '';
+  flex-grow: 1;
+  height: 0.5px;
+  background-color: $color-primary;
+}
+
+.title::before {
+  margin-right: $spacing-xl;
+
+  @include mobile {
+    margin-right: $spacing-sm;
+  }
+}
+
+.title::after {
+  margin-left: $spacing-xl;
+
+  @include mobile {
+    margin-right: $spacing-sm;
+  }
+}
+
+.form {
+  @include flex-column;
+  margin-bottom: $spacing-xxl;
+  margin-top: $spacing-xxl;
+  gap: 25px;
+}
+
+.content {
+  @include flex-column;
+  gap: 20px;
+}
+
+.inputGroup {
+  @include flex-column;
+  min-width: 284px;
+}
+
+.emailWrapper {
+  position: relative;
+}
+
+.inputEmail {
+  width: 100%;
+  padding-right: $spacing-xxl;
+  box-sizing: border-box;
+}
+
+.lockImg {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.errorText {
+  margin-top: $spacing-xs;
+  color: $color-primary;
+}

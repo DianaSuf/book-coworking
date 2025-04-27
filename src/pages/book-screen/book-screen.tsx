@@ -319,7 +319,7 @@ export default function BookScreen() {
       </Helmet>
       <Header />
       <main className={styles.main}>
-        {(authorizationStatus === AuthorizationStatus.NoAuth || authorizationStatus === AuthorizationStatus.Unknown) ?  
+        {!(authorizationStatus === AuthorizationStatus.USER || authorizationStatus === AuthorizationStatus.ADMIN) ?  
           <section className={styles.bookNoAuth}>
             <p className={styles.textNoAuth}>Чтобы забронировать место для работы в нашем коворкинге, пожалуйста, зарегистрируйтесь на нашем сайте. 
             Регистрация займет всего лишь несколько минут, и после этого вы сможете легко и быстро выбрать место для работы.</p>

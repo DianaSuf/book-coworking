@@ -1,4 +1,4 @@
-import styles from './profile-screen.module.css'
+import styles from './profile-screen.module.scss'
 import { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { fetchUserDataAction, updateUserRealnameAction, updateUserPasswordAction, fetchAdminDataAction } from '../../store/api-actions';

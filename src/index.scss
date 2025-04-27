@@ -71,13 +71,32 @@ h1 {
 h2 {
   font-family: $font-family-secondary;
   font-weight: 600;
+  line-height: 50px;
   font-size: $font-size-huge;
   color: $color-text;
+
+  @include tablet {
+    font-size: $font-size-xxlarge;
+    line-height: 40px;
+  }
+
+  @include mobile {
+    font-size: $font-size-large;
+    line-height: 30px;
+  }
 }
 
 h3 {
   @include text-style($font-size-large, 16px);
   color: $color-primary;
+
+  @include tablet {
+    font-size: $font-size-medium;
+  }
+
+  @include mobile {
+    font-size: $font-size-base;
+  }
 }
 
 h4 {
