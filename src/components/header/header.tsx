@@ -4,10 +4,12 @@ import { AppRoute, AuthorizationStatus, ActionButtonType } from '../../const';
 import { useState } from 'react';
 import { Popper, Paper } from '@mui/material';
 import { useAppSelector, useAppDispatch } from '../../hooks';
-import { openModal } from '../../store/slices/modal-slice';
+// import { openModal } from '../../store/slices/modal-slice';
 import AuthModals from '../authModalManager';
 import ActionButton from '../action-button/action-button';
 import { logoutUser, getAuthorizationStatus } from '../../store/slices/user-slice';
+import { keycloak } from '../../keycloak';
+import { checkAuthAction } from '../../store/api-actions'; 
 
 export default function Header() {
   const navigate = useNavigate();
@@ -51,9 +53,20 @@ export default function Header() {
   const handleProfileMouseLeave = () => {
     if (profileAnchorEl) setProfileAnchorEl(null);
   };
-
+  
   const handleAuthModal = () => {
-    dispatch(openModal('login'));
+    // dispatch(openModal('login'));
+    keycloak.init({
+      onLoad: "login-required",
+      silentCheckSsoRedirectUri: window.location.origin + "/check-sso.html",
+    }).then(() => {
+      if (keycloak.token) {
+        localStorage.setItem("token", keycloak.token);
+        dispatch(checkAuthAction());
+      } else {
+        console.error("Ошибка аутентификации: токен отсутствует");
+      }
+    });
   };
 
   const handleClose = () => {

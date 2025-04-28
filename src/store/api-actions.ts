@@ -14,9 +14,15 @@ export const checkAuthAction = createAsyncThunk<AuthorizationStatus, undefined, 
   extra: AxiosInstance;
 }>(
   'user/checkAuth',
-  async (_arg, {extra: api}) => {
+  async (_arg, { dispatch, extra: api }) => {
     try {
       const { data: { role } } = await api.get<IAuthRole>(APIRoute.Status);
+      if (AuthorizationStatus.USER === AuthorizationStatus[role]) {
+        dispatch(fetchUserDataAction());
+      }
+      if (AuthorizationStatus.ADMIN === AuthorizationStatus[role]) {
+        dispatch(fetchAdminDataAction());
+      }
       return AuthorizationStatus[role];
     } catch {
       return AuthorizationStatus.NoAuth;
