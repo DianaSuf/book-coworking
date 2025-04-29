@@ -24,7 +24,7 @@ const shouldDisplayError = (response: AxiosResponse) => !!StatusCodeMapping[resp
 export const createAPI = (): AxiosInstance => {
   
   const api = axios.create({
-    baseURL: import.meta.env.API_URL,
+    baseURL: import.meta.env.VITE_API_URL,
     timeout: REQUEST_TIMEOUT,
   });
 
