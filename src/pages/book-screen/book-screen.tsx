@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import { ReactSVG } from 'react-svg';
 import Header from '../../components/header/header';
 import Footer from '../../components/footer/footer';
+import styles from './book-screen.module.scss';
 import { useAppSelector, useAppDispatch } from '../../hooks';
 import { getAuthorizationStatus, getUserData } from '../../store/slices/user-slice';
 import { fetchUsersDataAction, fetchBusyTablesAction, reservalTablesAction, reservalTablesAdminAction } from '../../store/api-actions';
@@ -14,7 +15,6 @@ import ActionButton from '../../components/action-button/action-button';
 import AuthModals from '../../components/authModalManager';
 import { openModal, setReservationData } from '../../store/slices/modal-slice';
 import 'rsuite/dist/rsuite.min.css';
-import styles from './book-screen.module.css';
 import { Toggle, InputPicker, Checkbox } from 'rsuite';
 import SpinnerIcon from '@rsuite/icons/legacy/Spinner';
 import { useFormik } from 'formik';
@@ -458,11 +458,13 @@ export default function BookScreen() {
                   </Checkbox>
                 </div>
               )}
-              <ActionButton
-                text="Забронировать коворкинг"
-                buttonType="submit"
-                variant={ActionButtonType.Red}
-              />
+              <div className={styles.buttonContainer}>
+                <ActionButton
+                  text="Забронировать коворкинг"
+                  buttonType="submit"
+                  variant={ActionButtonType.Red}
+                />
+              </div>
             </form>
           </section>
         }

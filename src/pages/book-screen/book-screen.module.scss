@@ -1,0 +1,229 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.main {
+  display: flex;
+
+  @include desktop {
+    @include flex-column;
+    flex-direction: column-reverse;
+  }
+}
+
+.bookNoAuth, .book {
+  max-width: 420px;
+  box-shadow: $color-box-shadow;
+  padding: clamp(20px, 2vw, 15px) clamp(20px, 6vw, 45px) clamp(20px, 6vw, 45px) clamp(20px, 6vw, 45px);
+  display: flex;
+
+  @include desktop {
+    max-width: 100%;
+  }
+}
+
+.bookNoAuth {
+  justify-content: center;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.form {
+  @include flex-column;
+  justify-content: space-between;
+  gap: 25px;
+
+  @include tablet {
+    width: 100%;
+  }
+}
+
+.content {
+  @include flex-column;
+  gap: $spacing-lg;
+  align-self: flex-start;
+}
+
+.errorText {
+  margin-top: $spacing-xs;
+  color: $color-primary;
+}
+
+.textNoAuth {
+  font-size: clamp($font-size-base, 2vw, $font-size-large);
+  line-height: 24px;
+  color: $color-text-secondary;
+}
+
+.container {
+  button {
+    color: inherit;
+  }
+}
+
+.timeSelects {
+  display: flex;
+  gap: $spacing-md;
+}
+
+.seatText {
+  font-size: clamp($font-size-base, 2vw, $font-size-large);
+  color: $color-text;
+}
+
+.rs-calendar-table-cell-selected {
+  background-color: rgba(239, 59, 36, 1) !important;
+}
+
+.rs-picker-toolbar {
+  border-top: 1px solid rgba(239, 59, 36, 1) !important;
+}
+
+.selectedList {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  padding: 0;
+  gap: $spacing-md;
+  list-style: none;
+  margin-top: $spacing-md;
+}
+
+.selectedItem {
+  position: relative;
+  box-sizing: border-box;
+  height: 27px;
+  border-radius: $border-radius-sm;
+  border: 1px solid $color-border;
+  padding: 15px 35px 15px 15px;
+  font-size: clamp($font-size-base, 2vw, $font-size-large);
+  line-height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.deleteBtn {
+  position: absolute;
+  top: 50%;
+  right: 9px;
+  transform: translateY(-50%);
+  width: 13px;
+  height: 13px;
+}
+
+.deleteBtn::before,
+.deleteBtn::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 1px;
+  background-color: rgba(116, 116, 116, 1);
+  transform-origin: center;
+}
+
+.deleteBtn::before {
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.deleteBtn::after {
+  transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+.noSelection {
+  font-size: 12px;
+  line-height: 16px;
+  color: $color-text-secondary;
+}
+
+.invitation {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+}
+
+.toggle {
+  display: flex;
+  gap: $spacing-sm;
+}
+
+.checkbox {
+  margin-top: auto;
+  margin-bottom: $spacing-sm;
+}
+
+.buttonContainer {
+  align-self: center;
+}
+
+.map {
+  width: 100%;
+  margin: clamp($spacing-lg, 5vw, 90px) clamp($spacing-lg, 8vw, 100px);
+  overflow-y: hidden;
+
+  @include desktop {
+    width: auto;
+  }
+
+  svg {
+    min-width: 499px;
+    min-height: 390px;
+    display: inline-block;
+  }
+}
+
+.colorList {
+  display: flex;
+  flex-direction: row;
+  padding: 0;
+  margin: 0;
+  margin-bottom: $spacing-lg;
+  list-style: none;
+
+  @include desktop {
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+}
+
+.color {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  &:not(:last-child) {
+    margin-right: 70px;
+  }
+
+  @include desktop {
+    margin-right: 0;
+  }
+}
+
+.selected {
+  fill: $color-green !important;
+}
+
+.red, .grey, .green {
+  width: clamp(20px, 4vw, 40px);
+  height: clamp(20px, 4vw, 40px);
+  margin-right: $spacing-md;
+}
+
+.red {
+  background: $color-primary;
+}
+
+.grey {
+  background: $color-grey;
+}
+
+.green {
+  background: $color-green;
+}
+
+.text {
+  font-size: clamp($font-size-base, 2vw, $font-size-large);
+}
