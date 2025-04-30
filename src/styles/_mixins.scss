@@ -37,8 +37,20 @@
   flex-direction: column;
 }
 
-// Background image
+@mixin flex-container($justify: flex-start, $align: center) {
+  display: flex;
+  justify-content: $justify;
+  align-items: $align;
+}
+
+// Image
 @mixin background-image {
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+@mixin icon-base {
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;

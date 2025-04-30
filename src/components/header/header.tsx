@@ -8,7 +8,8 @@ import AuthModals from '../authModalManager';
 import ActionButton from '../action-button/action-button';
 import { logoutUser, getAuthorizationStatus } from '../../store/slices/user-slice';
 import { keycloak } from '../../keycloak';
-import { checkAuthAction } from '../../store/api-actions'; 
+import { checkAuthAction } from '../../store/api-actions';
+import { useMediaQuery } from '@mui/material';
 
 export default function Header() {
   const navigate = useNavigate();
@@ -20,6 +21,8 @@ export default function Header() {
 
   const openNotifyPopper = Boolean(notifyAnchorEl);
   const openProfilePopper = Boolean(profileAnchorEl);
+
+  const isTablet = useMediaQuery('(max-width: 768px)');
 
   const handleNotifyClick = (event: React.MouseEvent<HTMLElement>) => {
     if (!(authorizationStatus === AuthorizationStatus.USER || authorizationStatus === AuthorizationStatus.ADMIN)) {
@@ -60,24 +63,68 @@ export default function Header() {
 
   const handleClose = () => {
     dispatch(logoutUser());
-  }
+  };
 
   return (
     <header className={styles.header}>
       <nav className={styles.menu}>
-        <Link className={styles.logo} to={AppRoute.Root}></Link>
-        <div className={styles.nav}>
-          <div className={styles.infoCity}>
-            <span className={styles.city}><img className={styles.geo} src="../img/icon_geo_white.svg" alt="Geo Icon" />Екатеринбург</span>
-          </div>
-          {(authorizationStatus !== AuthorizationStatus.ADMIN) && (
+        <div className={styles.topMenu}>
+          <Link className={styles.logo} to={AppRoute.Root}></Link>
+          <div className={styles.desktopNav}>
+            <span className={styles.city}>
+              <img className={styles.geo} src="../img/icon_geo_white.svg" alt="Geo Icon" />
+              Екатеринбург
+            </span>
+            {(authorizationStatus !== AuthorizationStatus.ADMIN) && (
+              <div
+                className={styles.container}
+                onMouseEnter={handleNotifyMouseEnter}
+                onMouseLeave={handleNotifyMouseLeave}
+              >
+                <button className={styles.notify} onClick={handleNotifyClick}></button>
+                <Popper 
+                  open={openNotifyPopper} 
+                  anchorEl={notifyAnchorEl} 
+                  placement="bottom-end" 
+                  sx={{
+                    width: isTablet ? '50%' : '360px',
+                  }}
+                  disablePortal
+                >
+                  <Paper
+                    elevation={0}
+                    sx={{
+                      py: { xs: '8px', sm: '12px', md: '14px' },
+                      px: { xs: '10px', sm: '15px', md: '17px' },
+                      mt: '9px',
+                    }}
+                  >
+                    <p className={styles.titleNotify}>Ой! Мы еще не знакомы :(</p>
+                    <ActionButton
+                      text="Войти или зарегистрироваться"
+                      onClick={handleAuthModal}
+                      variant={ActionButtonType.Red}
+                    />
+                  </Paper>
+                </Popper>
+              </div>
+            )}
+
             <div
               className={styles.container}
-              onMouseEnter={handleNotifyMouseEnter}
-              onMouseLeave={handleNotifyMouseLeave}
+              onMouseEnter={handleProfileMouseEnter}
+              onMouseLeave={handleProfileMouseLeave}
             >
-              <button className={styles.notify} onClick={handleNotifyClick}></button>
-              <Popper open={openNotifyPopper} anchorEl={notifyAnchorEl} placement="bottom-end" sx={{ width: 360 }} disablePortal>
+              <button className={styles.profile} onClick={handleProfileToggle}></button>
+              <Popper 
+                open={openProfilePopper} 
+                anchorEl={profileAnchorEl} 
+                placement="bottom-end" 
+                sx={{ 
+                  width: isTablet ? '50%' : '360px',
+                }}
+                disablePortal
+              >
                 <Paper
                   elevation={0}
                   sx={{
@@ -86,54 +133,62 @@ export default function Header() {
                     mt: '9px',
                   }}
                 >
-                  <p className={styles.title}>Ой! Мы еще не знакомы :(</p>
-                  <ActionButton
-                    text="Войти или зарегистрироваться"
-                    onClick={handleAuthModal}
-                    variant={ActionButtonType.Red}
-                  />
+                  {!(authorizationStatus === AuthorizationStatus.USER || authorizationStatus === AuthorizationStatus.ADMIN) ? (
+                    <>
+                      <p className={styles.title}>Личный кабинет</p>
+                      <p className={styles.text}>
+                        Получите возможность бронировать места и отслеживать статус брони.
+                      </p>
+                      <ActionButton text="Войти или зарегистрироваться" onClick={handleAuthModal} variant={ActionButtonType.Red} />
+                    </>
+                  ) : (
+                    <>
+                      <Link className={styles.containerText} to={AppRoute.Profile}>
+                        <img className={styles.profile} src="../img/profile.svg" alt="profile icon" />
+                        <p className={styles.title}>Личный кабинет</p>
+                      </Link>
+                      <div className={styles.containerButton}>
+                        <ActionButton text="Выйти" onClick={handleClose} variant={ActionButtonType.Red} />
+                      </div>
+                    </>
+                  )}
                 </Paper>
               </Popper>
             </div>
-          )}
-
-          <div
-            className={styles.container}
-            onMouseEnter={handleProfileMouseEnter}
-            onMouseLeave={handleProfileMouseLeave}
-          >
-            <button className={styles.profile} onClick={handleProfileToggle}></button>
-            <Popper open={openProfilePopper} anchorEl={profileAnchorEl} placement="bottom-end" sx={{ width: 360 }} disablePortal>
-              <Paper
-                elevation={0}
-                sx={{
-                  py: { xs: '8px', sm: '12px', md: '14px' },
-                  px: { xs: '10px', sm: '15px', md: '17px' },
-                  mt: '9px',
-                }}
-              >
-                {!(authorizationStatus === AuthorizationStatus.USER || authorizationStatus === AuthorizationStatus.ADMIN) ? (
-                  <>
-                    <p className={styles.title}>Личный кабинет</p>
-                    <p className={styles.text}>
-                      Получите возможность бронировать места и отслеживать статус брони.
-                    </p>
-                    <ActionButton text="Войти или зарегистрироваться" onClick={handleAuthModal} variant={ActionButtonType.Red} />
-                  </>
-                ) : (
-                  <>
-                    <Link className={styles.containerText} to={AppRoute.Profile}>
-                      <img className={styles.profileImg} src="../img/profile.svg" alt="profile icon" />
-                      <p className={styles.title}>Личный кабинет</p>
-                    </Link>
-                    <div className={styles.containerButton}>
-                      <ActionButton text="Выйти" onClick={handleClose} variant={ActionButtonType.Red} />
-                    </div>
-                  </>
-                )}
-              </Paper>
-            </Popper>
           </div>
+        </div>
+        <div className={styles.bottomMenu}>
+          <Link 
+            to={AppRoute.Profile} 
+            className={styles.mobileLink}
+            onClick={() => {
+              if (!(authorizationStatus === AuthorizationStatus.USER || authorizationStatus === AuthorizationStatus.ADMIN)) {
+                handleAuthModal();
+              }
+            }}
+          >
+            Личный кабинет
+          </Link>
+          <Link 
+            to={AppRoute.Notify} 
+            className={styles.mobileLink}
+            onClick={(e) => {
+              if (!(authorizationStatus === AuthorizationStatus.USER || authorizationStatus === AuthorizationStatus.ADMIN)) {
+                e.preventDefault();
+                handleAuthModal();
+              }
+            }}
+          >
+            Уведомления
+          </Link>
+          {(authorizationStatus === AuthorizationStatus.USER || authorizationStatus === AuthorizationStatus.ADMIN) && (
+            <button 
+              className={styles.mobileLink}
+              onClick={handleClose}
+            >
+              Выйти
+            </button>
+          )}
         </div>
       </nav>
       <AuthModals />
