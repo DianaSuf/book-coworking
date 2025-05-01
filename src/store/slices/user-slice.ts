@@ -18,8 +18,8 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     logoutUser: (state) => {
-      localStorage.removeItem("tokenAccess");
-      localStorage.removeItem("tokenRefresh");
+      // localStorage.removeItem("tokenAccess");
+      // localStorage.removeItem("tokenRefresh");
 
       state.authorizationStatus = AuthorizationStatus.NoAuth;
       state.userData = null;
