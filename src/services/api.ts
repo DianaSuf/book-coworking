@@ -1,10 +1,9 @@
 import axios, { AxiosInstance, InternalAxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
 import { StatusCodes } from 'http-status-codes';
 import { toast } from 'react-toastify';
-// import { ITokenResponse } from '../types/user-data';
-// import { APIRoute } from '../const';
 import { logoutUser } from '../store/slices/user-slice';
-import { store } from '../store'
+import { store } from '../store';
+import { keycloak } from '../keycloak';
 
 const REQUEST_TIMEOUT = 5000;
 
@@ -22,18 +21,28 @@ const StatusCodeMapping: Record<number, boolean> = {
 const shouldDisplayError = (response: AxiosResponse) => !!StatusCodeMapping[response.status];
 
 export const createAPI = (): AxiosInstance => {
-  
   const api = axios.create({
     baseURL: import.meta.env.VITE_API_URL,
     timeout: REQUEST_TIMEOUT,
   });
 
   api.interceptors.request.use(
-    (config: InternalAxiosRequestConfig) => {
-      const token = localStorage.getItem('token');
-
-      if (token && config.headers) {
-        config.headers.Authorization = `Bearer ${token}`;
+    async (config: InternalAxiosRequestConfig) => {
+      try {
+        if (keycloak.authenticated) {
+          const isTokenExpired = keycloak.isTokenExpired();
+          if (isTokenExpired) {
+            await keycloak.updateToken(30);
+          }
+          
+          if (config.headers) {
+            config.headers.Authorization = `Bearer ${keycloak.token}`;
+          }
+        }
+      } catch (error) {
+        console.error('Failed to refresh token:', error);
+        keycloak.logout();
+        store.dispatch(logoutUser());
       }
 
       return config;
@@ -51,25 +60,27 @@ export const createAPI = (): AxiosInstance => {
   
       const statusCode = error.response?.status;
 
-      // if (statusCode === 401) {
-      //   localStorage.removeItem('tokenAccess');
-      //   const tokenRefresh = localStorage.getItem('tokenRefresh');
-      //   if (tokenRefresh) {
-      //     const { data } = await api.post<ITokenResponse>(APIRoute.Refresh, { token: tokenRefresh });
-
-      //     localStorage.setItem('tokenAccess', data.tokenAccess);
-      //     localStorage.setItem('tokenRefresh', data.tokenRefresh);
-
-      //     if (originalRequest.headers) {
-      //       originalRequest.headers.Authorization = `Bearer ${data.tokenAccess}`;
-      //     }
-
-      //     return api(originalRequest);
-      //   } 
-      // }
-
       if (statusCode === 401) {
-        store.dispatch(logoutUser());
+        const hasToken = !!keycloak.token;
+
+        if (!hasToken || keycloak.isTokenExpired()) {
+          store.dispatch(logoutUser());
+          return;
+        }
+
+        try {
+          await keycloak.updateToken(30);
+          if (keycloak.token) {
+            if (originalRequest.headers) {
+              originalRequest.headers.Authorization = `Bearer ${keycloak.token}`;
+            }
+            return api(originalRequest);
+          }
+        } catch (updateError) {
+          console.error('Token refresh failed:', updateError);
+          keycloak.logout()
+          store.dispatch(logoutUser());
+        }
       } else if (shouldDisplayError(error.response!)) {
         const detailMessage = error.response!.data;
         toast.warn(detailMessage.message);

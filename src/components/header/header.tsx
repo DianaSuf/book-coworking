@@ -62,9 +62,8 @@ export default function Header() {
   };
 
   const handleClose = () => {
-    keycloak.logout({ redirectUri: window.location.origin }).then(() => {
-      dispatch(logoutUser());
-    })
+    keycloak.logout();
+    dispatch(logoutUser());
   };
 
   return (

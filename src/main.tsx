@@ -27,9 +27,9 @@ keycloak.init({
   // onLoad: "check-sso",
   silentCheckSsoRedirectUri: window.location.origin + "/check-sso.html",
 })
-.then(() => {
-  if (keycloak.token) {
-    localStorage.setItem("token", keycloak.token);
+.then((authenticated) => {
+  if (authenticated) {
+    console.log("User is authenticated");
   }
 
   createRoot(document.getElementById('root')!).render(
