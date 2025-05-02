@@ -1,20 +1,20 @@
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { useAppDispatch } from '../../hooks';
+import { useAppDispatch } from '../../../hooks';
 import { useLocation, useNavigate } from "react-router-dom";
-import PasswordInput from '../password-input/password-input';
-import ActionButton from "../action-button/action-button";
-import { ActionButtonType, ModalType } from "../../const";
-import { confirmPasswordAction } from '../../store/api-actions';
+import PasswordInput from '../../password-input/password-input';
+import ActionButton from "../../action-button/action-button";
+import { ActionButtonType, ModalType } from "../../../const";
+import { confirmPasswordAction } from '../../../store/api-actions';
 import styles from './reset-password-modal.module.css'
-import { openModal } from '../../store/slices/modal-slice';
-import { AppRoute } from '../../const';
+import { openModal } from '../../../store/slices/modal-slice';
+import { AppRoute } from '../../../const';
 
-interface ResetModalProps {
+interface ResetPasswordProps {
   onClose: () => void;
 }
 
-export default function ResetPasswordModal({ onClose }: ResetModalProps) {
+export default function ResetPasswordModal({ onClose }: ResetPasswordProps) {
   const dispatch = useAppDispatch();
   const location = useLocation();
   const navigate = useNavigate();

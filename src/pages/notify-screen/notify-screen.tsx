@@ -8,7 +8,7 @@ import { useAppDispatch, useAppSelector } from '../../hooks'
 import { fetchNotificationsAction, ConfirmReservalGroupAction, CancelReservalAction } from '../../store/api-actions'
 import { getReservals, getNotificationsToday, getNotificationsWeek, getNotificationsMonth } from '../../store/slices/notifications-slice'
 import { INotification } from '../../types/notification-data'
-import AuthModals from '../../components/authModalManager'
+import AuthModals from '../../components/modal/authModalManager'
 import { openModal, setNotificationId } from '../../store/slices/modal-slice'
 import { getAuthorizationStatus } from '../../store/slices/user-slice'
 

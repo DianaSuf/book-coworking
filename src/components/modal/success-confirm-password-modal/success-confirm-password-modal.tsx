@@ -1,12 +1,12 @@
-import ActionButton from "../action-button/action-button";
-import { ActionButtonType } from "../../const";
+import ActionButton from "../../action-button/action-button";
+import { ActionButtonType } from "../../../const";
 import styles from './success-confirm-password-modal.module.css'
 
-interface ConfirmPasswordModalProps {
+interface SuccessConfirmPasswordProps {
   onClose: () => void;
 }
 
-export default function SuccessConfirmPasswordModal({ onClose }: ConfirmPasswordModalProps) {
+export default function SuccessConfirmPasswordModal({ onClose }: SuccessConfirmPasswordProps) {
   return (
     <>
       <h1 className={styles.title}>Забыли пароль?</h1>

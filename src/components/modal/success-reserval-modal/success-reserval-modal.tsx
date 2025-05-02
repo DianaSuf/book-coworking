@@ -1,14 +1,14 @@
-import ActionButton from "../action-button/action-button";
-import { ActionButtonType } from "../../const";
-import { useAppSelector } from "../../hooks";
-import { getReservationData } from "../../store/slices/modal-slice";
+import ActionButton from "../../action-button/action-button";
+import { ActionButtonType } from "../../../const";
+import { useAppSelector } from "../../../hooks";
+import { getReservationData } from "../../../store/slices/modal-slice";
 import styles from './success-reserval-modal.module.css'
 
-interface ConfirmBookingModalProps {
+interface SuccessReservalProps {
   onClose: () => void;
 }
 
-export default function SuccessReservalModal({ onClose }: ConfirmBookingModalProps) {
+export default function SuccessReservalModal({ onClose }: SuccessReservalProps) {
   const reservationData = useAppSelector(getReservationData);
 
   return (

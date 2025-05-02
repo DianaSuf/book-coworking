@@ -1,12 +1,12 @@
-import ActionButton from "../action-button/action-button";
-import { ActionButtonType } from "../../const";
+import ActionButton from "../../action-button/action-button";
+import { ActionButtonType } from "../../../const";
 import styles from './success-reset-password-modal.module.css'
 
-interface SuccessResetPasswordModalProps {
+interface SuccessResetPasswordProps {
   onClose: () => void;
 }
 
-export default function SuccessResetPasswordModal({ onClose }: SuccessResetPasswordModalProps) {
+export default function SuccessResetPasswordModal({ onClose }: SuccessResetPasswordProps) {
   return (
     <>
       <h1 className={styles.title}>Успешно!</h1>

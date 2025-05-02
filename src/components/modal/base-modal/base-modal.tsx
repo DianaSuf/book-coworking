@@ -1,13 +1,13 @@
 import { Dialog } from '@mui/material';
-import styles from './modal.module.css'
+import styles from './base-modal.module.css'
 
-interface ModalProps {
+interface BaseModalProps {
   isOpen: boolean;
   onClose: () => void;
   children: React.ReactNode;
 }
 
-const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
+const BaseModal: React.FC<BaseModalProps> = ({ isOpen, onClose, children }) => {
   return (
     <Dialog open={isOpen} onClose={onClose}>
        <div className={styles.modal}>
@@ -18,4 +18,4 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
   );
 };
 
-export default Modal;
+export default BaseModal;

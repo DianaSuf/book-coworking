@@ -1,13 +1,13 @@
-import ActionButton from "../action-button/action-button";
-import { ActionButtonType } from "../../const";
+import ActionButton from "../../action-button/action-button";
+import { ActionButtonType } from "../../../const";
 import styles from './confirm-register-modal.module.css'
 
-interface ConfirmRegisterModalProps {
+interface ConfirmRegisterProps {
   onClose: () => void;
   email: string;
 }
 
-export default function ConfirmRegisterModal({ onClose, email }: ConfirmRegisterModalProps) {
+export default function ConfirmRegisterModal({ onClose, email }: ConfirmRegisterProps) {
   return (
     <>
       <h1 className={styles.title}>Письмо отправлено!</h1>

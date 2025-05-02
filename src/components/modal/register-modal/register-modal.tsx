@@ -1,19 +1,19 @@
 import styles from './register-modal.module.css'
-import { useAppDispatch } from '../../hooks';
-import { registerAction } from '../../store/api-actions';
+import { useAppDispatch } from '../../../hooks';
+import { registerAction } from '../../../store/api-actions';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import PasswordInput from '../password-input/password-input';
-import ActionButton from '../action-button/action-button';
-import { ActionButtonType } from '../../const';
+import PasswordInput from '../../password-input/password-input';
+import ActionButton from '../../action-button/action-button';
+import { ActionButtonType } from '../../../const';
 
-interface RegisterModalProps {
+interface RegisterProps {
   onSwitch: () => void;
   onClose: () => void;
   onRegisterSuccess: (email: string) => void;
 }
 
-export default function RegisterModal({ onSwitch, onClose, onRegisterSuccess }: RegisterModalProps) {
+export default function RegisterModal({ onSwitch, onClose, onRegisterSuccess }: RegisterProps) {
   const dispatch = useAppDispatch();
 
   const handleSubmit = async (values: { name: string; email: string; password: string }) => {

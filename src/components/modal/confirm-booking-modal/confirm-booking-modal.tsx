@@ -1,12 +1,12 @@
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import ActionButton from "../action-button/action-button";
-import { ActionButtonType } from "../../const";
+import ActionButton from "../../action-button/action-button";
+import { ActionButtonType } from "../../../const";
 import styles from './confirm-booking-modal.module.css'
-import { getNotificationId, openModal } from '../../store/slices/modal-slice';
-import { ModalType } from '../../const';
-import { ConfirmReservalAction } from '../../store/api-actions';
-import { useAppDispatch, useAppSelector } from '../../hooks';
+import { getNotificationId, openModal } from '../../../store/slices/modal-slice';
+import { ModalType } from '../../../const';
+import { ConfirmReservalAction } from '../../../store/api-actions';
+import { useAppDispatch, useAppSelector } from '../../../hooks';
 
 export default function ConfirmBookingModal( ) {
   const dispatch = useAppDispatch()

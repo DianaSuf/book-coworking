@@ -1,19 +1,19 @@
 import styles from './login-modal.module.css';
-import { useAppDispatch } from '../../hooks';
-import { loginAction } from '../../store/api-actions';
+import { useAppDispatch } from '../../../hooks';
+import { loginAction } from '../../../store/api-actions';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import PasswordInput from '../password-input/password-input';
-import ActionButton from '../action-button/action-button';
-import { ActionButtonType } from '../../const';
+import PasswordInput from '../../password-input/password-input';
+import ActionButton from '../../action-button/action-button';
+import { ActionButtonType } from '../../../const';
 
-interface LoginModalProps {
+interface LoginProps {
   onSwitch: () => void;
   onForgotPassword: () => void;
   onClose: () => void;
 }
 
-export default function LoginModal({ onSwitch, onForgotPassword, onClose }: LoginModalProps) {
+export default function LoginModal({ onSwitch, onForgotPassword, onClose }: LoginProps) {
   const dispatch = useAppDispatch();
 
   const handleForgotPassword = () => {

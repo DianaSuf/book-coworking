@@ -4,7 +4,7 @@ import { AppRoute, AuthorizationStatus, ActionButtonType } from '../../const';
 import { useState } from 'react';
 import { Popper, Paper } from '@mui/material';
 import { useAppSelector, useAppDispatch } from '../../hooks';
-import AuthModals from '../authModalManager';
+import AuthModals from '../modal/authModalManager';
 import ActionButton from '../action-button/action-button';
 import { logoutUser, getAuthorizationStatus } from '../../store/slices/user-slice';
 import { keycloak } from '../../keycloak';

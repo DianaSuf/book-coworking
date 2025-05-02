@@ -12,7 +12,7 @@ import { IDataReserval } from '../../types/book-data';
 import { AuthorizationStatus, ActionButtonType, ModalType, seatColorsType } from '../../const';
 import { generateTimeOptions, timeOptions, formatDateForRequest, paintSeat } from '../../utils';
 import ActionButton from '../../components/action-button/action-button';
-import AuthModals from '../../components/authModalManager';
+import AuthModals from '../../components/modal/authModalManager';
 import { openModal, setReservationData } from '../../store/slices/modal-slice';
 import 'rsuite/dist/rsuite.min.css';
 import { Toggle, InputPicker, Checkbox } from 'rsuite';

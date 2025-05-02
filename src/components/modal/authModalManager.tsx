@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../hooks';
-import Modal from './modal/modal';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import BaseModal from './base-modal/base-modal';
 import LoginModal from './login-modal/login-modal';
 import RegisterModal from './register-modal/register-modal';
 import ForgotPasswordModal from './forgot-password-modal/forgot-password-modal';
@@ -10,8 +10,8 @@ import ConfirmBookingModal from './confirm-booking-modal/confirm-booking-modal';
 import SuccessConfirmPasswordModal from './success-confirm-password-modal/success-confirm-password-modal';
 import SuccessConfirmBookingModal from './success-confirm-booking-modal/success-confirm-booking-modal';
 import SuccessResetPasswordModal from './success-reset-password-modal/success-reset-password-modal';
-import { closeModal, openModal , getCurrentModal} from '../store/slices/modal-slice';
-import { ModalType } from '../const';
+import { closeModal, openModal , getCurrentModal} from '../../store/slices/modal-slice';
+import { ModalType } from '../../const';
 
 export default function AuthModals() {
   const dispatch = useAppDispatch();
@@ -30,67 +30,67 @@ export default function AuthModals() {
   return (
     <>
       {currentModal === ModalType.Login && (
-        <Modal isOpen onClose={closeCurrentModal}>
+        <BaseModal isOpen onClose={closeCurrentModal}>
           <LoginModal
             onSwitch={() => dispatch(openModal(ModalType.Register))}
             onClose={closeCurrentModal}
             onForgotPassword={() => dispatch(openModal(ModalType.ForgotPassword))}
           />
-        </Modal>
+        </BaseModal>
       )}
       {currentModal === ModalType.Register && (
-        <Modal isOpen onClose={closeCurrentModal}>
+        <BaseModal isOpen onClose={closeCurrentModal}>
           <RegisterModal
             onSwitch={() => dispatch(openModal(ModalType.Login))}
             onClose={closeCurrentModal}
             onRegisterSuccess={handleRegisterSuccess}
           />
-        </Modal>
+        </BaseModal>
       )}
       {currentModal === ModalType.ForgotPassword && (
-        <Modal isOpen onClose={closeCurrentModal}>
+        <BaseModal isOpen onClose={closeCurrentModal}>
           <ForgotPasswordModal
             onSuccess={() => dispatch(openModal(ModalType.SuccessConfirmPassword))}
           />
-        </Modal>
+        </BaseModal>
       )}
       {currentModal === ModalType.ConfirmRegister && (
-        <Modal isOpen onClose={closeCurrentModal}>
+        <BaseModal isOpen onClose={closeCurrentModal}>
           <ConfirmRegisterModal onClose={closeCurrentModal}  email={email}/>
-        </Modal>
+        </BaseModal>
       )}
       {currentModal === ModalType.SuccessReserval && (
-        <Modal isOpen onClose={closeCurrentModal}>
+        <BaseModal isOpen onClose={closeCurrentModal}>
           <SuccessReservalModal
             onClose={closeCurrentModal}
           />
-        </Modal>
+        </BaseModal>
       )}
       {currentModal === ModalType.ConfirmBooking && (
-        <Modal isOpen onClose={closeCurrentModal}>
+        <BaseModal isOpen onClose={closeCurrentModal}>
           <ConfirmBookingModal />
-        </Modal>
+        </BaseModal>
       )}
       {currentModal === ModalType.SuccessConfirmPassword && (
-        <Modal isOpen onClose={closeCurrentModal}>
+        <BaseModal isOpen onClose={closeCurrentModal}>
           <SuccessConfirmPasswordModal
             onClose={closeCurrentModal}
           />
-        </Modal>
+        </BaseModal>
       )}
       {currentModal === ModalType.SuccessConfirmBooking && (
-        <Modal isOpen onClose={closeCurrentModal}>
+        <BaseModal isOpen onClose={closeCurrentModal}>
           <SuccessConfirmBookingModal
             onClose={closeCurrentModal}
           />
-        </Modal>
+        </BaseModal>
       )}
       {currentModal === ModalType.SuccessResetPassword && (
-        <Modal isOpen onClose={closeCurrentModal}>
+        <BaseModal isOpen onClose={closeCurrentModal}>
           <SuccessResetPasswordModal
             onClose={closeCurrentModal}
           />
-        </Modal>
+        </BaseModal>
       )}
     </>
   );

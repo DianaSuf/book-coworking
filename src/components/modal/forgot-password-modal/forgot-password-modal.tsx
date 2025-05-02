@@ -1,16 +1,16 @@
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import ActionButton from "../action-button/action-button";
-import { ActionButtonType } from "../../const";
-import { resetUserPasswordAction } from '../../store/api-actions';
-import { useAppDispatch } from '../../hooks';
+import ActionButton from "../../action-button/action-button";
+import { ActionButtonType } from "../../../const";
+import { resetUserPasswordAction } from '../../../store/api-actions';
+import { useAppDispatch } from '../../../hooks';
 import styles from './forgot-password-modal.module.css'
 
-interface ForgotPasswordModalProps {
+interface ForgotPasswordProps {
   onSuccess: () => void;
 }
 
-export default function ForgotPasswordModal({ onSuccess }: ForgotPasswordModalProps) {
+export default function ForgotPasswordModal({ onSuccess }: ForgotPasswordProps) {
   const dispatch = useAppDispatch();
 
   const handleSubmit = async (email: string) => {
@@ -18,7 +18,7 @@ export default function ForgotPasswordModal({ onSuccess }: ForgotPasswordModalPr
       await dispatch(resetUserPasswordAction({ username: email })).unwrap();
       onSuccess();
     } catch (error) {
-      console.error('Ошибка при бронировании:', error);
+      console.error('Ошибка:', error);
     }
   };
 
