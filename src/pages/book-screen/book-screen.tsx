@@ -6,7 +6,7 @@ import Footer from '../../components/footer/footer';
 import styles from './book-screen.module.scss';
 import { useAppSelector, useAppDispatch } from '../../hooks';
 import { getAuthorizationStatus, getUserData } from '../../store/slices/user-slice';
-import { fetchUsersDataAction, fetchBusyTablesAction, reservalTablesAction, reservalTablesAdminAction } from '../../store/api-actions';
+import { fetchUsersDataAction, fetchBusyTablesAction, reservalTablesAction, reservalTablesAdminAction, checkAuthAction } from '../../store/api-actions';
 import { IUserDataWithId } from '../../types/user-data';
 import { IDataReserval } from '../../types/book-data';
 import { AuthorizationStatus, ActionButtonType, ModalType, seatColorsType } from '../../const';
@@ -21,6 +21,7 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import DatePickerComponent from '../../components/date-picker/date-picker';
 import SelectPickerComponent from '../../components/select-picker/select-picker';
+import { keycloak } from '../../keycloak';
 
 const useUsers = (defaultUsers: IUserDataWithId[] = []) => {
   const dispatch = useAppDispatch();
@@ -146,7 +147,8 @@ export default function BookScreen() {
   }, [selectedSeats]);
 
   const handleAuthModal = () => {
-    dispatch(openModal(ModalType.Login));
+    keycloak.login();
+    dispatch(checkAuthAction());
   };
 
   const handleReservalModal = () => {
