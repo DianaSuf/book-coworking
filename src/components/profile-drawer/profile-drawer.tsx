@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Drawer, ButtonToolbar, Button } from 'rsuite';
 import 'rsuite/dist/rsuite.min.css';
 import SearchIcon from '@mui/icons-material/Search';
-import styles from './profile-drawer.module.css';
+import styles from './profile-drawer.module.scss';
 import DatePickerComponent from '../date-picker/date-picker';
 import { useAppDispatch } from '../../hooks';
 import { formatDateForRequest, getCorrectWordEnding } from '../../utils';
@@ -19,6 +19,24 @@ export default function ProfileDrawer() {
   const [reservations, setReservations] = useState<IUserReserval[]>([]);
   const [usersBlock, setUsersBlock] = useState<IUserBlock[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
+
+  const [drawerWidth, setDrawerWidth] = useState('400px');
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth <= 425) { // mobile
+        setDrawerWidth('270px');
+      } else if (window.innerWidth <= 768) { // tablet
+        setDrawerWidth('350px');
+      } else {
+        setDrawerWidth('400px');
+      }
+    };
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const handleToggleDrawerDoc = () => setIsOpenDrawerDoc((prev) => !prev);
   const handleToggleDrawerPeople = () => setIsOpenDrawerPeople((prev) => !prev);
@@ -126,13 +144,13 @@ export default function ProfileDrawer() {
         size="sm"
         backdrop={false}
         style={{
-          width: '400px',
-          // marginTop: '54px',
+          width: drawerWidth,
+          top: window.innerWidth <= 425 ? '112px' : 'max(3.073vw, 30px)',
         }}
       >
         <Drawer.Body
           style={{
-            padding: '40px'
+            padding: window.innerWidth <= 425 ? '20px' : '40px',
           }}
         >
           <p className={styles.text}>Список актуальных бронирований</p>
@@ -151,12 +169,14 @@ export default function ProfileDrawer() {
               {reservations.length > 0 ? (
                 reservations.map((reservation) => (
                   <div key={reservation.id} className={styles.item}>
-                    <div className={styles.title}>
-                      <p className={styles.text}>{reservation.realname}</p>
-                      <p className={styles.email}>{reservation.username}</p>
+                    <div>
+                      <div className={styles.title}>
+                        <p className={styles.text}>{reservation.realname}</p>
+                        <p className={styles.email}>{reservation.username}</p>
+                      </div>
+                      <p className={styles.textGrey}>{reservation.dateReserval} с {reservation.timeStartReserval} до {reservation.timeEndReserval}</p>
+                      <p className={styles.textGrey}>{reservation.table} место</p>
                     </div>
-                    <p className={styles.textGrey}>{reservation.dateReserval} с {reservation.timeStartReserval} до {reservation.timeEndReserval}</p>
-                    <p className={styles.textGrey}>{reservation.table} место</p>
                     <div className={styles.listButton} onClick={() => handleCancel(reservation.id)}><button className={styles.textButton}>отменить</button></div>
                   </div>
                 ))
@@ -188,13 +208,13 @@ export default function ProfileDrawer() {
         className={styles.drawer}
         backdrop={false}
         style={{
-          width: '400px',
-          // marginTop: '54px',
+          width: drawerWidth,
+          top: window.innerWidth <= 425 ? '112px' : 'max(3.073vw, 30px)',
         }}
       >
         <Drawer.Body
           style={{
-            padding: '40px'
+            padding: window.innerWidth <= 425 ? '20px' : '40px',
           }}
         >
           <h4>Список пользователей</h4>
@@ -215,26 +235,28 @@ export default function ProfileDrawer() {
               {usersBlock.length > 0 ? (
                 usersBlock.map((user) => (
                   <div key={user.id} className={styles.itemBlock}>
-                    <div className={styles.titleBlock}>
-                      <p className={styles.text}>{user.realname}</p>
+                    <div>
+                      <div className={styles.title}>
+                        <p className={styles.text}>{user.realname}</p>
+                        <div className={styles.contentBlock}>
+                          {(user.stateBlock === 'TRUE') ? <p className={`${styles.countBlock} ${
+                              user.countBlock === 0
+                                ? styles.greenText
+                                : user.countBlock <= 3
+                                ? styles.orangeText
+                                : styles.redText
+                            }`}
+                          >
+                            {user.countBlock} {getCorrectWordEnding(user.countBlock)}
+                          </p> : ''}
+                        </div>
+                      </div>
                       <p className={styles.email}>{user.username}</p>
                     </div>
-                    <div className={styles.contentBlock}>
-                      {(user.stateBlock === 'TRUE') ? <p className={`${styles.countBlock} ${
-                          user.countBlock === 0
-                            ? styles.greenText
-                            : user.countBlock <= 3
-                            ? styles.orangeText
-                            : styles.redText
-                        }`}
-                      >
-                        {user.countBlock} {getCorrectWordEnding(user.countBlock)}
-                      </p> : ''}
-                      {(user.stateBlock === 'TRUE') ? 
-                        <div className={styles.listButton}><button className={styles.textButton} onClick={() => handleBlock(user.id)}>забанить</button></div> :
-                        <div className={styles.listButton}><button className={styles.textButton} onClick={() => handleUnblock(user.id)}>разбанить</button></div>
-                      }
-                    </div>
+                    {(user.stateBlock === 'TRUE') ? 
+                      <div className={styles.listButton}><button className={styles.textButton} onClick={() => handleBlock(user.id)}>забанить</button></div> :
+                      <div className={styles.listButton}><button className={styles.textButton} onClick={() => handleUnblock(user.id)}>разбанить</button></div>
+                    }
                   </div>
                 ))
               ) : (

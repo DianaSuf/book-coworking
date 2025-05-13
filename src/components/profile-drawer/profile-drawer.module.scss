@@ -1,0 +1,174 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+%drawer-button-base {
+  position: fixed;
+  right: 0;
+  transform: translateY(-50%);
+  cursor: pointer;
+  transition: right 0.3s ease-out;
+  border-radius: 15px 0px 0px 15px;
+
+  @include mobile {
+    top: 112px;
+  }
+
+  &.open {
+    right: 400px;
+
+    @include tablet {
+      right: 350px;
+    }
+
+    @include mobile {
+      right: 270px;
+    }
+  }
+}
+
+.drawerButtonDoc {
+  @extend %drawer-button-base;
+  top: 180px;
+  background-color: $color-primary;
+  width: 45px;
+  height: 111.07px;
+  z-index: 1000;
+
+  &.open {
+    background-color: $color-primary;
+  }
+}
+
+.drawerButtonPeople {
+  @extend %drawer-button-base;
+  top: 250px;
+  background-color: #F5887A;
+  width: 51px;
+  height: 100px;
+  z-index: 999;
+
+  &.open {
+    background-color: #F5887A;
+  }
+}
+
+.content {
+  margin-top: $spacing-xxl;
+
+  @include mobile {
+    margin-top: $spacing-lg;
+  }
+}
+
+.form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-md;
+}
+
+%text-base {
+  font-size: $font-size-large;
+
+  @include tablet {
+    font-size: $font-size-medium;
+  }
+
+  @include mobile {
+    font-size: $font-size-small;
+  }
+}
+
+.text {
+  @extend %text-base;
+  font-weight: 500;
+}
+
+.list {
+  margin-top: 28px;
+}
+
+%item-base {
+  background: $color-background;
+  box-shadow: $color-box-shadow;
+  border-radius: $border-radius-lg;
+  padding: $spacing-sm;
+  margin: $spacing-md 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+}
+
+.item {
+  @extend %item-base;
+  height: 140px;
+}
+
+.itemBlock {
+  @extend %item-base;
+  height: 80px;
+}
+
+.title {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.contentBlock {
+  @include flex-column;
+  justify-content: flex-end;
+  gap: 14px;
+}
+
+.email {
+  font-size: $font-size-small;
+  color: $color-text-secondary;
+  margin: 0;
+}
+
+.textGrey {
+  @extend %text-base;
+  color: $color-text-secondary;
+}
+
+.greenText {
+  color: $color-green;
+}
+
+.orangeText {
+  color: #F2994A;
+}
+
+.redText {
+  color: $color-primary;
+}
+
+.listButton {
+  @include flex-container(flex-end);
+}
+
+.textButton {
+  @extend %text-base;
+  color: $color-primary;
+  align-self: flex-end;
+}
+
+.inputWrapper {
+  position: relative;
+  width: 100%;
+  @include flex-container(flex-start);
+}
+
+.inputText {
+  width: 100%;
+  padding-right: $spacing-xxl;
+  box-sizing: border-box;
+}
+
+.searchIcon {
+  position: absolute;
+  right: $spacing-sm;
+  top: 50%;
+  transform: translateY(-50%);
+}

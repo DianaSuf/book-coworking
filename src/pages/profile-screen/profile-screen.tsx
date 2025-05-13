@@ -115,7 +115,7 @@ export default function ProfileScreen() {
             {authorizationStatus === AuthorizationStatus.ADMIN && userData && 'code' in userData && (
               <>
                 <h3 className={styles.title}>код</h3>
-                <div className={styles.form} style={{width: "400px"}}>
+                <div className={styles.formCode}>
                   <div className={styles.inputGroup}>
                     <label htmlFor="code">Код для бронирования</label>
                     <input

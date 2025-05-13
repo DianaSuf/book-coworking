@@ -79,6 +79,19 @@
   gap: 25px;
 }
 
+.formCode {
+  @extend .form;
+  width: 400px;
+
+  @include tablet {
+    max-width: 350px;
+  }
+
+  @include mobile {
+    max-width: 280px;
+  }
+}
+
 .content {
   @include flex-column;
   gap: 20px;
