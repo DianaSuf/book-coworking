@@ -70,9 +70,9 @@ export default function ProfileScreen() {
       <Header/>
       <main className={styles.profile}>
         <div className={styles.profileSection}>
-          <h2 className={styles.titleMain}>Личный кабинет</h2>
+          <h2>Личный кабинет</h2>
           <section className={styles.section}>
-            <h3 className={styles.title}>личные данные</h3>
+            <h4 className={styles.title}>личные данные</h4>
             <form className={styles.form} onSubmit={personalForm.handleSubmit} noValidate>
               <div className={styles.content}>
                 <div className={styles.inputGroup}>
@@ -114,7 +114,7 @@ export default function ProfileScreen() {
             </form>
             {authorizationStatus === AuthorizationStatus.ADMIN && userData && 'code' in userData && (
               <>
-                <h3 className={styles.title}>код</h3>
+                <h4 className={styles.title}>код</h4>
                 <div className={styles.formCode}>
                   <div className={styles.inputGroup}>
                     <label htmlFor="code">Код для бронирования</label>

@@ -5,7 +5,8 @@ import { APIRoute, AuthorizationStatus, AppRoute } from '../const';
 import { redirectToRoute } from './action';
 import { IAuthRole, IRegisterData, ILoginData, IMessage, IRefreshData, ITokenResponse, IUserData, IRealNameData, IUserNameData, IPassword, IUserDataWithId, IConfirmPassword, IAdminData } from '../types/user-data';
 import { IDataBusyTables, IDataReserval, IUserParams, IAdminReserval } from '../types/book-data';
-import { INotificationsData, IReservalId, IConfirmReserval } from '../types/notification-data';
+import { INotificationsData  } from '../types/notification-data';
+import { IReservalId, IConfirmReserval, IReservalData } from '../types/reservals-data';
 import { IDate, IUserReserval, IUserBlock } from '../types/admin-data';
 
 export const checkAuthAction = createAsyncThunk<AuthorizationStatus, undefined, {
@@ -239,6 +240,23 @@ export const fetchNotificationsAction = createAsyncThunk<INotificationsData, und
   async (_arg, {extra: api}) => {
     try {
       const {data} = await api.get(APIRoute.Notifications);
+      return data;
+    }
+    catch {
+      return undefined;
+    }
+  },
+);
+
+export const fetchReservalsAction = createAsyncThunk<IReservalData, undefined, {
+  dispatch: AppDispatch;
+  state: State;
+  extra: AxiosInstance;
+}>(
+  'reservals/fetchReservals',
+  async (_arg, {extra: api}) => {
+    try {
+      const {data} = await api.get(APIRoute.Reservals);
       return data;
     }
     catch {

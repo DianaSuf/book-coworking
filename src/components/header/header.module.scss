@@ -129,7 +129,7 @@
   height: clamp(14px, 2vw, 24px);
 }
 
-.notify, .profile {
+.notify, .book, .profile {
   @include icon-base;
   width: clamp(20px, 2vw, 40px);
   height: clamp(20px, 2vw, 40px);
@@ -143,6 +143,10 @@
   background-image: url('../img/notify.svg');
 }
 
+.book {
+  background-image: url('../img/book.svg');
+}
+
 .profile {
   background-image: url('../img/profile.svg');
   margin-left: 0.453%;
@@ -153,7 +157,7 @@
   font-size: clamp($font-size-medium, 2vw, $font-size-xlarge);
 }
 
-.titleNotify {
+.titlePopper {
   margin-bottom: $spacing-md;
   line-height: 1.4;
   font-size: clamp($font-size-medium, 2vw, $font-size-xlarge);

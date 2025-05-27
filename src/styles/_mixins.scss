@@ -19,6 +19,17 @@
   }
 }
 
+// Layout
+@mixin layout {
+  padding: $spacing-xxl;
+  display: flex;
+  justify-content: center;
+
+  @include mobile {
+    padding: $spacing-xl;
+  }
+}
+
 // Flexbox
 @mixin flex-center {
   display: flex;

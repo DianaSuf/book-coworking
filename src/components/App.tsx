@@ -12,6 +12,7 @@ import ProfileScreen from '../pages/profile-screen/profile-screen'
 import ConfirmScreen from '../pages/confirm-screen/confirm-screen'
 import NotifyScreen from '../pages/notify-screen/notify-screen'
 import BookScreen from '../pages/book-screen/book-screen'
+import ReservalsScreen from '../pages/reservals-screen/reservals-screen'
 
 function App() {
   const authorizationStatus = useAppSelector(getAuthorizationStatus);
@@ -41,6 +42,16 @@ function App() {
                 authorizationStatus={authorizationStatus}
               >
                 <NotifyScreen />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path={AppRoute.Reservals}
+            element={
+              <PrivateRoute
+                authorizationStatus={authorizationStatus}
+              >
+                <ReservalsScreen />
               </PrivateRoute>
             }
           />

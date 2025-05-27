@@ -1,4 +1,4 @@
-import styles from './error-screen.module.css'
+import styles from './error-screen.module.scss'
 import { Helmet } from 'react-helmet-async';
 import Header from '../../components/header/header';
 import Footer from '../../components/footer/footer';

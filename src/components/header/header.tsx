@@ -15,13 +15,23 @@ export default function Header() {
   const dispatch = useAppDispatch();
   const authorizationStatus = useAppSelector(getAuthorizationStatus);
 
+  const isTablet = useMediaQuery('(max-width: 768px)');
+
+  const [reservalsAnchorEl, setReservalsAnchorEl] = useState<null | HTMLElement>(null);
   const [notifyAnchorEl, setNotifyAnchorEl] = useState<null | HTMLElement>(null);
   const [profileAnchorEl, setProfileAnchorEl] = useState<null | HTMLElement>(null);
 
+  const openReservalsPopper = Boolean(reservalsAnchorEl);
   const openNotifyPopper = Boolean(notifyAnchorEl);
   const openProfilePopper = Boolean(profileAnchorEl);
 
-  const isTablet = useMediaQuery('(max-width: 768px)');
+  const handleReservalsClick = (event: React.MouseEvent<HTMLElement>) => {
+    if (!(authorizationStatus === AuthorizationStatus.USER || authorizationStatus === AuthorizationStatus.ADMIN)) {
+      setReservalsAnchorEl(reservalsAnchorEl ? null : event.currentTarget);
+    } else {
+      navigate(AppRoute.Reservals);
+    }
+  };
 
   const handleNotifyClick = (event: React.MouseEvent<HTMLElement>) => {
     if (!(authorizationStatus === AuthorizationStatus.USER || authorizationStatus === AuthorizationStatus.ADMIN)) {
@@ -33,6 +43,18 @@ export default function Header() {
 
   const handleProfileToggle = (event: React.MouseEvent<HTMLElement>) => {
     setProfileAnchorEl(profileAnchorEl ? null : event.currentTarget);
+  };
+
+  const handleReservalsMouseEnter = (event: React.MouseEvent<HTMLElement>) => {
+    if (!(authorizationStatus === AuthorizationStatus.USER || authorizationStatus === AuthorizationStatus.ADMIN) && !reservalsAnchorEl) {
+      setReservalsAnchorEl(event.currentTarget);
+    }
+  };
+  
+  const handleReservalsMouseLeave = () => {
+    if (!(authorizationStatus === AuthorizationStatus.USER || authorizationStatus === AuthorizationStatus.ADMIN)) {
+      setReservalsAnchorEl(null);
+    }
   };
 
   const handleNotifyMouseEnter = (event: React.MouseEvent<HTMLElement>) => {
@@ -75,6 +97,42 @@ export default function Header() {
               <img className={styles.geo} src="../img/icon_geo_white.svg" alt="Geo Icon" />
               Екатеринбург
             </span>
+
+            {(authorizationStatus !== AuthorizationStatus.ADMIN) && (
+              <div
+                className={styles.container}
+                onMouseEnter={handleReservalsMouseEnter}
+                onMouseLeave={handleReservalsMouseLeave}
+              >
+                <button className={styles.book} onClick={handleReservalsClick}></button>
+                <Popper 
+                  open={openReservalsPopper} 
+                  anchorEl={reservalsAnchorEl} 
+                  placement="bottom-end" 
+                  sx={{
+                    width: isTablet ? '50%' : '360px',
+                  }}
+                  disablePortal
+                >
+                  <Paper
+                    elevation={0}
+                    sx={{
+                      py: { xs: '8px', sm: '12px', md: '14px' },
+                      px: { xs: '10px', sm: '15px', md: '17px' },
+                      mt: '9px',
+                    }}
+                  >
+                    <p className={styles.titlePopper}>Ой! Мы еще не знакомы :(</p>
+                    <ActionButton
+                      text="Войти или зарегистрироваться"
+                      onClick={handleAuthModal}
+                      variant={ActionButtonType.Red}
+                    />
+                  </Paper>
+                </Popper>
+              </div>
+            )}
+
             {(authorizationStatus !== AuthorizationStatus.ADMIN) && (
               <div
                 className={styles.container}
@@ -99,7 +157,7 @@ export default function Header() {
                       mt: '9px',
                     }}
                   >
-                    <p className={styles.titleNotify}>Ой! Мы еще не знакомы :(</p>
+                    <p className={styles.titlePopper}>Ой! Мы еще не знакомы :(</p>
                     <ActionButton
                       text="Войти или зарегистрироваться"
                       onClick={handleAuthModal}

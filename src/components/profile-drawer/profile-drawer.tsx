@@ -6,9 +6,8 @@ import styles from './profile-drawer.module.scss';
 import DatePickerComponent from '../date-picker/date-picker';
 import { useAppDispatch } from '../../hooks';
 import { formatDateForRequest, getCorrectWordEnding } from '../../utils';
-import { IUserReserval } from '../../types/admin-data';
+import { IUserReserval, IUserBlock } from '../../types/admin-data';
 import { SearchDateAction, SearchBlockAction, CancelReservalAction, BlockUserAction, UnblockUserAction } from '../../store/api-actions';
-import { IUserBlock } from '../../types/admin-data';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
@@ -217,7 +216,7 @@ export default function ProfileDrawer() {
             padding: window.innerWidth <= 425 ? '20px' : '40px',
           }}
         >
-          <h4>Список пользователей</h4>
+          <h5>Список пользователей</h5>
           <div className={styles.content}>
             <div className={styles.inputWrapper}>
               <input

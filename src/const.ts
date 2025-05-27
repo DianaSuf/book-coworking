@@ -4,6 +4,7 @@ export enum AppRoute {
   Profile = '/profile',
   Book = '/book',
   Notify = '/notification',
+  Reservals = '/reservals',
   Password = '/password',
   NotFound = '*',
 }
@@ -33,7 +34,8 @@ export enum APIRoute {
   SearchBlock = '/Brusnika/admin/list',
   Reserval = '/Brusnika/user/reserval',
   ReservalAdmin = '/Brusnika/admin/reserval',
-  Notifications = '/Brusnika/user/notifications',
+  Notifications = '/Brusnika/user/notificationsSort',
+  Reservals = '/Brusnika/user/reservalsSort',
   CancelReserval = '/Brusnika/user/cancel',
   ConfirmReserval = '/Brusnika/user/codeReserval',
   ConfirmReservalGroup = '/Brusnika/user/groupReserval',
