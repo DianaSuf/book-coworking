@@ -48,12 +48,12 @@ export enum ActionButtonType {
   Black = 'black',
 }
 
-export enum ReservalType {
-  CODE = 'CODE',
-  GROUP = 'GROUP',
+export enum ReservalGroup {
+  TRUE = 'TRUE',
+  FALSE = 'FALSE',
 }
 
-export enum StateType {
+export enum ReservalType {
   TRUE = 'TRUE',
   FALSE = 'FALSE',
   CONFIRMED = 'CONFIRMED',

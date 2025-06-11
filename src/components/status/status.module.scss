@@ -1,0 +1,14 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.greenStatus {
+  @include status-style($color-green, #00B232);
+}
+
+.redStatus {
+  @include status-style($color-primary, #EF3B24);
+}
+
+.greyStatus {
+  @include status-style($color-grey, rgba(184, 184, 184, 1));
+}

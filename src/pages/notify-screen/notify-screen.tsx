@@ -3,7 +3,7 @@ import { useEffect } from 'react'
 import { Helmet } from 'react-helmet-async'
 import Header from '../../components/header/header'
 import Footer from '../../components/footer/footer'
-import Notification from '../../components/notification/notification'
+import Notification from '../../components/card/notification'
 import { useAppDispatch, useAppSelector } from '../../hooks'
 import { fetchNotificationsAction } from '../../store/api-actions'
 import { getNotificationFormsFalse, getNotificationFormsTrue } from '../../store/slices/notifications-slice'
@@ -16,7 +16,6 @@ export default function NotifyScreen() {
   useEffect(() => {
     dispatch(fetchNotificationsAction())
   }, [dispatch])
-
 
   return (
     <>

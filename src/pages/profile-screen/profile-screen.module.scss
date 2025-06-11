@@ -6,8 +6,7 @@
 }
 
 .profileSection {
-  width: 100%;
-  max-width: 1144px;
+  @include section;
 }
 
 .section {

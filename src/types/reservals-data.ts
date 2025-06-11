@@ -1,8 +1,8 @@
 import { IUserDataWithId } from "./user-data";
 
-export type IReservalType = 'CODE' | 'GROUP';
+export type IReservalGroup = 'TRUE' | 'FALSE';
 
-export type IStateType = 'TRUE' | 'CONFIRMED' | 'FALSE';
+export type IReservalType = 'TRUE' | 'CONFIRMED' | 'FALSE';
 
 export interface IReserval {
   id: number;
@@ -11,8 +11,8 @@ export interface IReserval {
   timeEndReserval: string;
   sendTime: string,
   table: number;
-  stateReserval: IStateType,
-  stateGroup: IReservalType,
+  stateReserval: IReservalType,
+  stateGroup: IReservalGroup,
   invit: string;
 }
 
