@@ -38,7 +38,8 @@ export enum APIRoute {
   Reservals = '/Brusnika/user/reservalsSort',
   CancelReserval = '/Brusnika/user/cancel',
   ConfirmReserval = '/Brusnika/user/codeReserval',
-  ConfirmReservalGroup = '/Brusnika/user/groupReserval',
+  ConfirmReservalGroup = '/Brusnika/user/groupReservalConfirm',
+  UnConfirmReservalGroup = '/Brusnika/user/groupReservalUnconfirm',
   BlockUser = '/Brusnika/admin/block',
   UnblockUser = '/Brusnika/admin/unblock',
 }
@@ -48,15 +49,13 @@ export enum ActionButtonType {
   Black = 'black',
 }
 
-export enum ReservalGroup {
-  TRUE = 'TRUE',
-  FALSE = 'FALSE',
-}
-
 export enum ReservalType {
-  TRUE = 'TRUE',
-  FALSE = 'FALSE',
+  GROUP = 'GROUP',
+  ACTIVE = 'ACTIVE',
+  HOURS = 'ACTIVE_TWO_HOUR',
+  CODE = 'EXPECTATION_CODE',
   CONFIRMED = 'CONFIRMED',
+  UNCONFIRMED = 'UNCONFIRMED',
 }
 
 export enum ModalType {

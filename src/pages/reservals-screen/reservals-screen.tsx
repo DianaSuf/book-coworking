@@ -1,12 +1,11 @@
 import styles from './reservals-screen.module.scss'
 import { Helmet } from "react-helmet-async";
-import Header from '../../components/header/header'
-import Footer from "../../components/footer/footer";
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { getOldReservals, getReservalsMonth, getReservalsToday, getReservalsWeek } from '../../store/slices/reservals-slice';
 import { useEffect } from 'react';
 import { fetchReservalsAction } from '../../store/api-actions';
 import Reserval from '../../components/card/reserval';
+import AuthModals from '../../components/modal/authModalManager';
 
 export default function ReservalsScreen() {
   const dispatch = useAppDispatch()
@@ -22,10 +21,9 @@ export default function ReservalsScreen() {
   return (
     <>
       <Helmet>
-        <title>Брусника.Коворкинг</title>
+        <title>Бронирования.Коворкинг</title>
       </Helmet>
-      <Header />
-      <main className={styles.reservals}>
+      <section className={styles.reservals}>
         <div className={styles.reservalsSection}>
           <h2>Бронирования</h2>
           {reservalsToday.length === 0 && reservalsWeek.length === 0 && reservalsMonth.length === 0 && reservalsOld.length === 0 ? (
@@ -64,8 +62,8 @@ export default function ReservalsScreen() {
             </>
           )}
         </div>
-      </main>
-      <Footer />
+        <AuthModals />
+      </section>
     </>
   )
 }

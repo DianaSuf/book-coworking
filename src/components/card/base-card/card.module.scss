@@ -26,3 +26,8 @@
   font-size: $font-size-large;
   color: $color-text-secondary;
 }
+
+.actions {
+  display: flex;
+  gap: 15px;
+}

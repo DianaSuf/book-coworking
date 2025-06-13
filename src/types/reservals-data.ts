@@ -1,8 +1,6 @@
 import { IUserDataWithId } from "./user-data";
 
-export type IReservalGroup = 'TRUE' | 'FALSE';
-
-export type IReservalType = 'TRUE' | 'CONFIRMED' | 'FALSE';
+export type IReservalType = 'GROUP' | 'ACTIVE' | 'ACTIVE_TWO_HOUR' | 'EXPECTATION_CODE' | 'CONFIRMED' | 'UNCONFIRMED';
 
 export interface IReserval {
   id: number;
@@ -11,8 +9,7 @@ export interface IReserval {
   timeEndReserval: string;
   sendTime: string,
   table: number;
-  stateReserval: IReservalType,
-  stateGroup: IReservalGroup,
+  type: IReservalType,
   invit: string;
 }
 

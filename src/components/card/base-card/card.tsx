@@ -5,11 +5,11 @@ type CardProps = {
   title: ReactNode
   timeText: string
   text: string
-  actionButton?: ReactNode
+  actionButtons?: ReactNode[]
   status?: ReactNode
 }
 
-export default function Card({ title, timeText, text, actionButton, status }: CardProps) {
+export default function Card({ title, timeText, text, actionButtons, status }: CardProps) {
   return (
     <div className={styles.card}>
       <div className={styles.content}>
@@ -20,7 +20,13 @@ export default function Card({ title, timeText, text, actionButton, status }: Ca
         </div>
         <p className={styles.text}>{text}</p>
       </div>
-      {actionButton}
+      {actionButtons && actionButtons.length > 0 && (
+        <div className={styles.actions}>
+          {actionButtons.map((button, index) => (
+            <div key={index}>{button}</div>
+          ))}
+        </div>
+      )}
     </div>
   )
 }

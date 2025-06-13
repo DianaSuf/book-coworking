@@ -6,8 +6,6 @@ import { getAuthorizationStatus, getUserData } from '../../store/slices/user-sli
 import { Helmet } from 'react-helmet-async'
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import Header from '../../components/header/header'
-import Footer from '../../components/footer/footer'
 import ActionButton from '../../components/action-button/action-button';
 import { ActionButtonType, AuthorizationStatus } from '../../const';
 import ProfileDrawer from '../../components/profile-drawer/profile-drawer';
@@ -65,10 +63,9 @@ export default function ProfileScreen() {
   return (
     <>
       <Helmet>
-        <title>Брусника.Коворкинг</title>
+        <title>Профиль.Коворкинг</title>
       </Helmet>
-      <Header/>
-      <main className={styles.profile}>
+      <section className={styles.profile}>
         <div className={styles.profileSection}>
           <h2>Личный кабинет</h2>
           <section className={styles.section}>
@@ -130,11 +127,10 @@ export default function ProfileScreen() {
             )}
           </section>
         </div>
-      </main>
+      </section>
       {authorizationStatus === AuthorizationStatus.ADMIN && (
         <ProfileDrawer />
       )}
-      <Footer/>
     </>
   )
 }

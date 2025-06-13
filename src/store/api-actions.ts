@@ -265,23 +265,6 @@ export const fetchReservalsAction = createAsyncThunk<IReservalData, undefined, {
   },
 );
 
-export const CancelReservalAction = createAsyncThunk<IMessage, IReservalId, {
-  dispatch: AppDispatch;
-  state: State;
-  extra: AxiosInstance;
-}>(
-  'notifications/cancelReserval',
-  async ({ id }, { extra: api}) => {
-    try {
-      const { data: { message } } = await api.get(`${APIRoute.CancelReserval}/${id}`);
-      return { message };
-    } catch (error) {
-      console.error("Ошибка при отмене бронирования:", error);
-      throw error;
-    }
-  },
-);
-
 export const ConfirmReservalAction = createAsyncThunk<IMessage, IConfirmReserval, {
   dispatch: AppDispatch;
   state: State;
@@ -291,13 +274,31 @@ export const ConfirmReservalAction = createAsyncThunk<IMessage, IConfirmReserval
   async ({ id, code }, {dispatch, extra: api}) => {
     try {
       const { data: { message } } =  await api.post<IMessage>(`${APIRoute.ConfirmReserval}/${id}`, { code });
-      await dispatch(fetchNotificationsAction());
+      await dispatch(fetchReservalsAction());
       return  { message };
     } catch (error) {
       console.error("Ошибка при подтверждении бронирования:", error);
       throw error;
     }
   }
+);
+
+export const CancelReservalAction = createAsyncThunk<IMessage, IReservalId, {
+  dispatch: AppDispatch;
+  state: State;
+  extra: AxiosInstance;
+}>(
+  'notifications/cancelReserval',
+  async ({ id }, {dispatch, extra: api}) => {
+    try {
+      const { data: { message } } = await api.get(`${APIRoute.CancelReserval}/${id}`);
+      await dispatch(fetchReservalsAction());
+      return { message };
+    } catch (error) {
+      console.error("Ошибка при отмене бронирования:", error);
+      throw error;
+    }
+  },
 );
 
 export const ConfirmReservalGroupAction = createAsyncThunk<IMessage, IReservalId, {
@@ -309,10 +310,28 @@ export const ConfirmReservalGroupAction = createAsyncThunk<IMessage, IReservalId
   async ({ id }, { dispatch, extra: api }) => {
     try {
       const { data: { message } } = await api.get<IMessage>(`${APIRoute.ConfirmReservalGroup}/${id}`);
-      await dispatch(fetchNotificationsAction());
+      await dispatch(fetchReservalsAction());
       return { message };
     } catch (error) {
       console.error("Ошибка при подтверждении группового бронирования:", error);
+      throw error;
+    }
+  }
+);
+
+export const UnConfirmReservalGroupAction = createAsyncThunk<IMessage, IReservalId, {
+  dispatch: AppDispatch;
+  state: State;
+  extra: AxiosInstance;
+}>(
+  'notifications/unConfirmReserval',
+  async ({ id }, { dispatch, extra: api }) => {
+    try {
+      const { data: { message } } = await api.get<IMessage>(`${APIRoute.UnConfirmReservalGroup}/${id}`);
+      await dispatch(fetchReservalsAction());
+      return { message };
+    } catch (error) {
+      console.error("Ошибка при отклонении группового бронирования:", error);
       throw error;
     }
   }

@@ -6,6 +6,7 @@ import browserHistory from '../browser-history'
 import PrivateRoute from './private-route'
 import { useAppSelector } from '../hooks'
 import { getAuthorizationStatus } from '../store/slices/user-slice'
+import Layout from '../pages/layout'
 import MainScreen from '../pages/main-screen/main-screen'
 import ErrorScreen from '../pages/error-screen/error-screen'
 import ProfileScreen from '../pages/profile-screen/profile-screen'
@@ -21,52 +22,54 @@ function App() {
     <HelmetProvider>
       <HistoryRouter history={browserHistory}>
         <Routes>
-          <Route
-            path={AppRoute.Root}
-            element={<MainScreen />}
-          />
-          <Route
-            path={AppRoute.Profile}
-            element={
-              <PrivateRoute
-                authorizationStatus={authorizationStatus}
-              >
-                <ProfileScreen />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path={AppRoute.Notify}
-            element={
-              <PrivateRoute
-                authorizationStatus={authorizationStatus}
-              >
-                <NotifyScreen />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path={AppRoute.Reservals}
-            element={
-              <PrivateRoute
-                authorizationStatus={authorizationStatus}
-              >
-                <ReservalsScreen />
-              </PrivateRoute>
-            }
-          />
-          <Route
-              path={AppRoute.Book}
-              element={<BookScreen />}
-          />
-          <Route
-              path={AppRoute.Confirm}
-              element={<ConfirmScreen />}
-          />
-          <Route
-            path={AppRoute.NotFound}
-            element={<ErrorScreen />}
-          />
+          <Route element={<Layout />}>
+            <Route
+              path={AppRoute.Root}
+              element={<MainScreen />}
+            />
+            <Route
+              path={AppRoute.Profile}
+              element={
+                <PrivateRoute
+                  authorizationStatus={authorizationStatus}
+                >
+                  <ProfileScreen />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path={AppRoute.Notify}
+              element={
+                <PrivateRoute
+                  authorizationStatus={authorizationStatus}
+                >
+                  <NotifyScreen />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path={AppRoute.Reservals}
+              element={
+                <PrivateRoute
+                  authorizationStatus={authorizationStatus}
+                >
+                  <ReservalsScreen />
+                </PrivateRoute>
+              }
+            />
+            <Route
+                path={AppRoute.Book}
+                element={<BookScreen />}
+            />
+            <Route
+                path={AppRoute.Confirm}
+                element={<ConfirmScreen />}
+            />
+            <Route
+              path={AppRoute.NotFound}
+              element={<ErrorScreen />}
+            />
+          </Route>
         </Routes>
       </HistoryRouter>
     </HelmetProvider>

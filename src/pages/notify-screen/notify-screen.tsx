@@ -1,8 +1,6 @@
 import styles from './notify-screen.module.scss'
 import { useEffect } from 'react'
 import { Helmet } from 'react-helmet-async'
-import Header from '../../components/header/header'
-import Footer from '../../components/footer/footer'
 import Notification from '../../components/card/notification'
 import { useAppDispatch, useAppSelector } from '../../hooks'
 import { fetchNotificationsAction } from '../../store/api-actions'
@@ -20,10 +18,9 @@ export default function NotifyScreen() {
   return (
     <>
       <Helmet>
-        <title>Брусника.Коворкинг</title>
+        <title>Уведомления.Коворкинг</title>
       </Helmet>
-      <Header />
-      <main className={styles.notify}>
+      <section className={styles.notify}>
         <div className={styles.notifySection}>
           <h2>Уведомления</h2>
           {notificationFormsFalse.length === 0 && notificationFormsTrue.length === 0 ? (
@@ -45,8 +42,7 @@ export default function NotifyScreen() {
             </>
           )}
         </div>
-      </main>
-      <Footer />
+      </section>
     </>
   )
 }
