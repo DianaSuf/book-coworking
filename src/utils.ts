@@ -65,3 +65,41 @@ export function getCorrectWordEnding(count: number): string {
 
   return 'нарушений';
 }
+
+export function getCorrectNewEnding(count: number): string {
+  const lastDigit = count % 10;
+  const lastTwoDigits = count % 100;
+
+  if (lastTwoDigits >= 11 && lastTwoDigits <= 19) {
+    return 'новых';
+  }
+
+  if (lastDigit === 1) {
+    return 'новое';
+  }
+
+  if (lastDigit >= 2 && lastDigit <= 4) {
+    return 'новых';
+  }
+
+  return 'новых';
+}
+
+export function getCorrectNotificationEnding(count: number): string {
+  const lastDigit = count % 10;
+  const lastTwoDigits = count % 100;
+
+  if (lastTwoDigits >= 11 && lastTwoDigits <= 19) {
+    return 'уведомлений';
+  }
+
+  if (lastDigit === 1) {
+    return 'уведомление';
+  }
+
+  if (lastDigit >= 2 && lastDigit <= 4) {
+    return 'уведомления';
+  }
+
+  return 'уведомлений';
+}

@@ -22,6 +22,7 @@ export enum APIRoute {
   Register = '/Brusnika/auth/registration',
   Login = '/Brusnika/auth/login',
   ConfirmRegister = '/Brusnika/auth/confirmReg',
+  NotificationsCount = '/Brusnika/user/countNotification',
   UserProfile = '/Brusnika/user/profile',
   AdminProfile = '/Brusnika/admin/profile',
   UpdateUserRealname = '/Brusnika/user/updateRealname',
