@@ -9,13 +9,14 @@ import { logoutUser, getAuthorizationStatus } from '../../store/slices/user-slic
 import { keycloak } from '../../keycloak';
 import { checkAuthAction } from '../../store/api-actions';
 import { useMediaQuery } from '@mui/material';
-import { getNotificationsCount } from '../../store/slices/new-notifications-slice';
+import { getCountNewNotification, getCountExpectationCode } from '../../store/slices/new-notifications-slice';
 import { getCorrectNewEnding, getCorrectNotificationEnding } from '../../utils';
 
 export default function Header() {
   const dispatch = useAppDispatch();
   const authorizationStatus = useAppSelector(getAuthorizationStatus);
-  const notificationCount = useAppSelector(getNotificationsCount);
+  const newNotificationsCount = useAppSelector(getCountNewNotification);
+  const expectationsResevalCount = useAppSelector(getCountExpectationCode);
 
   const isTablet = useMediaQuery('(max-width: 768px)');
 
@@ -124,7 +125,10 @@ export default function Header() {
                           <img className={styles.profile} src="../img/book.svg" alt="book icon" />
                           <p className={styles.title}>Бронирования</p>
                         </Link>
-                        <p className={styles.text}>Бронирования</p>
+                        {expectationsResevalCount > 0 
+                          ? <p className={styles.text}>Необходимо подтвердить бронь!</p> 
+                          : <p className={styles.text}>У Вас нет предстоящих бронирований(</p>
+                        }
                       </>
                     )}
                   </Paper>
@@ -172,8 +176,8 @@ export default function Header() {
                           <img className={styles.profile} src="../img/notify.svg" alt="notify icon" />
                           <p className={styles.title}>Уведомления</p>
                         </Link>
-                        {notificationCount > 0 
-                          ? <p className={styles.text}>У Вас <span className={styles.count}> {notificationCount} {getCorrectNewEnding(notificationCount)}</span> {getCorrectNotificationEnding(notificationCount)}</p> 
+                        {newNotificationsCount > 0 
+                          ? <p className={styles.text}>У Вас <span className={styles.count}> {newNotificationsCount} {getCorrectNewEnding(newNotificationsCount)}</span> {getCorrectNotificationEnding(newNotificationsCount)}</p> 
                           : <p className={styles.text}>У Вас нет новых уведомлений(</p>
                         }
                       </>

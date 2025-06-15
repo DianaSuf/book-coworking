@@ -49,7 +49,10 @@ export default function Reserval({ reservals }: ReservalProps) {
     if (reserval.type === ReservalType.UNCONFIRMED) {
       return <Status type="red" text="Не подтверждено" />;
     }
-    return <Status type="green" text="Ожидает подтверждения" />;
+    if (reserval.type === ReservalType.GROUP || reserval.type === ReservalType.CODE) {
+      return <Status type="green" text="Ожидает подтверждения" />;
+    }
+    return null;
   };
 
   const getActionButton = (reserval: IReserval) => {
