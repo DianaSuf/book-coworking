@@ -1,3 +1,4 @@
 export interface INotificationsCount {
-  count: number;
+  countNewNotification: number;
+  countExpectationCode: number;
 }

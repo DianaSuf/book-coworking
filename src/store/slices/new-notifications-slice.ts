@@ -2,13 +2,15 @@ import { createSlice } from "@reduxjs/toolkit";
 import { fetchNotificationsCountAction } from "../api-actions";
 
 interface NewNotificationsState {
-  count: number;
+  countNewNotification: number;
+  countExpectationCode: number;
   loading: boolean;
   error: string | null | undefined;
 }
 
 const initialState: NewNotificationsState  = {
-  count: 0,
+  countNewNotification: 0,
+  countExpectationCode: 0,
   loading: false,
   error: null,
 };
@@ -18,7 +20,8 @@ export const newNotificationsSlice = createSlice({
   initialState,
   reducers: {},
   selectors: {
-    getNotificationsCount: (store) => store.count,
+    getCountNewNotification: (store) => store.countNewNotification,
+    getCountExpectationCode: (store) => store.countExpectationCode,
   },
   extraReducers: (builder) => {
     builder
@@ -27,7 +30,8 @@ export const newNotificationsSlice = createSlice({
       })
       .addCase(fetchNotificationsCountAction.fulfilled, (state, action) => {
         if (action.payload) {
-          state.count = action.payload.count;
+          state.countNewNotification = action.payload.countNewNotification;
+          state.countExpectationCode = action.payload.countExpectationCode;
         }
         state.loading = false;
       })
@@ -38,5 +42,5 @@ export const newNotificationsSlice = createSlice({
   },
 });
 
-export const { getNotificationsCount } = newNotificationsSlice.selectors;
+export const { getCountNewNotification, getCountExpectationCode } = newNotificationsSlice.selectors;
 
