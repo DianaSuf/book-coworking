@@ -6,8 +6,6 @@ import { getAuthorizationStatus, getUserData } from '../../store/slices/user-sli
 import { Helmet } from 'react-helmet-async'
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import Header from '../../components/header/header'
-import Footer from '../../components/footer/footer'
 import ActionButton from '../../components/action-button/action-button';
 import { ActionButtonType, AuthorizationStatus } from '../../const';
 import ProfileDrawer from '../../components/profile-drawer/profile-drawer';
@@ -65,14 +63,13 @@ export default function ProfileScreen() {
   return (
     <>
       <Helmet>
-        <title>Брусника.Коворкинг</title>
+        <title>Профиль.Коворкинг</title>
       </Helmet>
-      <Header/>
-      <main className={styles.profile}>
+      <section className={styles.profile}>
         <div className={styles.profileSection}>
-          <h2 className={styles.titleMain}>Личный кабинет</h2>
+          <h2>Личный кабинет</h2>
           <section className={styles.section}>
-            <h3 className={styles.title}>личные данные</h3>
+            <h4 className={styles.title}>личные данные</h4>
             <form className={styles.form} onSubmit={personalForm.handleSubmit} noValidate>
               <div className={styles.content}>
                 <div className={styles.inputGroup}>
@@ -114,7 +111,7 @@ export default function ProfileScreen() {
             </form>
             {authorizationStatus === AuthorizationStatus.ADMIN && userData && 'code' in userData && (
               <>
-                <h3 className={styles.title}>код</h3>
+                <h4 className={styles.title}>код</h4>
                 <div className={styles.formCode}>
                   <div className={styles.inputGroup}>
                     <label htmlFor="code">Код для бронирования</label>
@@ -130,11 +127,10 @@ export default function ProfileScreen() {
             )}
           </section>
         </div>
-      </main>
+      </section>
       {authorizationStatus === AuthorizationStatus.ADMIN && (
         <ProfileDrawer />
       )}
-      <Footer/>
     </>
   )
 }

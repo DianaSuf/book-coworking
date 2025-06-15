@@ -4,7 +4,7 @@ import { ToastContainer } from 'react-toastify';
 import { Provider } from 'react-redux';
 import App from './components/App.tsx';
 import { store } from './store';
-import { checkAuthAction } from './store/api-actions';
+import { checkAuthAction, fetchNotificationsCountAction } from './store/api-actions';
 import 'react-toastify/dist/ReactToastify.css';
 import './index.scss';
 import { keycloak } from './keycloak';
@@ -13,6 +13,7 @@ function Root() {
 
   useEffect(() => {
     store.dispatch(checkAuthAction());
+    store.dispatch(fetchNotificationsCountAction());
   }, []);
 
   return (

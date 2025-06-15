@@ -1,5 +1,5 @@
 import styles from './header.module.scss';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { AppRoute, AuthorizationStatus, ActionButtonType } from '../../const';
 import { useState } from 'react';
 import { Popper, Paper } from '@mui/material';
@@ -9,42 +9,50 @@ import { logoutUser, getAuthorizationStatus } from '../../store/slices/user-slic
 import { keycloak } from '../../keycloak';
 import { checkAuthAction } from '../../store/api-actions';
 import { useMediaQuery } from '@mui/material';
+import { getNotificationsCount } from '../../store/slices/new-notifications-slice';
+import { getCorrectNewEnding, getCorrectNotificationEnding } from '../../utils';
 
 export default function Header() {
-  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const authorizationStatus = useAppSelector(getAuthorizationStatus);
-
-  const [notifyAnchorEl, setNotifyAnchorEl] = useState<null | HTMLElement>(null);
-  const [profileAnchorEl, setProfileAnchorEl] = useState<null | HTMLElement>(null);
-
-  const openNotifyPopper = Boolean(notifyAnchorEl);
-  const openProfilePopper = Boolean(profileAnchorEl);
+  const notificationCount = useAppSelector(getNotificationsCount);
 
   const isTablet = useMediaQuery('(max-width: 768px)');
 
-  const handleNotifyClick = (event: React.MouseEvent<HTMLElement>) => {
-    if (!(authorizationStatus === AuthorizationStatus.USER || authorizationStatus === AuthorizationStatus.ADMIN)) {
-      setNotifyAnchorEl(notifyAnchorEl ? null : event.currentTarget);
-    } else {
-      navigate(AppRoute.Notify);
-    }
+  const [reservalsAnchorEl, setReservalsAnchorEl] = useState<null | HTMLElement>(null);
+  const [notifyAnchorEl, setNotifyAnchorEl] = useState<null | HTMLElement>(null);
+  const [profileAnchorEl, setProfileAnchorEl] = useState<null | HTMLElement>(null);
+
+  const openReservalsPopper = Boolean(reservalsAnchorEl);
+  const openNotifyPopper = Boolean(notifyAnchorEl);
+  const openProfilePopper = Boolean(profileAnchorEl);
+
+  const handleReservalsToggle = (event: React.MouseEvent<HTMLElement>) => {
+    setReservalsAnchorEl(reservalsAnchorEl ? null : event.currentTarget);
+  };
+
+  const handleNotifyToggle = (event: React.MouseEvent<HTMLElement>) => {
+    setNotifyAnchorEl(notifyAnchorEl ? null : event.currentTarget);
   };
 
   const handleProfileToggle = (event: React.MouseEvent<HTMLElement>) => {
     setProfileAnchorEl(profileAnchorEl ? null : event.currentTarget);
   };
 
+  const handleReservalsMouseEnter = (event: React.MouseEvent<HTMLElement>) => {
+    if (!reservalsAnchorEl) setReservalsAnchorEl(event.currentTarget);
+  };
+  
+  const handleReservalsMouseLeave = () => {
+    if (reservalsAnchorEl) setReservalsAnchorEl(null);
+  };
+
   const handleNotifyMouseEnter = (event: React.MouseEvent<HTMLElement>) => {
-    if (!(authorizationStatus === AuthorizationStatus.USER || authorizationStatus === AuthorizationStatus.ADMIN) && !notifyAnchorEl) {
-      setNotifyAnchorEl(event.currentTarget);
-    }
+    if (!notifyAnchorEl) setNotifyAnchorEl(event.currentTarget);
   };
   
   const handleNotifyMouseLeave = () => {
-    if (!(authorizationStatus === AuthorizationStatus.USER || authorizationStatus === AuthorizationStatus.ADMIN)) {
-      setNotifyAnchorEl(null);
-    }
+    if (notifyAnchorEl) setNotifyAnchorEl(null);
   };
 
   const handleProfileMouseEnter = (event: React.MouseEvent<HTMLElement>) => {
@@ -75,19 +83,21 @@ export default function Header() {
               <img className={styles.geo} src="../img/icon_geo_white.svg" alt="Geo Icon" />
               Екатеринбург
             </span>
+
             {(authorizationStatus !== AuthorizationStatus.ADMIN) && (
               <div
                 className={styles.container}
-                onMouseEnter={handleNotifyMouseEnter}
-                onMouseLeave={handleNotifyMouseLeave}
+                onMouseEnter={handleReservalsMouseEnter}
+                onMouseLeave={handleReservalsMouseLeave}
               >
-                <button className={styles.notify} onClick={handleNotifyClick}></button>
-                <Popper 
-                  open={openNotifyPopper} 
-                  anchorEl={notifyAnchorEl} 
+                <button className={styles.book} onClick={handleReservalsToggle}></button>
+                <Popper
+                  open={openReservalsPopper} 
+                  anchorEl={reservalsAnchorEl} 
                   placement="bottom-end" 
                   sx={{
-                    width: isTablet ? '50%' : '360px',
+                    width: isTablet ? '50%' : '342px',
+                    boxShadow: '0px 4px 16px 0px rgba(20, 25, 26, 0.08)',
                   }}
                   disablePortal
                 >
@@ -99,12 +109,75 @@ export default function Header() {
                       mt: '9px',
                     }}
                   >
-                    <p className={styles.titleNotify}>Ой! Мы еще не знакомы :(</p>
-                    <ActionButton
-                      text="Войти или зарегистрироваться"
-                      onClick={handleAuthModal}
-                      variant={ActionButtonType.Red}
-                    />
+                    {!(authorizationStatus === AuthorizationStatus.USER) ? (
+                      <>
+                        <p className={styles.titlePopper}>Ой! Мы еще не знакомы :(</p>
+                        <ActionButton
+                          text="Войти или зарегистрироваться"
+                          onClick={handleAuthModal}
+                          variant={ActionButtonType.Red}
+                        />
+                      </>
+                    ) : (
+                      <>
+                        <Link className={styles.containerText} to={AppRoute.Reservals}>
+                          <img className={styles.profile} src="../img/book.svg" alt="book icon" />
+                          <p className={styles.title}>Бронирования</p>
+                        </Link>
+                        <p className={styles.text}>Бронирования</p>
+                      </>
+                    )}
+                  </Paper>
+                </Popper>
+              </div>
+            )}
+
+            {(authorizationStatus !== AuthorizationStatus.ADMIN) && (
+              <div
+                className={styles.container}
+                onMouseEnter={handleNotifyMouseEnter}
+                onMouseLeave={handleNotifyMouseLeave}
+              >
+                <button className={styles.notify} onClick={handleNotifyToggle}></button>
+                <Popper 
+                  open={openNotifyPopper} 
+                  anchorEl={notifyAnchorEl} 
+                  placement="bottom-end" 
+                  sx={{
+                    width: isTablet ? '50%' : '342px',
+                    boxShadow: '0px 4px 16px 0px rgba(20, 25, 26, 0.08)',
+                  }}
+                  disablePortal
+                >
+                  <Paper
+                    elevation={0}
+                    sx={{
+                      py: { xs: '8px', sm: '12px', md: '14px' },
+                      px: { xs: '10px', sm: '15px', md: '17px' },
+                      mt: '9px',
+                    }}
+                  >
+                    {!(authorizationStatus === AuthorizationStatus.USER) ? (
+                      <>
+                        <p className={styles.titlePopper}>Ой! Мы еще не знакомы :(</p>
+                        <ActionButton
+                          text="Войти или зарегистрироваться"
+                          onClick={handleAuthModal}
+                          variant={ActionButtonType.Red}
+                        />
+                      </>
+                    ) : (
+                      <>
+                        <Link className={styles.containerText} to={AppRoute.Notify}>
+                          <img className={styles.profile} src="../img/notify.svg" alt="notify icon" />
+                          <p className={styles.title}>Уведомления</p>
+                        </Link>
+                        {notificationCount > 0 
+                          ? <p className={styles.text}>У Вас <span className={styles.count}> {notificationCount} {getCorrectNewEnding(notificationCount)}</span> {getCorrectNotificationEnding(notificationCount)}</p> 
+                          : <p className={styles.text}>У Вас нет новых уведомлений(</p>
+                        }
+                      </>
+                    )}
                   </Paper>
                 </Popper>
               </div>
@@ -121,7 +194,7 @@ export default function Header() {
                 anchorEl={profileAnchorEl} 
                 placement="bottom-end" 
                 sx={{ 
-                  width: isTablet ? '50%' : '360px',
+                  width: isTablet ? '50%' : '342px',
                 }}
                 disablePortal
               >

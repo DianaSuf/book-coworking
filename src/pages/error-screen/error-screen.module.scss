@@ -1,0 +1,21 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.error {
+  @include flex-column;
+  @include flex-center;
+  gap: 30px;
+  padding: $spacing-xxl 258px;
+}
+
+.title {
+  font-family: $font-family-mega;
+  color: $color-primary;
+  @include text-style(150px, 127px, 700);
+}
+
+.text {
+  font-family: $font-family-secondary;
+  color: $color-text;
+  @include text-style($font-size-large, 32px, 600);
+}

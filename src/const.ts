@@ -4,6 +4,7 @@ export enum AppRoute {
   Profile = '/profile',
   Book = '/book',
   Notify = '/notification',
+  Reservals = '/reservals',
   Password = '/password',
   NotFound = '*',
 }
@@ -21,6 +22,7 @@ export enum APIRoute {
   Register = '/Brusnika/auth/registration',
   Login = '/Brusnika/auth/login',
   ConfirmRegister = '/Brusnika/auth/confirmReg',
+  NotificationsCount = '/Brusnika/user/countNotification',
   UserProfile = '/Brusnika/user/profile',
   AdminProfile = '/Brusnika/admin/profile',
   UpdateUserRealname = '/Brusnika/user/updateRealname',
@@ -33,10 +35,12 @@ export enum APIRoute {
   SearchBlock = '/Brusnika/admin/list',
   Reserval = '/Brusnika/user/reserval',
   ReservalAdmin = '/Brusnika/admin/reserval',
-  Notifications = '/Brusnika/user/notifications',
+  Notifications = '/Brusnika/user/notificationsSort',
+  Reservals = '/Brusnika/user/reservalsSort',
   CancelReserval = '/Brusnika/user/cancel',
   ConfirmReserval = '/Brusnika/user/codeReserval',
-  ConfirmReservalGroup = '/Brusnika/user/groupReserval',
+  ConfirmReservalGroup = '/Brusnika/user/groupReservalConfirm',
+  UnConfirmReservalGroup = '/Brusnika/user/groupReservalUnconfirm',
   BlockUser = '/Brusnika/admin/block',
   UnblockUser = '/Brusnika/admin/unblock',
 }
@@ -47,14 +51,12 @@ export enum ActionButtonType {
 }
 
 export enum ReservalType {
-  CODE = 'CODE',
   GROUP = 'GROUP',
-}
-
-export enum StateType {
-  TRUE = 'TRUE',
-  FALSE = 'FALSE',
+  ACTIVE = 'ACTIVE',
+  HOURS = 'ACTIVE_TWO_HOUR',
+  CODE = 'EXPECTATION_CODE',
   CONFIRMED = 'CONFIRMED',
+  UNCONFIRMED = 'UNCONFIRMED',
 }
 
 export enum ModalType {

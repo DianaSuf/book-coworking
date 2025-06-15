@@ -5,8 +5,10 @@ import { APIRoute, AuthorizationStatus, AppRoute } from '../const';
 import { redirectToRoute } from './action';
 import { IAuthRole, IRegisterData, ILoginData, IMessage, IRefreshData, ITokenResponse, IUserData, IRealNameData, IUserNameData, IPassword, IUserDataWithId, IConfirmPassword, IAdminData } from '../types/user-data';
 import { IDataBusyTables, IDataReserval, IUserParams, IAdminReserval } from '../types/book-data';
-import { INotificationsData, IReservalId, IConfirmReserval } from '../types/notification-data';
+import { INotificationsData  } from '../types/notification-data';
+import { IReservalId, IConfirmReserval, IReservalData } from '../types/reservals-data';
 import { IDate, IUserReserval, IUserBlock } from '../types/admin-data';
+import { INotificationsCount } from '../types/new-notification-data';
 
 export const checkAuthAction = createAsyncThunk<AuthorizationStatus, undefined, {
   dispatch: AppDispatch;
@@ -74,6 +76,22 @@ export const refreshAction = createAsyncThunk<void, IRefreshData, {
     localStorage.setItem('tokenRefresh', tokenRefresh);
     dispatch(checkAuthAction())
   }
+);
+
+export const fetchNotificationsCountAction = createAsyncThunk<INotificationsCount | null, undefined, {
+  dispatch: AppDispatch;
+  state: State;
+  extra: AxiosInstance;
+}>(
+  'user/fetchNotificationsCount',
+  async (_arg, {extra: api}) => {
+    try {
+      const { data } = await api.get<INotificationsCount>(APIRoute.NotificationsCount);
+      return data;
+    } catch {
+      return null;
+    }
+  },
 );
 
 export const confirmRegisterAction = createAsyncThunk<
@@ -212,8 +230,9 @@ export const reservalTablesAction = createAsyncThunk<IMessage, IDataReserval, {
   extra: AxiosInstance
 }>(
   'book/reservalTables',
-  async ({ date, timeStart, timeEnd, usernames, tables }, { extra: api }) => {
+  async ({ date, timeStart, timeEnd, usernames, tables }, { dispatch, extra: api }) => {
     const { data: { message } } =  await api.post<IMessage>(APIRoute.Reserval, { date, timeStart, timeEnd, usernames, tables });
+    await dispatch(fetchNotificationsCountAction());
     return  { message };
   }
 );
@@ -236,9 +255,10 @@ export const fetchNotificationsAction = createAsyncThunk<INotificationsData, und
   extra: AxiosInstance;
 }>(
   'notifications/fetchNotifications',
-  async (_arg, {extra: api}) => {
+  async (_arg, { dispatch, extra: api }) => {
     try {
       const {data} = await api.get(APIRoute.Notifications);
+      await dispatch(fetchNotificationsCountAction());
       return data;
     }
     catch {
@@ -247,19 +267,19 @@ export const fetchNotificationsAction = createAsyncThunk<INotificationsData, und
   },
 );
 
-export const CancelReservalAction = createAsyncThunk<IMessage, IReservalId, {
+export const fetchReservalsAction = createAsyncThunk<IReservalData, undefined, {
   dispatch: AppDispatch;
   state: State;
   extra: AxiosInstance;
 }>(
-  'notifications/cancelReserval',
-  async ({ id }, { extra: api}) => {
+  'reservals/fetchReservals',
+  async (_arg, {extra: api}) => {
     try {
-      const { data: { message } } = await api.get(`${APIRoute.CancelReserval}/${id}`);
-      return { message };
-    } catch (error) {
-      console.error("Ошибка при отмене бронирования:", error);
-      throw error;
+      const {data} = await api.get(APIRoute.Reservals);
+      return data;
+    }
+    catch {
+      return undefined;
     }
   },
 );
@@ -273,13 +293,31 @@ export const ConfirmReservalAction = createAsyncThunk<IMessage, IConfirmReserval
   async ({ id, code }, {dispatch, extra: api}) => {
     try {
       const { data: { message } } =  await api.post<IMessage>(`${APIRoute.ConfirmReserval}/${id}`, { code });
-      await dispatch(fetchNotificationsAction());
+      await dispatch(fetchReservalsAction());
       return  { message };
     } catch (error) {
       console.error("Ошибка при подтверждении бронирования:", error);
       throw error;
     }
   }
+);
+
+export const CancelReservalAction = createAsyncThunk<IMessage, IReservalId, {
+  dispatch: AppDispatch;
+  state: State;
+  extra: AxiosInstance;
+}>(
+  'notifications/cancelReserval',
+  async ({ id }, {dispatch, extra: api}) => {
+    try {
+      const { data: { message } } = await api.get(`${APIRoute.CancelReserval}/${id}`);
+      await dispatch(fetchReservalsAction());
+      return { message };
+    } catch (error) {
+      console.error("Ошибка при отмене бронирования:", error);
+      throw error;
+    }
+  },
 );
 
 export const ConfirmReservalGroupAction = createAsyncThunk<IMessage, IReservalId, {
@@ -291,10 +329,28 @@ export const ConfirmReservalGroupAction = createAsyncThunk<IMessage, IReservalId
   async ({ id }, { dispatch, extra: api }) => {
     try {
       const { data: { message } } = await api.get<IMessage>(`${APIRoute.ConfirmReservalGroup}/${id}`);
-      await dispatch(fetchNotificationsAction());
+      await dispatch(fetchReservalsAction());
       return { message };
     } catch (error) {
       console.error("Ошибка при подтверждении группового бронирования:", error);
+      throw error;
+    }
+  }
+);
+
+export const UnConfirmReservalGroupAction = createAsyncThunk<IMessage, IReservalId, {
+  dispatch: AppDispatch;
+  state: State;
+  extra: AxiosInstance;
+}>(
+  'notifications/unConfirmReserval',
+  async ({ id }, { dispatch, extra: api }) => {
+    try {
+      const { data: { message } } = await api.get<IMessage>(`${APIRoute.UnConfirmReservalGroup}/${id}`);
+      await dispatch(fetchReservalsAction());
+      return { message };
+    } catch (error) {
+      console.error("Ошибка при отклонении группового бронирования:", error);
       throw error;
     }
   }

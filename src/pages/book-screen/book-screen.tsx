@@ -1,8 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { ReactSVG } from 'react-svg';
-import Header from '../../components/header/header';
-import Footer from '../../components/footer/footer';
 import styles from './book-screen.module.scss';
 import { useAppSelector, useAppDispatch } from '../../hooks';
 import { getAuthorizationStatus, getUserData } from '../../store/slices/user-slice';
@@ -319,8 +317,7 @@ export default function BookScreen() {
       <Helmet>
         <title>Брусника.Коворкинг</title>
       </Helmet>
-      <Header />
-      <main className={styles.main}>
+      <section className={styles.main}>
         {!(authorizationStatus === AuthorizationStatus.USER || authorizationStatus === AuthorizationStatus.ADMIN) ?  
           <section className={styles.bookNoAuth}>
             <p className={styles.textNoAuth}>Чтобы забронировать место для работы в нашем коворкинге, пожалуйста, зарегистрируйтесь на нашем сайте. 
@@ -499,8 +496,7 @@ export default function BookScreen() {
           />
         </section>
         <AuthModals />
-      </main>
-      <Footer />
+      </section>
     </>
   );
 }

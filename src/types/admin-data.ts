@@ -1,5 +1,5 @@
 import { IDataBusyTables } from "./book-data";
-import { IReserval } from "./notification-data";
+import { IReserval } from "./reservals-data";
 import { IUserData, IUserDataWithId } from "./user-data";
 
 export type IDate = Pick<IDataBusyTables, 'date'>;

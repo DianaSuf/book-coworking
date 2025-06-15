@@ -19,6 +19,23 @@
   }
 }
 
+// Layout
+@mixin layout {
+  padding: $spacing-xxl;
+  display: flex;
+  justify-content: center;
+
+  @include mobile {
+    padding: $spacing-xl;
+  }
+}
+
+// Section 
+@mixin section {
+  width: 100%;
+  max-width: 1144px;
+}
+
 // Flexbox
 @mixin flex-center {
   display: flex;
@@ -61,4 +78,14 @@
   font-size: $size;
   line-height: $line-height;
   font-weight: $weight;
-} 
+}
+
+// Status
+@mixin status-style($color, $border-color) {
+  padding: 5px 10px;
+  @include text-style($font-size-large, 24px, 500);
+  height: fit-content;
+  color: $color;
+  border-radius: $border-radius-xl;
+  border: 1px solid $border-color;
+}

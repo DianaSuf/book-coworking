@@ -3,14 +3,14 @@ import * as Yup from 'yup';
 import ActionButton from "../../action-button/action-button";
 import { ActionButtonType } from "../../../const";
 import styles from './confirm-booking-modal.module.css'
-import { getNotificationId, openModal } from '../../../store/slices/modal-slice';
+import { getReservationId, openModal } from '../../../store/slices/modal-slice';
 import { ModalType } from '../../../const';
 import { ConfirmReservalAction } from '../../../store/api-actions';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
 
 export default function ConfirmBookingModal( ) {
   const dispatch = useAppDispatch()
-  const id = useAppSelector(getNotificationId)
+  const id = useAppSelector(getReservationId)
 
   const handleSubmit = async (id: number, code: string) => {
     try {

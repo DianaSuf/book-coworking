@@ -1,0 +1,45 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.reservals {
+  @include layout;
+}
+
+.reservalsSection {
+  @include section;
+}
+
+.title {
+  margin-bottom: 10px;
+}
+
+.reservalsLast, .reservalsOld {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin: 40px 0px;
+}
+
+.titleReservals {
+  @include flex-center;
+  position: relative;
+  width: 100%;
+  margin: 5px 0;
+}
+
+.titleReservals::before,
+.titleReservals::after {
+  content: '';
+  flex-grow: 1;
+  height: 0.5px;
+  background-color: $color-primary;
+  width: 100px;
+}
+
+.titleReservals::before {
+  margin-right: $spacing-xl;
+}
+
+.titleReservals::after {
+  margin-left: $spacing-xl;
+}

@@ -8,13 +8,13 @@ interface ModalState {
     timeStart: string;
     timeEnd: string;
   } | null;
-  notificationId: number;
+  reservationId: number;
 }
 
 const initialState: ModalState = {
   currentModal: null,
   reservationData: null,
-  notificationId: 0,
+  reservationId: 0,
 };
 
 export const modalSlice = createSlice({
@@ -23,7 +23,7 @@ export const modalSlice = createSlice({
   selectors: {
     getCurrentModal: (store) => store.currentModal,
     getReservationData: (store) => store.reservationData,
-    getNotificationId: (store) => store.notificationId,
+    getReservationId: (store) => store.reservationId,
   },
   reducers: {
     openModal: (state, action: PayloadAction<IModalType>) => {
@@ -36,12 +36,12 @@ export const modalSlice = createSlice({
     setReservationData(state, action: PayloadAction<ModalState['reservationData']>) {
       state.reservationData = action.payload;
     },
-    setNotificationId(state, action: PayloadAction<number>) {
-      state.notificationId = action.payload;
+    setReservationId(state, action: PayloadAction<number>) {
+      state.reservationId = action.payload;
     },
   },
 });
 
-export const { openModal, closeModal, setReservationData, setNotificationId } = modalSlice.actions;
+export const { openModal, closeModal, setReservationData, setReservationId } = modalSlice.actions;
 
-export const { getCurrentModal, getReservationData, getNotificationId } = modalSlice.selectors;
+export const { getCurrentModal, getReservationData, getReservationId } = modalSlice.selectors;

@@ -2,17 +2,11 @@
 @use '../../styles/mixins' as *;
 
 .profile {
-  padding: $spacing-xxl;
-  display: flex;
-  justify-content: center;
-
-  @include mobile {
-    padding: $spacing-xl;
-  }
+  @include layout;
 }
 
 .profileSection {
-  width: 100%;
+  @include section;
 }
 
 .section {
@@ -26,18 +20,6 @@
 
   @include mobile {
     margin-top: $spacing-lg;
-  }
-}
-
-.titleMain {
-  margin-left: $spacing-xl;
-
-  @include tablet {
-    margin-left: 0px;
-  }
-
-  @include mobile {
-    margin-left: 0px;
   }
 }
 
