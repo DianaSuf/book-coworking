@@ -9,6 +9,21 @@
   @include section;
 }
 
+.ban {
+  display: flex;
+  justify-content: space-between;
+}
+
+.banSection {
+  border-radius: $border-radius-xl;
+  border: 1px solid $color-primary;
+  padding: 10px 15px;
+}
+
+.banText {
+  font-size: 20px;
+}
+
 .section {
   @include flex-column;
   align-items: center;

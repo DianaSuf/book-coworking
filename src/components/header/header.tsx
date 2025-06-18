@@ -97,7 +97,7 @@ export default function Header() {
                   anchorEl={reservalsAnchorEl} 
                   placement="bottom-end" 
                   sx={{
-                    width: isTablet ? '50%' : '342px',
+                    width: isTablet ? '50%' : '356px',
                     boxShadow: '0px 4px 16px 0px rgba(20, 25, 26, 0.08)',
                   }}
                   disablePortal
@@ -148,7 +148,7 @@ export default function Header() {
                   anchorEl={notifyAnchorEl} 
                   placement="bottom-end" 
                   sx={{
-                    width: isTablet ? '50%' : '342px',
+                    width: isTablet ? '50%' : '356px',
                     boxShadow: '0px 4px 16px 0px rgba(20, 25, 26, 0.08)',
                   }}
                   disablePortal
@@ -198,7 +198,7 @@ export default function Header() {
                 anchorEl={profileAnchorEl} 
                 placement="bottom-end" 
                 sx={{ 
-                  width: isTablet ? '50%' : '342px',
+                  width: isTablet ? '50%' : '356px',
                 }}
                 disablePortal
               >
