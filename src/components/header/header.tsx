@@ -247,6 +247,18 @@ export default function Header() {
             Личный кабинет
           </Link>
           <Link 
+            to={AppRoute.Reservals} 
+            className={styles.mobileLink}
+            onClick={(e) => {
+              if (!(authorizationStatus === AuthorizationStatus.USER || authorizationStatus === AuthorizationStatus.ADMIN)) {
+                e.preventDefault();
+                handleAuthModal();
+              }
+            }}
+          >
+            Бронирования
+          </Link>
+          <Link 
             to={AppRoute.Notify} 
             className={styles.mobileLink}
             onClick={(e) => {

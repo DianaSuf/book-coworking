@@ -12,16 +12,40 @@
 .ban {
   display: flex;
   justify-content: space-between;
+  gap: $spacing-xl;
+  flex-wrap: wrap;
+
+  @include tablet {
+    gap: $spacing-lg;
+  }
+
+  @include mobile {
+    gap: $spacing-sm;
+  }
 }
 
 .banSection {
   border-radius: $border-radius-xl;
   border: 1px solid $color-primary;
-  padding: 10px 15px;
+  padding: $spacing-sm $spacing-md;
+
+  @include tablet {
+    padding: $spacing-xs $spacing-sm;
+  }
 }
 
 .banText {
-  font-size: 20px;
+  font-size: $font-size-large;
+
+  @include tablet {
+    font-size: $font-size-medium;
+    margin-top: 0px;
+  }
+
+  @include mobile {
+    font-size: $font-size-base;
+    margin-top: 0px;
+  }
 }
 
 .section {

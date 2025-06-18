@@ -57,7 +57,7 @@
 }
 
 .mobileLink {
-  @include text-style($font-size-base, 16px);
+  @include text-style($font-size-small);
   color: $color-text;
   text-decoration: none;
   cursor: pointer;

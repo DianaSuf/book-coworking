@@ -74,18 +74,25 @@
 }
 
 // Typography
-@mixin text-style($size, $line-height, $weight: 400) {
+@mixin text-style($size, $weight: 400) {
   font-size: $size;
-  line-height: $line-height;
   font-weight: $weight;
 }
 
 // Status
 @mixin status-style($color, $border-color) {
-  padding: 5px 10px;
-  @include text-style($font-size-large, 24px, 500);
+  padding: $spacing-xs $spacing-sm;
+  @include text-style($font-size-large, 500);
   height: fit-content;
   color: $color;
   border-radius: $border-radius-xl;
   border: 1px solid $border-color;
+
+  @include tablet {
+    font-size: $font-size-medium;
+  }
+
+  @include mobile {
+    font-size: $font-size-base;
+  }
 }

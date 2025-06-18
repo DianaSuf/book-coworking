@@ -1,4 +1,5 @@
 import { ReactNode } from 'react'
+import { useMediaQuery } from '@mui/material'
 import styles from './card.module.scss'
 
 type CardProps = {
@@ -10,13 +11,16 @@ type CardProps = {
 }
 
 export default function Card({ title, timeText, text, actionButtons, status }: CardProps) {
+  const isTablet = useMediaQuery('(max-width: 768px)')
+
   return (
     <div className={styles.card}>
       <div className={styles.content}>
+        {isTablet && status}
         <div className={styles.title}>
           {title}
           <p className={styles.timeText}>{timeText}</p>
-          {status}
+          {!isTablet && status}
         </div>
         <p className={styles.text}>{text}</p>
       </div>
