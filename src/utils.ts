@@ -103,3 +103,17 @@ export function getCorrectNotificationEnding(count: number): string {
 
   return 'уведомлений';
 }
+
+export function getCorrectBanEnding(count: number): string {
+  const lastDigit = count % 10;
+
+  if (lastDigit === 1) {
+    return 'штраф';
+  }
+
+  if (lastDigit >= 2 && lastDigit <= 4) {
+    return 'штрафа';
+  }
+
+  return 'штрафов';
+}

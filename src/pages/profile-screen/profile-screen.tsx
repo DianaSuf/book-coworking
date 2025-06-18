@@ -9,6 +9,7 @@ import * as Yup from 'yup';
 import ActionButton from '../../components/action-button/action-button';
 import { ActionButtonType, AuthorizationStatus } from '../../const';
 import ProfileDrawer from '../../components/profile-drawer/profile-drawer';
+import { getCorrectBanEnding } from '../../utils';
 
 export default function ProfileScreen() {
   const dispatch = useAppDispatch();
@@ -67,7 +68,13 @@ export default function ProfileScreen() {
       </Helmet>
       <section className={styles.profile}>
         <div className={styles.profileSection}>
-          <h2>Личный кабинет</h2>
+          <div className={styles.ban}>
+            <h2>Личный кабинет</h2>
+            <div className={styles.banSection}>
+              <p className={styles.banText}>у Вас <span className={styles.errorText}>{userData?.blockCount} {getCorrectBanEnding(userData?.blockCount || 0)}</span></p>
+              <p className={styles.banText}>осталось: <span className={styles.errorText}>{5 - (userData?.blockCount || 0)}</span></p>
+            </div>
+          </div>
           <section className={styles.section}>
             <h4 className={styles.title}>личные данные</h4>
             <form className={styles.form} onSubmit={personalForm.handleSubmit} noValidate>

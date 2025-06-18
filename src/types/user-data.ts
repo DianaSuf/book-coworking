@@ -22,6 +22,7 @@ export interface IRefreshData {
 export interface IUserData {
   username: string;
   realname: string;
+  blockCount: number;
 }
 
 export type IRealNameData = Pick<IUserData, 'realname'>;
