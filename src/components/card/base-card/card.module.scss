@@ -5,29 +5,68 @@
   width: 100%;
   padding: $spacing-xxl;
   background-color: #F6F6F4;
-  border-radius: 10px;
+  border-radius: $border-radius-lg;
   box-shadow: 4px 4px 25px 0px rgba(0, 0, 0, 0.25);
   @include flex-between;
-  gap: 30px;
+  gap: $spacing-xl;
+  flex-wrap: wrap;
+
+  @include tablet {
+    padding: $spacing-xl;
+  }
+
+  @include mobile {
+    padding: $spacing-lg;
+  }
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+  align-items: flex-start;
+
+  @include tablet {
+    > :first-child {
+      margin-bottom: $spacing-xs;
+    }
+  }
 }
 
 .text {
   font-size: $font-size-large;
+
+  @include tablet {
+    font-size: $font-size-medium;
+  }
+
+  @include mobile {
+    font-size: $font-size-base;
+  }
 }
 
 .title {
   display: flex;
   align-items: center;
-  gap: 15px;
-  margin-bottom: 15px;
+  gap: $spacing-md;
+  flex-wrap: wrap;
 }
 
 .timeText {
   font-size: $font-size-large;
   color: $color-text-secondary;
+
+  @include tablet {
+    font-size: $font-size-medium;
+  }
+
+  @include mobile {
+    font-size: $font-size-base;
+  }
 }
 
 .actions {
   display: flex;
-  gap: 15px;
+  gap: $spacing-md;
+  margin-left: auto;
 }
